@@ -5,28 +5,78 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MathQuest - Problem Database</title>
   <style>
-    /* ----- DARK THEME & RESET ----- */
+    /* Basic Reset & Dark Theme */
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
     body {
+      display: flex;
+      flex-direction: row;
+      min-height: 100vh;
       background-color: #1f1f1f;
       color: #f1f1f1;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    /* Main Content & Right Sidebar */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
       padding: 1rem;
     }
-    header {
-      text-align: center;
+    .right-sidebar {
+      width: 250px;
+      background-color: #2a2a2a;
+      padding: 1rem;
+      border-left: 1px solid #444;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    /* Top Navigation */
+    .top-nav {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
       margin-bottom: 1rem;
+      flex-wrap: wrap;
     }
-    header h1 {
-      font-size: 1.8rem;
+    .nav-btn,
+    .pick-one-btn {
+      background-color: #2f2f2f;
+      border: 1px solid #444;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      color: #f1f1f1;
     }
-    /* ----- TABLE STYLE ----- */
+    .nav-btn:hover,
+    .pick-one-btn:hover {
+      background-color: #444;
+    }
+    .search-bar {
+      flex: 1;
+      position: relative;
+    }
+    .search-bar input {
+      width: 100%;
+      padding: 0.5rem;
+      border-radius: 4px;
+      border: 1px solid #444;
+      background-color: #2f2f2f;
+      color: #f1f1f1;
+    }
+    .search-bar input::placeholder {
+      color: #999;
+    }
+
+    /* Table */
     .table-wrapper {
       overflow-x: auto;
+      margin-bottom: 1rem;
     }
     table {
       width: 100%;
@@ -36,7 +86,8 @@
     thead {
       background-color: #333;
     }
-    th, td {
+    th,
+    td {
       padding: 0.75rem;
       text-align: left;
       border-bottom: 1px solid #444;
@@ -53,83 +104,119 @@
     tbody tr:hover {
       background-color: #3a3a3a;
     }
+
+    /* Difficulty color coding */
+    .difficulty-easy {
+      color: #5fd38d; /* greenish */
+    }
+    .difficulty-medium {
+      color: #f1c40f; /* gold */
+    }
+    .difficulty-hard {
+      color: #e74c3c; /* red */
+    }
+
+    /* Right Sidebar: Company Tags & Session Stats */
+    .company-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .company-tag {
+      background-color: #3a3a3a;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.85rem;
+    }
+    .session-stats h3 {
+      margin-bottom: 0.5rem;
+    }
+    .session-stats .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 0.5rem;
+      text-align: center;
+    }
+    .session-stats .stats-item {
+      background-color: #3a3a3a;
+      padding: 0.5rem;
+      border-radius: 4px;
+    }
   </style>
 </head>
 <body>
-  <header>
-    <h1>MathQuest Problem Database</h1>
-  </header>
+  <!-- MAIN CONTENT -->
+  <div class="main-content">
+    <!-- Top Navigation -->
+    <div class="top-nav">
+      <button class="nav-btn">Lists</button>
+      <button class="nav-btn">Difficulty</button>
+      <button class="nav-btn">Status</button>
+      <button class="nav-btn">Tags</button>
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Search questions..." />
+      </div>
+      <button class="pick-one-btn" id="pickOneBtn">Pick One</button>
+    </div>
 
-  <div class="table-wrapper">
-    <table id="problemsTable">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Title</th>
-          <th>Difficulty</th>
-          <th>Status</th>
-          <th>Tags</th>
-          <th>Frequency</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Table rows will be inserted here dynamically -->
-      </tbody>
-    </table>
+    <!-- Table of Problems -->
+    <div class="table-wrapper">
+      <table id="problemsTable">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Title</th>
+            <th>Difficulty</th>
+            <th>Status</th>
+            <th>Tags</th>
+            <th>Frequency</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Dynamically populated rows go here -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- RIGHT SIDEBAR -->
+  <div class="right-sidebar">
+    <div class="company-tags">
+      <span class="company-tag">Amazon</span>
+      <span class="company-tag">Google</span>
+      <span class="company-tag">Facebook</span>
+      <span class="company-tag">Apple</span>
+      <span class="company-tag">Microsoft</span>
+      <span class="company-tag">DoorDash</span>
+    </div>
+    <div class="session-stats">
+      <h3>Session</h3>
+      <div class="stats-grid">
+        <div class="stats-item">Easy<br>0</div>
+        <div class="stats-item">Medium<br>0</div>
+        <div class="stats-item">Hard<br>0</div>
+      </div>
+    </div>
   </div>
 
   <script>
+    let problemsData = [];
+
+    // Fetch and render the problems table
     async function loadProblems() {
       try {
         const response = await fetch('problems.json');
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
-        const problems = await response.json();
+        problemsData = await response.json();
 
-        // Defensive check: Ensure problems is an array
-        if (!Array.isArray(problems)) {
-          throw new Error('Problems data is not in expected array format.');
+        // Defensive check: Ensure the JSON is an array
+        if (!Array.isArray(problemsData)) {
+          throw new Error('JSON is not in expected array format.');
         }
 
-        const tbody = document.querySelector('#problemsTable tbody');
-        tbody.innerHTML = ''; // Clear any existing content
-
-        problems.forEach((problem, index) => {
-          const row = document.createElement('tr');
-
-          // When a row is clicked, redirect to the problem page with the corresponding id
-          row.addEventListener('click', () => {
-            window.location.href = `problem.html?id=${index}`;
-          });
-
-          // Create and append the table cells
-          const cellIndex = document.createElement('td');
-          cellIndex.textContent = index + 1;
-          row.appendChild(cellIndex);
-
-          const cellTitle = document.createElement('td');
-          cellTitle.textContent = problem.title || "Untitled";
-          row.appendChild(cellTitle);
-
-          const cellDifficulty = document.createElement('td');
-          cellDifficulty.textContent = problem.difficulty || "Unknown";
-          row.appendChild(cellDifficulty);
-
-          const cellStatus = document.createElement('td');
-          cellStatus.textContent = problem.status || "Not Done";
-          row.appendChild(cellStatus);
-
-          const cellTags = document.createElement('td');
-          cellTags.textContent = problem.tags || "None";
-          row.appendChild(cellTags);
-
-          const cellFrequency = document.createElement('td');
-          cellFrequency.textContent = problem.frequency || 0;
-          row.appendChild(cellFrequency);
-
-          tbody.appendChild(row);
-        });
+        renderTable(problemsData);
       } catch (error) {
         console.error('Failed to load problems:', error);
         const tbody = document.querySelector('#problemsTable tbody');
@@ -137,6 +224,81 @@
       }
     }
 
+    // Render the table rows
+    function renderTable(data) {
+      const tbody = document.querySelector('#problemsTable tbody');
+      tbody.innerHTML = ''; // Clear existing rows
+
+      data.forEach((problem, index) => {
+        const row = document.createElement('tr');
+
+        // Make row clickable
+        row.addEventListener('click', () => {
+          window.location.href = `problem.html?id=${index}`;
+        });
+
+        // # Column
+        const cellIndex = document.createElement('td');
+        cellIndex.textContent = index + 1;
+        row.appendChild(cellIndex);
+
+        // Title
+        const cellTitle = document.createElement('td');
+        cellTitle.textContent = problem.title || "Untitled";
+        row.appendChild(cellTitle);
+
+        // Difficulty (color-coded)
+        const cellDifficulty = document.createElement('td');
+        const difficulty = (problem.difficulty || "Unknown").toLowerCase();
+        cellDifficulty.textContent = capitalize(difficulty);
+        if (["easy","medium","hard"].includes(difficulty)) {
+          cellDifficulty.classList.add(`difficulty-${difficulty}`);
+        }
+        row.appendChild(cellDifficulty);
+
+        // Status
+        const cellStatus = document.createElement('td');
+        cellStatus.textContent = problem.status || "Not Done";
+        row.appendChild(cellStatus);
+
+        // Tags
+        const cellTags = document.createElement('td');
+        cellTags.textContent = problem.tags || "None";
+        row.appendChild(cellTags);
+
+        // Frequency
+        const cellFreq = document.createElement('td');
+        cellFreq.textContent = problem.frequency || 0;
+        row.appendChild(cellFreq);
+
+        tbody.appendChild(row);
+      });
+    }
+
+    // Search function
+    const searchInput = document.getElementById('searchInput');
+    searchInput.addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase();
+      const filtered = problemsData.filter(problem =>
+        (problem.title || '').toLowerCase().includes(query) ||
+        (problem.tags || '').toLowerCase().includes(query)
+      );
+      renderTable(filtered);
+    });
+
+    // "Pick One" function: picks a random problem and redirects
+    document.getElementById('pickOneBtn').addEventListener('click', () => {
+      if (!problemsData.length) return;
+      const randomIndex = Math.floor(Math.random() * problemsData.length);
+      window.location.href = `problem.html?id=${randomIndex}`;
+    });
+
+    // Capitalize the first letter
+    function capitalize(str) {
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    // On page load
     document.addEventListener('DOMContentLoaded', loadProblems);
   </script>
 </body>
