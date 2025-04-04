@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MathQuest - FE Exam / Interview Problems</title>
+  <style>
+    /* ----- DARK THEME & BASIC RESET ----- */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      display: flex;
+      flex-direction: row;
+      min-height: 100vh;
+      background-color: #1f1f1f;
+      color: #f1f1f1;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    /* ----- LEFT SIDEBAR (OPTIONAL) ----- */
+    /* If you have a left sidebar, you'd style it here. 
+       We'll focus on top nav + table + right sidebar. */
+
+    /* ----- MAIN CONTENT WRAPPER ----- */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 1rem;
+    }
+
+    /* ----- TOP NAV BAR ----- */
+    .top-nav {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+    .nav-btn, .pick-one-btn {
+      background-color: #2f2f2f;
+      border: 1px solid #444;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      color: #f1f1f1;
+    }
+    .nav-btn:hover, .pick-one-btn:hover {
+      background-color: #444;
+    }
+    .search-bar {
+      flex: 1;
+      position: relative;
+    }
+    .search-bar input {
+      width: 100%;
+      padding: 0.5rem;
+      border-radius: 4px;
+      border: 1px solid #444;
+      background-color: #2f2f2f;
+      color: #f1f1f1;
+    }
+    .search-bar input::placeholder {
+      color: #999;
+    }
+
+    /* ----- TABLE WRAPPER ----- */
+    .table-wrapper {
+      overflow-x: auto;
+      margin-bottom: 1rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #2f2f2f;
+    }
+    thead {
+      background-color: #333;
+    }
+    th, td {
+      padding: 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid #444;
+      white-space: nowrap;
+    }
+    th {
+      font-weight: 600;
+      color: #ddd;
+    }
+    tbody tr:hover {
+      background-color: #3a3a3a;
+      cursor: pointer;
+    }
+
+    /* Difficulty color coding */
+    .difficulty-easy {
+      color: #5fd38d;  /* greenish */
+    }
+    .difficulty-medium {
+      color: #f1c40f;  /* gold */
+    }
+    .difficulty-hard {
+      color: #e74c3c;  /* red */
+    }
+
+    /* Status icon (dummy example) */
+    .status-icon {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+    }
+    .status-done {
+      background-color: #5fd38d;
+    }
+    .status-not-done {
+      background-color: #e74c3c;
+    }
+
+    /* Frequency bar container */
+    .freq-bar-container {
+      width: 100px;
+      height: 8px;
+      background-color: #444;
+      border-radius: 4px;
+      position: relative;
+    }
+    .freq-bar-fill {
+      height: 8px;
+      background-color: #f39c12;
+      border-radius: 4px;
+    }
+
+    /* ----- RIGHT SIDEBAR ----- */
+    .right-sidebar {
+      width: 250px;
+      background-color: #2a2a2a;
+      padding: 1rem;
+      border-left: 1px solid #444;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .company-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .company-tag {
+      background-color: #3a3a3a;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.85rem;
+    }
+    .session-stats h3 {
+      margin-bottom: 0.5rem;
+    }
+    .session-stats .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 0.5rem;
+      text-align: center;
+    }
+    .session-stats .stats-item {
+      background-color: #3a3a3a;
+      padding: 0.5rem;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <!-- MAIN CONTENT AREA -->
+  <div class="main-content">
+    <!-- Top Navigation Bar -->
+    <div class="top-nav">
+      <button class="nav-btn">Lists</button>
+      <button class="nav-btn">Difficulty</button>
+      <button class="nav-btn">Status</button>
+      <button class="nav-btn">Tags</button>
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Search questions..." />
+      </div>
+      <button class="pick-one-btn">Pick One</button>
+    </div>
+
+    <!-- Table -->
+    <div class="table-wrapper">
+      <table id="problemsTable">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Title</th>
+            <th>Difficulty</th>
+            <th>Status</th>
+            <th>Tags</th>
+            <th>Frequency</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Dynamically populated rows go here -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- RIGHT SIDEBAR -->
+  <div class="right-sidebar">
+    <!-- Example Company Tags -->
+    <div class="company-tags">
+      <span class="company-tag">Amazon</span>
+      <span class="company-tag">Google</span>
+      <span class="company-tag">Facebook</span>
+      <span class="company-tag">Apple</span>
+      <span class="company-tag">Microsoft</span>
+      <span class="company-tag">Tesla</span>
+    </div>
+
+    <!-- Session Stats -->
+    <div class="session-stats">
+      <h3>Session</h3>
+      <div class="stats-grid">
+        <div class="stats-item">Easy<br>0</div>
+        <div class="stats-item">Medium<br>0</div>
+        <div class="stats-item">Hard<br>0</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPT FOR FETCHING AND RENDERING PROBLEMS -->
+  <script>
+    let problemsData = [];
+
+    async function loadProblems() {
+      try {
+        const response = await fetch('problems.json');
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        problemsData = await response.json();
+        
+        // Defensive check: Ensure the JSON is an array
+        if (!Array.isArray(problemsData)) {
+          throw new Error('JSON is not in expected array format.');
+        }
+        renderTable(problemsData);
+      } catch (error) {
+        console.error('Failed to load problems:', error);
+        alert('Error loading problems. Check console for details.');
+      }
+    }
+
+    function renderTable(data) {
+      const tbody = document.querySelector('#problemsTable tbody');
+      tbody.innerHTML = ''; // Clear existing rows
+
+      data.forEach((problem, index) => {
+        const row = document.createElement('tr');
+
+        // Defensive approach: use defaults if properties are missing
+        const number = index + 1;
+        const title = problem.title || 'Untitled';
+        const difficulty = (problem.difficulty || 'Unknown').toLowerCase();
+        const status = problem.status || 'Not Done';
+        const tags = problem.tags || 'None';
+        const frequency = problem.frequency || 0;
+
+        // # Column
+        const numberCell = document.createElement('td');
+        numberCell.textContent = number;
+        row.appendChild(numberCell);
+
+        // Title Column
+        const titleCell = document.createElement('td');
+        titleCell.textContent = title;
+        row.appendChild(titleCell);
+
+        // Difficulty Column
+        const diffCell = document.createElement('td');
+        diffCell.textContent = capitalize(difficulty);
+        // Add color-coded class
+        if (difficulty === 'easy' || difficulty === 'medium' || difficulty === 'hard') {
+          diffCell.classList.add(`difficulty-${difficulty}`);
+        }
+        row.appendChild(diffCell);
+
+        // Status Column (with status icon for fun)
+        const statusCell = document.createElement('td');
+        const statusIcon = document.createElement('span');
+        statusIcon.classList.add('status-icon');
+        statusIcon.classList.add(status.toLowerCase().includes('done') ? 'status-done' : 'status-not-done');
+        statusCell.appendChild(statusIcon);
+        const statusText = document.createElement('span');
+        statusText.textContent = status;
+        statusCell.appendChild(statusText);
+        row.appendChild(statusCell);
+
+        // Tags Column
+        const tagsCell = document.createElement('td');
+        tagsCell.textContent = tags;
+        row.appendChild(tagsCell);
+
+        // Frequency Column (render a small bar to visualize it)
+        const freqCell = document.createElement('td');
+        const freqBarContainer = document.createElement('div');
+        freqBarContainer.classList.add('freq-bar-container');
+        const freqBarFill = document.createElement('div');
+        freqBarFill.classList.add('freq-bar-fill');
+        // Limit frequency to 100 for display
+        const freqPercent = Math.min(frequency, 100);
+        freqBarFill.style.width = freqPercent + '%';
+        freqBarContainer.appendChild(freqBarFill);
+        freqCell.appendChild(freqBarContainer);
+        row.appendChild(freqCell);
+
+        // Row click event if you want to navigate or do something
+        row.addEventListener('click', () => {
+          // Example: console log or navigate
+          console.log(`Clicked on problem #${number} - ${title}`);
+          // window.location.href = 'your-problem-detail-page.html'; // If you have a detail page
+        });
+
+        tbody.appendChild(row);
+      });
+    }
+
+    // Quick utility to capitalize first letter
+    function capitalize(str) {
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    // Search function
+    const searchInput = document.getElementById('searchInput');
+    searchInput.addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase();
+      const filtered = problemsData.filter(problem =>
+        (problem.title || '').toLowerCase().includes(query) ||
+        (problem.tags || '').toLowerCase().includes(query)
+      );
+      renderTable(filtered);
+    });
+
+    // On page load
+    document.addEventListener('DOMContentLoaded', loadProblems);
+  </script>
+</body>
+</html>
