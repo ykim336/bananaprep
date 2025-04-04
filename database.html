@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MathQuest - Problem Database</title>
+  <style>
+    /* ----- DARK THEME & RESET ----- */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background-color: #1f1f1f;
+      color: #f1f1f1;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      padding: 1rem;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    header h1 {
+      font-size: 1.8rem;
+    }
+    /* ----- TABLE STYLE ----- */
+    .table-wrapper {
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #2f2f2f;
+    }
+    thead {
+      background-color: #333;
+    }
+    th, td {
+      padding: 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid #444;
+      white-space: nowrap;
+    }
+    th {
+      font-weight: 600;
+      color: #ddd;
+    }
+    tbody tr {
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+    tbody tr:hover {
+      background-color: #3a3a3a;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>MathQuest Problem Database</h1>
+  </header>
+
+  <div class="table-wrapper">
+    <table id="problemsTable">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Title</th>
+          <th>Difficulty</th>
+          <th>Status</th>
+          <th>Tags</th>
+          <th>Frequency</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Table rows will be inserted here dynamically -->
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    async function loadProblems() {
+      try {
+        const response = await fetch('problems.json');
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const problems = await response.json();
+
+        // Defensive check: Ensure problems is an array
+        if (!Array.isArray(problems)) {
+          throw new Error('Problems data is not in expected array format.');
+        }
+
+        const tbody = document.querySelector('#problemsTable tbody');
+        tbody.innerHTML = ''; // Clear any existing content
+
+        problems.forEach((problem, index) => {
+          const row = document.createElement('tr');
+
+          // When a row is clicked, redirect to the problem page with the corresponding id
+          row.addEventListener('click', () => {
+            window.location.href = `problem.html?id=${index}`;
+          });
+
+          // Create and append the table cells
+          const cellIndex = document.createElement('td');
+          cellIndex.textContent = index + 1;
+          row.appendChild(cellIndex);
+
+          const cellTitle = document.createElement('td');
+          cellTitle.textContent = problem.title || "Untitled";
+          row.appendChild(cellTitle);
+
+          const cellDifficulty = document.createElement('td');
+          cellDifficulty.textContent = problem.difficulty || "Unknown";
+          row.appendChild(cellDifficulty);
+
+          const cellStatus = document.createElement('td');
+          cellStatus.textContent = problem.status || "Not Done";
+          row.appendChild(cellStatus);
+
+          const cellTags = document.createElement('td');
+          cellTags.textContent = problem.tags || "None";
+          row.appendChild(cellTags);
+
+          const cellFrequency = document.createElement('td');
+          cellFrequency.textContent = problem.frequency || 0;
+          row.appendChild(cellFrequency);
+
+          tbody.appendChild(row);
+        });
+      } catch (error) {
+        console.error('Failed to load problems:', error);
+        const tbody = document.querySelector('#problemsTable tbody');
+        tbody.innerHTML = '<tr><td colspan="6">Error loading problems. Check console for details.</td></tr>';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadProblems);
+  </script>
+</body>
+</html>
