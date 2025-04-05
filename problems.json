@@ -1,143 +1,162 @@
 [
-    {
-      "title": "Ohm's Law Calculation",
-      "concept": "Circuits",
-      "description": "Calculate the current flowing through a resistor when a voltage is applied across it.",
-      "tags": "Circuits, Ohm's Law",
-      "solution": "Using Ohm's Law, I = V/R. For example, if V = 10V and R = 5Ω, then I = 2A."
-    },
-    {
-      "title": "Kirchhoff's Voltage Law",
-      "concept": "Circuit Analysis",
-      "description": "Given a closed circuit loop with multiple voltage sources, determine the missing voltage.",
-      "tags": "Circuits, Kirchhoff's Voltage Law",
-      "solution": "Apply Kirchhoff's Voltage Law: the sum of the voltage gains equals the sum of the voltage drops in a closed loop."
-    },
-    {
-      "title": "Resistor Network Equivalent",
-      "concept": "Circuit Analysis",
-      "description": "Determine the equivalent resistance of a combination of resistors in series and parallel.",
-      "tags": "Circuits, Resistors",
-      "solution": "For resistors in series, add them directly. For parallel, use 1/Req = 1/R1 + 1/R2 + ... and then take the reciprocal."
-    },
-    {
-      "title": "AC Circuit Impedance",
-      "concept": "AC Circuits",
-      "description": "Calculate the impedance of an RLC circuit at a specific frequency.",
-      "tags": "AC Circuits, RLC",
-      "solution": "Impedance Z = sqrt(R² + (X_L - X_C)²), where X_L = 2πfL and X_C = 1/(2πfC)."
-    },
-    {
-      "title": "Transformer Turns Ratio",
-      "concept": "Electromagnetism",
-      "description": "Determine the primary and secondary voltages given the transformer turns ratio.",
-      "tags": "Transformers, Electromagnetism",
-      "solution": "The voltage ratio equals the turns ratio: V_primary/V_secondary = N_primary/N_secondary."
-    },
-    {
-      "title": "Power Factor Correction",
-      "concept": "AC Power",
-      "description": "Calculate the capacitor size required for power factor correction in an AC circuit.",
-      "tags": "AC Power, Power Factor",
-      "solution": "Use the reactive power equation Q = V²/X_C. Adjust the capacitance so that the reactive power compensates for the lagging power factor."
-    },
-    {
-      "title": "RC Circuit Time Constant",
-      "concept": "Transient Analysis",
-      "description": "Determine the time constant of an RC circuit used for capacitor charging.",
-      "tags": "Transient, RC Circuit",
-      "solution": "The time constant τ = RC, which indicates how quickly the capacitor charges."
-    },
-    {
-      "title": "RL Circuit Decay",
-      "concept": "Transient Analysis",
-      "description": "Determine the decay of current in an RL circuit over time.",
-      "tags": "Transient, RL Circuit",
-      "solution": "Current decay follows I(t) = I₀ * exp(-t/τ) with τ = L/R."
-    },
-    {
-      "title": "DC Circuit Power Calculation",
-      "concept": "DC Circuits",
-      "description": "Calculate the power dissipated by a resistor in a DC circuit.",
-      "tags": "Power, DC Circuits",
-      "solution": "Power can be calculated using P = I²R or P = V²/R, depending on the given values."
-    },
-    {
-      "title": "Diode Forward Bias",
-      "concept": "Electronics",
-      "description": "Explain the behavior of a diode in a forward bias condition.",
-      "tags": "Electronics, Diodes",
-      "solution": "When forward biased, a diode begins conducting current after surpassing its threshold voltage (about 0.7V for silicon diodes)."
-    },
-    {
-      "title": "MOSFET Saturation Region",
-      "concept": "Electronics",
-      "description": "Describe how a MOSFET operates in the saturation region.",
-      "tags": "Electronics, MOSFET",
-      "solution": "In saturation, the MOSFET functions as a constant current source, where the drain current is relatively insensitive to the drain-source voltage."
-    },
-    {
-      "title": "2-Input AND Gate Truth Table",
-      "concept": "Digital Systems",
-      "description": "Construct the truth table for a 2-input AND gate.",
-      "tags": "Digital, Logic Gates",
-      "solution": "The truth table: 0 AND 0 = 0, 0 AND 1 = 0, 1 AND 0 = 0, and 1 AND 1 = 1."
-    },
-    {
-      "title": "Ideal Op-Amp in Negative Feedback",
-      "concept": "Analog Electronics",
-      "description": "Describe the ideal behavior of an operational amplifier configured with negative feedback.",
-      "tags": "Op-Amp, Analog",
-      "solution": "An ideal op-amp in negative feedback will drive its output such that the voltage difference between the inverting and non-inverting inputs is nearly zero."
-    },
-    {
-      "title": "RC Low-Pass Filter Cutoff Frequency",
-      "concept": "Signal Processing",
-      "description": "Calculate the cutoff frequency of an RC low-pass filter.",
-      "tags": "Filters, RC",
-      "solution": "The cutoff frequency is given by f_c = 1/(2πRC)."
-    },
-    {
-      "title": "Laplace Transform in RLC Circuit",
-      "concept": "Control Systems",
-      "description": "Use Laplace transforms to solve a differential equation describing an RLC circuit.",
-      "tags": "Control Systems, Laplace",
-      "solution": "Transform the circuit to the s-domain, solve the resulting algebraic equation, and then apply the inverse Laplace transform to return to the time domain."
-    },
-    {
-      "title": "Fourier Series Representation",
-      "concept": "Signal Processing",
-      "description": "Determine the Fourier series representation of a given periodic waveform.",
-      "tags": "Signal Processing, Fourier",
-      "solution": "Express the waveform as a sum of sine and cosine functions with coefficients computed over one period."
-    },
-    {
-      "title": "Bode Plot Analysis",
-      "concept": "Control Systems",
-      "description": "Interpret a Bode plot to assess system stability and gain margin.",
-      "tags": "Control Systems, Bode Plot",
-      "solution": "Examine the phase and gain margins on the Bode plot; positive margins generally indicate a stable system."
-    },
-    {
-      "title": "Circuit Simulation with SPICE",
-      "concept": "Circuit Design",
-      "description": "Explain the process of simulating a circuit using SPICE software.",
-      "tags": "Simulation, SPICE",
-      "solution": "Model the circuit components in SPICE, set up simulation parameters, run the simulation, and analyze the voltage/current responses."
-    },
-    {
-      "title": "Thermal Analysis of an Electronic Component",
-      "concept": "Electronics",
-      "description": "Calculate the temperature rise of an electronic component due to power dissipation.",
-      "tags": "Thermal, Electronics",
-      "solution": "Use the formula ΔT = P × θ, where P is the power dissipated and θ is the thermal resistance."
-    },
-    {
-      "title": "Electric Field of a Charged Sphere",
-      "concept": "Electromagnetics",
-      "description": "Determine the electric field at a point outside a uniformly charged sphere.",
-      "tags": "Electromagnetics, Field Theory",
-      "solution": "For points outside the sphere, treat it as a point charge: E = kQ/r², where k is Coulomb's constant."
-    }
-  ]
-  
+  {
+    "title": "Ohm's Law Calculation",
+    "concept": "Circuits",
+    "description": "Find the current through the circuit using Ohm's law.",
+    "tags": "Circuits, Ohm's Law",
+    "solution": "The two resistors are in parallel, so use the formula I = V/R. Calculate the equivalent resistance first if needed. R_eq = (R1 * R2) / (R1 + R2). Then, I = V/R_eq.",
+    "image": "ohms-law.png"
+  },
+  {
+    "title": "Kirchhoff's Voltage Law",
+    "concept": "Circuit Analysis",
+    "description": "Given a closed circuit loop with multiple voltage sources, determine the missing voltage.",
+    "tags": "Circuits, Kirchhoff's Voltage Law",
+    "solution": "Apply Kirchhoff's Voltage Law: the sum of the voltage gains equals the sum of the voltage drops in a closed loop.",
+    "image": "kirchhoff-voltage.png"
+  },
+  {
+    "title": "Resistor Network Equivalent",
+    "concept": "Circuit Analysis",
+    "description": "Determine the equivalent resistance of a combination of resistors in series and parallel.",
+    "tags": "Circuits, Resistors",
+    "solution": "For resistors in series, add them directly. For parallel, use 1/Req = 1/R1 + 1/R2 + ... and then take the reciprocal.",
+    "image": "resistor-network.png"
+  },
+  {
+    "title": "AC Circuit Impedance",
+    "concept": "AC Circuits",
+    "description": "Calculate the impedance of an RLC circuit at a specific frequency.",
+    "tags": "AC Circuits, RLC",
+    "solution": "Impedance Z = sqrt(R² + (X_L - X_C)²), where X_L = 2πfL and X_C = 1/(2πfC).",
+    "image": "rlc-circuit.png"
+  },
+  {
+    "title": "Transformer Turns Ratio",
+    "concept": "Electromagnetism",
+    "description": "Determine the primary and secondary voltages given the transformer turns ratio.",
+    "tags": "Transformers, Electromagnetism",
+    "solution": "The voltage ratio equals the turns ratio: V_primary/V_secondary = N_primary/N_secondary.",
+    "image": "transformer.png"
+  },
+  {
+    "title": "Power Factor Correction",
+    "concept": "AC Power",
+    "description": "Calculate the capacitor size required for power factor correction in an AC circuit.",
+    "tags": "AC Power, Power Factor",
+    "solution": "Use the reactive power equation Q = V²/X_C. Adjust the capacitance so that the reactive power compensates for the lagging power factor.",
+    "image": "power-factor.png"
+  },
+  {
+    "title": "RC Circuit Time Constant",
+    "concept": "Transient Analysis",
+    "description": "Determine the time constant of an RC circuit used for capacitor charging.",
+    "tags": "Transient, RC Circuit",
+    "solution": "The time constant τ = RC, which indicates how quickly the capacitor charges.",
+    "image": "rc-circuit.png"
+  },
+  {
+    "title": "RL Circuit Decay",
+    "concept": "Transient Analysis",
+    "description": "Determine the decay of current in an RL circuit over time.",
+    "tags": "Transient, RL Circuit",
+    "solution": "Current decay follows I(t) = I₀ * exp(-t/τ) with τ = L/R.",
+    "image": "rl-circuit.png"
+  },
+  {
+    "title": "DC Circuit Power Calculation",
+    "concept": "DC Circuits",
+    "description": "Calculate the power dissipated by a resistor in a DC circuit.",
+    "tags": "Power, DC Circuits",
+    "solution": "Power can be calculated using P = I²R or P = V²/R, depending on the given values.",
+    "image": "dc-power.png"
+  },
+  {
+    "title": "Diode Forward Bias",
+    "concept": "Electronics",
+    "description": "Explain the behavior of a diode in a forward bias condition.",
+    "tags": "Electronics, Diodes",
+    "solution": "When forward biased, a diode begins conducting current after surpassing its threshold voltage (about 0.7V for silicon diodes).",
+    "image": "diode-forward.png"
+  },
+  {
+    "title": "MOSFET Saturation Region",
+    "concept": "Electronics",
+    "description": "Describe how a MOSFET operates in the saturation region.",
+    "tags": "Electronics, MOSFET",
+    "solution": "In saturation, the MOSFET functions as a constant current source, where the drain current is relatively insensitive to the drain-source voltage.",
+    "image": "mosfet.png"
+  },
+  {
+    "title": "2-Input AND Gate Truth Table",
+    "concept": "Digital Systems",
+    "description": "Construct the truth table for a 2-input AND gate.",
+    "tags": "Digital, Logic Gates",
+    "solution": "The truth table: 0 AND 0 = 0, 0 AND 1 = 0, 1 AND 0 = 0, and 1 AND 1 = 1.",
+    "image": "and-gate.png"
+  },
+  {
+    "title": "Ideal Op-Amp in Negative Feedback",
+    "concept": "Analog Electronics",
+    "description": "Describe the ideal behavior of an operational amplifier configured with negative feedback.",
+    "tags": "Op-Amp, Analog",
+    "solution": "An ideal op-amp in negative feedback will drive its output such that the voltage difference between the inverting and non-inverting inputs is nearly zero.",
+    "image": "op-amp.png"
+  },
+  {
+    "title": "RC Low-Pass Filter Cutoff Frequency",
+    "concept": "Signal Processing",
+    "description": "Calculate the cutoff frequency of an RC low-pass filter.",
+    "tags": "Filters, RC",
+    "solution": "The cutoff frequency is given by f_c = 1/(2πRC).",
+    "image": "low-pass-filter.png"
+  },
+  {
+    "title": "Laplace Transform in RLC Circuit",
+    "concept": "Control Systems",
+    "description": "Use Laplace transforms to solve a differential equation describing an RLC circuit.",
+    "tags": "Control Systems, Laplace",
+    "solution": "Transform the circuit to the s-domain, solve the resulting algebraic equation, and then apply the inverse Laplace transform to return to the time domain.",
+    "image": "laplace-rlc.png"
+  },
+  {
+    "title": "Fourier Series Representation",
+    "concept": "Signal Processing",
+    "description": "Determine the Fourier series representation of a given periodic waveform.",
+    "tags": "Signal Processing, Fourier",
+    "solution": "Express the waveform as a sum of sine and cosine functions with coefficients computed over one period.",
+    "image": "fourier-series.png"
+  },
+  {
+    "title": "Bode Plot Analysis",
+    "concept": "Control Systems",
+    "description": "Interpret a Bode plot to assess system stability and gain margin.",
+    "tags": "Control Systems, Bode Plot",
+    "solution": "Examine the phase and gain margins on the Bode plot; positive margins generally indicate a stable system.",
+    "image": "bode-plot.png"
+  },
+  {
+    "title": "Circuit Simulation with SPICE",
+    "concept": "Circuit Design",
+    "description": "Explain the process of simulating a circuit using SPICE software.",
+    "tags": "Simulation, SPICE",
+    "solution": "Model the circuit components in SPICE, set up simulation parameters, run the simulation, and analyze the voltage/current responses.",
+    "image": "spice-simulation.png"
+  },
+  {
+    "title": "Thermal Analysis of an Electronic Component",
+    "concept": "Electronics",
+    "description": "Calculate the temperature rise of an electronic component due to power dissipation.",
+    "tags": "Thermal, Electronics",
+    "solution": "Use the formula ΔT = P × θ, where P is the power dissipated and θ is the thermal resistance.",
+    "image": "thermal-analysis.png"
+  },
+  {
+    "title": "Electric Field of a Charged Sphere",
+    "concept": "Electromagnetics",
+    "description": "Determine the electric field at a point outside a uniformly charged sphere.",
+    "tags": "Electromagnetics, Field Theory",
+    "solution": "For points outside the sphere, treat it as a point charge: E = kQ/r², where k is Coulomb's constant.",
+    "image": "electric-field.png"
+  }
+]

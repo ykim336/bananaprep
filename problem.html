@@ -61,6 +61,45 @@
     .constraint-item {
       margin-bottom: 0.5rem;
     }
+    /* New Image Styling */
+    .problem-image {
+      margin: 1rem 0;
+      text-align: center;
+      max-width: 100%;
+    }
+    .problem-image img {
+      max-width: 100%;
+      max-height: 300px;
+      border-radius: 8px;
+      border: 1px solid #444;
+    }
+    .problem-image figcaption {
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      color: #aaa;
+    }
+    /* Image Placeholder */
+    .image-placeholder {
+      width: 100%;
+      height: 200px;
+      background-color: #2a2a2a;
+      border: 1px dashed #444;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 1rem 0;
+    }
+    .image-placeholder i {
+      font-size: 2rem;
+      color: #555;
+      margin-bottom: 0.5rem;
+    }
+    .image-placeholder p {
+      color: #777;
+      font-size: 0.9rem;
+    }
     /* Right Panel: MATLAB Code Editor & Integration */
     .editor-section {
       flex: 1;
@@ -216,6 +255,11 @@
         <h2 id="problemTitle">Loading Problem Title...</h2>
         <span id="problemStatus" class="problem-status status-unsolved">Unsolved</span>
         <p id="problemDescription">Loading Problem Description...</p>
+        
+        <!-- Problem Image (New) -->
+        <figure class="problem-image" id="problemImageContainer">
+          <!-- Image will be inserted here -->
+        </figure>
       </div>
       <div class="section">
         <h2>Examples</h2>
@@ -273,6 +317,9 @@
   <script>
     // API URL - Change this to your actual API URL when deploying
     const API_URL = 'http://localhost:3000/api';
+    
+    // Base path for problem images
+    const IMAGE_BASE_PATH = 'images/problems/';
     
     // Utility: Get query parameter from URL
     function getQueryParam(param) {
@@ -360,6 +407,35 @@
       }
     }
     
+    // Improved display problem image function with better error handling
+    function displayProblemImage(imagePath, problemTitle) {
+      const imageContainer = document.getElementById('problemImageContainer');
+      
+      console.log("Image path:", imagePath);
+      
+      if (imagePath) {
+        // Direct image display with inline error handling
+        const fullImagePath = IMAGE_BASE_PATH + imagePath;
+        console.log("Full image path:", fullImagePath);
+        
+        imageContainer.innerHTML = `
+          <img src="${fullImagePath}" alt="${problemTitle} illustration" 
+               onerror="this.onerror=null; this.parentNode.innerHTML='<div class=\\'image-placeholder\\'><i>📷</i><p>Image not available</p></div>';"
+               style="max-width: 100%; border: 1px solid #444;">
+          <figcaption>Illustration for ${problemTitle}</figcaption>
+        `;
+      } else {
+        // No image provided, show placeholder
+        console.log("No image path provided");
+        imageContainer.innerHTML = `
+          <div class="image-placeholder">
+            <i>📷</i>
+            <p>No illustration available</p>
+          </div>
+        `;
+      }
+    }
+    
     // Load user progress for this problem
     async function loadUserProgress() {
       if (!checkAuthStatus()) return;
@@ -431,25 +507,50 @@
       }
     }
     
+    // Improved loadProblem function with better error handling and debugging
     async function loadProblem() {
       try {
+        console.log("Attempting to load problems.json...");
         const response = await fetch('problems.json');
+        
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+          console.error(`Network response was not ok: ${response.status} ${response.statusText}`);
+          document.getElementById('problemTitle').textContent = 'Error loading data';
+          document.getElementById('problemDescription').textContent = `Failed to load problems.json: ${response.status} ${response.statusText}`;
+          return;
         }
+        
+        console.log("Problems.json loaded successfully");
         const problems = await response.json();
+        console.log("JSON parsed successfully");
+        
         if (!Array.isArray(problems)) {
-          throw new Error('Problems data is not in the expected array format.');
+          console.error("JSON is not an array:", typeof problems, problems);
+          document.getElementById('problemTitle').textContent = 'Error: Invalid data format';
+          document.getElementById('problemDescription').textContent = 'The problems data is not in the expected format.';
+          return;
         }
         
         const id = getQueryParam('id');
+        console.log("Looking for problem with id:", id);
+        
         const problem = problems.find((_, index) => index.toString() === id) || problems[0];
+        
         if (!problem) {
-          throw new Error('No problem found for id: ' + id);
+          console.error("No problem found for id:", id);
+          document.getElementById('problemTitle').textContent = 'Error: Problem not found';
+          document.getElementById('problemDescription').textContent = 'No problem found with the specified ID.';
+          return;
         }
+        
+        console.log("Found problem:", problem);
+        console.log("Problem image:", problem.image);
         
         document.getElementById('problemTitle').textContent = problem.title || 'Untitled Problem';
         document.getElementById('problemDescription').textContent = problem.description || 'No description available.';
+        
+        // Display problem image
+        displayProblemImage(problem.image, problem.title);
         
         const examplesDiv = document.getElementById('problemExamples');
         examplesDiv.innerHTML = '';
