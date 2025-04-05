@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LeetMath - About Us</title>
+  <style>
+    /* Basic Reset & Dark Theme */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      min-height: 100vh;
+      background-color: #1f1f1f;
+      color: #f1f1f1;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    /* Header */
+    header {
+      background-color: #2a2a2a;
+      padding: 2rem 0;
+      text-align: center;
+      border-bottom: 1px solid #444;
+    }
+    .logo {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: #f39c12;
+    }
+    .tagline {
+      font-size: 1.2rem;
+      color: #ccc;
+    }
+    /* Navigation */
+    nav {
+      background-color: #333;
+      display: flex;
+      justify-content: center;
+      padding: 1rem;
+      border-bottom: 1px solid #444;
+    }
+    nav a {
+      color: #f1f1f1;
+      text-decoration: none;
+      padding: 0.5rem 1.5rem;
+      margin: 0 0.5rem;
+      border-radius: 4px;
+      transition: background-color 0.2s;
+    }
+    nav a:hover {
+      background-color: #444;
+    }
+    nav a.active {
+      background-color: #f39c12;
+      color: #333;
+    }
+    /* Main Content */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+    /* About Section Styles */
+    .about-section {
+      margin-bottom: 3rem;
+    }
+    .about-section h2 {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      color: #f39c12;
+      text-align: center;
+    }
+    .about-section p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+    .mission-vision {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+    .mission, .vision {
+      background-color: #2a2a2a;
+      border-radius: 8px;
+      padding: 1.5rem;
+      border: 1px solid #444;
+    }
+    .mission h3, .vision h3 {
+      color: #f39c12;
+      margin-bottom: 1rem;
+      font-size: 1.3rem;
+    }
+    .team-section {
+      text-align: center;
+      margin-top: 3rem;
+    }
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+    .team-member {
+      background-color: #2a2a2a;
+      border-radius: 8px;
+      padding: 1.5rem;
+      border: 1px solid #444;
+      text-align: center;
+    }
+    .team-member .avatar {
+      width: 120px;
+      height: 120px;
+      background-color: #3a3a3a;
+      border-radius: 50%;
+      margin: 0 auto 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      color: #f39c12;
+    }
+    .team-member h3 {
+      margin-bottom: 0.5rem;
+      color: #f1f1f1;
+    }
+    .team-member .title {
+      color: #ccc;
+      font-style: italic;
+      margin-bottom: 1rem;
+    }
+    /* Timeline Section */
+    .timeline {
+      position: relative;
+      max-width: 800px;
+      margin: 3rem auto;
+    }
+    .timeline::after {
+      content: '';
+      position: absolute;
+      width: 4px;
+      background-color: #444;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      margin-left: -2px;
+    }
+    .timeline-item {
+      position: relative;
+      width: 50%;
+      padding: 10px 30px;
+      box-sizing: border-box;
+    }
+    .timeline-item:nth-child(odd) {
+      left: 0;
+    }
+    .timeline-item:nth-child(even) {
+      left: 50%;
+    }
+    .timeline-content {
+      padding: 1.5rem;
+      background-color: #2a2a2a;
+      border-radius: 8px;
+      border: 1px solid #444;
+      position: relative;
+    }
+    .timeline-content h3 {
+      color: #f39c12;
+      margin-bottom: 0.5rem;
+    }
+    .timeline-content .date {
+      font-style: italic;
+      color: #ccc;
+      margin-bottom: 0.5rem;
+    }
+    /* Stats Section */
+    .stats-section {
+      background-color: #2a2a2a;
+      border-radius: 8px;
+      padding: 2rem;
+      border: 1px solid #444;
+      margin-top: 3rem;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      text-align: center;
+    }
+    .stat-item {
+      padding: 1rem;
+    }
+    .stat-item .number {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #f39c12;
+      margin-bottom: 0.5rem;
+    }
+    .stat-item .label {
+      color: #ccc;
+    }
+    /* Footer */
+    footer {
+      background-color: #2a2a2a;
+      text-align: center;
+      padding: 2rem;
+      margin-top: 2rem;
+      border-top: 1px solid #444;
+    }
+    footer p {
+      color: #aaa;
+      margin-top: 1rem;
+      font-size: 0.9rem;
+    }
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    .social-links a {
+      color: #f1f1f1;
+      font-size: 1.2rem;
+      text-decoration: none;
+    }
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      .mission-vision {
+        grid-template-columns: 1fr;
+      }
+      .timeline::after {
+        left: 31px;
+      }
+      .timeline-item {
+        width: 100%;
+        padding-left: 70px;
+        padding-right: 25px;
+      }
+      .timeline-item:nth-child(even) {
+        left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="logo">LeetMath</div>
+    <div class="tagline">Mastering math & engineering problems together</div>
+  </header>
+
+  <!-- Navigation -->
+  <nav>
+    <a href="home.html">Home</a>
+    <a href="database.html">Problem Database</a>
+    <a href="about.html" class="active">About</a>
+    <a href="login.html">Login</a>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="container">
+    <!-- About Section -->
+    <section class="about-section">
+      <h2>Our Story</h2>
+      <p>LeetMath was born from a simple observation: while programming interview prep resources are abundant, there's a gap in practice platforms for electrical engineering and mathematics students. Founded in 2023 by a group of electrical engineering graduates, LeetMath aims to bridge this gap by providing a comprehensive platform for students and professionals to practice, learn, and master engineering concepts through problem-solving.</p>
+      
+      <p>Our platform offers a structured approach to learning complex mathematical and electrical engineering concepts through practical problem-solving. By focusing on industry-relevant problems and providing interactive solutions, we help students develop the critical thinking and analytical skills needed in today's competitive technical landscape.</p>
+      
+      <div class="mission-vision">
+        <div class="mission">
+          <h3>Our Mission</h3>
+          <p>To create an accessible, comprehensive platform that empowers electrical engineering and mathematics students to hone their problem-solving skills through practice, collaboration, and expert guidance.</p>
+        </div>
+        <div class="vision">
+          <h3>Our Vision</h3>
+          <p>A world where every engineering student has access to quality practice resources, enabling them to build confidence, excel in their academics, and become innovative problem solvers in their careers.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="team-section">
+      <h2>Meet Our Team</h2>
+      <p>LeetMath is powered by a passionate team of electrical engineers, educators, and software developers committed to creating the best learning experience for our users.</p>
+      
+      <div class="team-grid">
+        <div class="team-member">
+          <div class="avatar">AL</div>
+          <h3>Dr. Alex Liu</h3>
+          <div class="title">Founder & Chief Problem Curator</div>
+          <p>PhD in Electrical Engineering with 15+ years of teaching experience specializing in circuit design and control systems.</p>
+        </div>
+        
+        <div class="team-member">
+          <div class="avatar">SP</div>
+          <h3>Sarah Patel</h3>
+          <div class="title">Lead Software Engineer</div>
+          <p>Full-stack developer with expertise in educational technology platforms and interactive learning tools.</p>
+        </div>
+        
+        <div class="team-member">
+          <div class="avatar">MJ</div>
+          <h3>Michael Johnson</h3>
+          <div class="title">Content Director</div>
+          <p>Former professor with expertise in signal processing and communications, overseeing our problem database quality.</p>
+        </div>
+        
+        <div class="team-member">
+          <div class="avatar">KZ</div>
+          <h3>Kira Zhang</h3>
+          <div class="title">Educational Strategist</div>
+          <p>Specialized in curriculum development with a passion for making complex concepts accessible to all learners.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Our Journey Timeline -->
+    <section class="about-section">
+      <h2>Our Journey</h2>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-content">
+            <h3>The Idea</h3>
+            <div class="date">January 2023</div>
+            <p>LeetMath was conceptualized during a study group session when our founders realized the lack of dedicated platforms for engineering problem practice.</p>
+          </div>
+        </div>
+        
+        <div class="timeline-item">
+          <div class="timeline-content">
+            <h3>Beta Launch</h3>
+            <div class="date">June 2023</div>
+            <p>The first version launched with 100 problem sets, focused on circuit analysis and digital systems.</p>
+          </div>
+        </div>
+        
+        <div class="timeline-item">
+          <div class="timeline-content">
+            <h3>University Partnerships</h3>
+            <div class="date">October 2023</div>
+            <p>Established partnerships with 5 leading engineering schools to develop curriculum-aligned problem sets.</p>
+          </div>
+        </div>
+        
+        <div class="timeline-item">
+          <div class="timeline-content">
+            <h3>Interactive Solutions</h3>
+            <div class="date">March 2024</div>
+            <p>Launched our proprietary MATLAB integration for real-time solution verification and feedback.</p>
+          </div>
+        </div>
+        
+        <div class="timeline-item">
+          <div class="timeline-content">
+            <h3>Full Platform Release</h3>
+            <div class="date">January 2025</div>
+            <p>Official launch with comprehensive coverage across electrical engineering disciplines and advanced learning analytics.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+      <h2>LeetMath by the Numbers</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="number">500+</div>
+          <div class="label">Engineering Problems</div>
+        </div>
+        
+        <div class="stat-item">
+          <div class="number">20,000</div>
+          <div class="label">Registered Users</div>
+        </div>
+        
+        <div class="stat-item">
+          <div class="number">15</div>
+          <div class="label">Topic Areas</div>
+        </div>
+        
+        <div class="stat-item">
+          <div class="number">30+</div>
+          <div class="label">University Partners</div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="logo">LeetMath</div>
+    <div class="social-links">
+      <a href="#">GitHub</a>
+      <a href="#">Twitter</a>
+      <a href="#">LinkedIn</a>
+    </div>
+    <p>© 2025 LeetMath. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Any JavaScript can go here
+    document.addEventListener('DOMContentLoaded', function() {
+      // You could add animations or interactive elements here
+    });
+  </script>
+</body>
+</html>
