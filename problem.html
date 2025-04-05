@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>MathQuest - Problem Details</title>
   <style>
-    /* Dark theme & basic reset */
+    /* Basic Reset & Dark Theme */
     * {
       box-sizing: border-box;
       margin: 0;
@@ -19,19 +19,27 @@
       flex-direction: column;
       min-height: 100vh;
     }
+    /* Sticky Header with Logo */
     header {
-      padding: 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
       background-color: #2a2a2a;
+      padding: 0.75rem 1rem;
       border-bottom: 1px solid #444;
-      text-align: center;
+      display: flex;
+      align-items: center;
+    }
+    header .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #f39c12;
     }
     header a {
       color: #f39c12;
       text-decoration: none;
       font-size: 0.9rem;
-      position: absolute;
-      left: 1rem;
-      top: 1.2rem;
+      margin-left: auto;
     }
     main {
       flex: 1;
@@ -94,17 +102,29 @@
     .database-section {
       background-color: #2f2f2f;
       border: 1px solid #444;
-      border-radius: 4px;
       padding: 1rem;
+      border-radius: 4px;
       font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+    .output-section {
+      background-color: #2f2f2f;
+      border: 1px solid #444;
+      padding: 1rem;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      margin-top: 1rem;
+      white-space: pre-wrap;
+      overflow-y: auto;
+      min-height: 100px;
     }
   </style>
 </head>
 <body>
-  <!-- Header with Back Link -->
+  <!-- Sticky Header with Logo -->
   <header>
+    <div class="logo">MathQuest</div>
     <a href="database.html">← Back to Database</a>
-    <h1>MathQuest: Problem Details</h1>
   </header>
   
   <!-- Main Content: Problem details and code editor -->
@@ -129,7 +149,7 @@
       </div>
     </div>
 
-    <!-- Right Panel: MATLAB Code Editor & Database Integration -->
+    <!-- Right Panel: MATLAB Code Editor & API Integration -->
     <div class="editor-section">
       <div class="btn-row">
         <button id="runBtn" class="btn">Run</button>
@@ -137,14 +157,17 @@
       </div>
       <div id="codeEditor" class="code-editor" contenteditable="true">
 % Write your MATLAB code here...
-% Example:
+% For example:
 % function result = solveProblem(input)
-%   % Your code logic here
+%   result = input * 2; % Sample operation
 % end
       </div>
       <div class="database-section">
-        <h2>MATLAB Integration (Placeholder)</h2>
-        <p>This section could integrate with MATLAB Online or a MATLAB Engine API on the server to run your code. (No actual MATLAB magic here in this static mockup.)</p>
+        <h2>MATLAB Integration</h2>
+        <p>This section calls a MATLAB API via our Flask server. Your MATLAB function (e.g., <code>solveProblem</code>) is executed with your input.</p>
+      </div>
+      <div class="output-section" id="matlabOutput">
+        MATLAB output will appear here...
       </div>
     </div>
   </main>
@@ -156,7 +179,6 @@
       return params.get(param);
     }
     
-    // Load a single problem from problems.json based on query parameter "id"
     async function loadProblem() {
       try {
         const response = await fetch('problems.json');
@@ -168,20 +190,17 @@
           throw new Error('Problems data is not in the expected array format.');
         }
         
-        const id = getQueryParam('id'); // Expect id to be the index in the array (as a string)
-        // Defensive: if id is missing or invalid, default to first problem
+        const id = getQueryParam('id');
         const problem = problems.find((_, index) => index.toString() === id) || problems[0];
         if (!problem) {
           throw new Error('No problem found for id: ' + id);
         }
         
-        // Populate problem details
         document.getElementById('problemTitle').textContent = problem.title || 'Untitled Problem';
         document.getElementById('problemDescription').textContent = problem.description || 'No description available.';
         
-        // Populate examples
         const examplesDiv = document.getElementById('problemExamples');
-        examplesDiv.innerHTML = ''; // clear placeholder
+        examplesDiv.innerHTML = '';
         if (Array.isArray(problem.examples)) {
           problem.examples.forEach(example => {
             const exDiv = document.createElement('div');
@@ -195,7 +214,6 @@
           examplesDiv.textContent = 'No examples provided.';
         }
         
-        // Populate constraints
         const constraintsUl = document.getElementById('problemConstraints');
         constraintsUl.innerHTML = '';
         if (Array.isArray(problem.constraints)) {
@@ -209,7 +227,6 @@
           constraintsUl.textContent = 'No constraints provided.';
         }
         
-        // Preload any starter MATLAB code if available
         if (problem.solutionCode) {
           document.getElementById('codeEditor').textContent = problem.solutionCode;
         }
@@ -220,10 +237,27 @@
       }
     }
     
-    // Mock Run and Submit button handlers
-    document.getElementById('runBtn').addEventListener('click', () => {
-      alert('Running your MATLAB code... (this is a mock alert, no real MATLAB integration)');
+    document.getElementById('runBtn').addEventListener('click', async () => {
+      const inputValue = prompt("Enter a number input for the MATLAB function:");
+      document.getElementById('matlabOutput').textContent = 'Running MATLAB code...';
+      
+      try {
+        const response = await fetch('http://localhost:5000/execute', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ input: inputValue })
+        });
+        const data = await response.json();
+        if (data.error) {
+          throw new Error(data.error);
+        }
+        document.getElementById('matlabOutput').textContent = 'MATLAB Output: ' + data.output;
+      } catch (err) {
+        console.error('Error calling MATLAB API:', err);
+        document.getElementById('matlabOutput').textContent = 'Error running MATLAB code: ' + err.message;
+      }
     });
+    
     document.getElementById('submitBtn').addEventListener('click', () => {
       alert('Submitting your MATLAB solution... (this is a mock alert)');
     });
