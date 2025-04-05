@@ -1,0 +1,9 @@
+/leetmath-server/node_modules
+/leetmath-server/dist
+/leetmath-server/.env
+/leetmath-server/.env.local
+/leetmath-server/.env.development.local
+/leetmath-server/.env.test.local  
+/leetmath-server/leetmath.db
+/leetmath-server/package-lock.json
+/leetmath-server/package.json                                                                  
