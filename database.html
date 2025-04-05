@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MathQuest - Problem Database</title>
+  <title>LeetMath - Problem Database</title>
   <style>
     /* Basic Reset & Dark Theme */
     * {
@@ -33,6 +33,44 @@
       font-size: 1.5rem;
       font-weight: bold;
       color: #f39c12;
+      text-decoration: none;
+    }
+    /* User Account Section */
+    .user-account {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .user-account .user-name {
+      font-size: 0.9rem;
+      color: #ddd;
+    }
+    .user-account .user-avatar {
+      width: 30px;
+      height: 30px;
+      background-color: #f39c12;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: bold;
+      color: #333;
+    }
+    .user-account .login-btn, 
+    .user-account .logout-btn {
+      background-color: #f39c12;
+      color: #333;
+      border: none;
+      padding: 0.4rem 0.8rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .user-account .logout-btn {
+      background-color: #444;
+      color: #f1f1f1;
     }
     /* Main Container */
     .container {
@@ -130,6 +168,16 @@
     .difficulty-hard {
       color: #e74c3c;
     }
+    /* Status color coding */
+    .status-solved {
+      color: #2ecc71;
+    }
+    .status-attempted {
+      color: #f39c12;
+    }
+    .status-not-done {
+      color: #ccc;
+    }
     /* Right Sidebar: Company Tags & Session Stats */
     .company-tags {
       display: flex;
@@ -156,26 +204,79 @@
       padding: 0.5rem;
       border-radius: 4px;
     }
+    .stats-item .number {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #f39c12;
+    }
+    /* User Profile Section */
+    .user-profile {
+      padding: 1rem;
+      background-color: #3a3a3a;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+    .user-profile h3 {
+      margin-bottom: 0.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .user-profile .progress-bar {
+      height: 8px;
+      background-color: #444;
+      border-radius: 4px;
+      margin-top: 0.5rem;
+      overflow: hidden;
+    }
+    .user-profile .progress-bar-fill {
+      height: 100%;
+      background-color: #f39c12;
+    }
+    .completion-text {
+      text-align: right;
+      font-size: 0.8rem;
+      color: #ccc;
+      margin-top: 0.25rem;
+    }
+    /* Filter dropdown */
+    .filter-dropdown {
+      position: relative;
+      display: inline-block;
+    }
+    .filter-dropdown .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #2f2f2f;
+      min-width: 160px;
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.5);
+      z-index: 1;
+      border-radius: 4px;
+      border: 1px solid #444;
+    }
+    .filter-dropdown:hover .dropdown-content {
+      display: block;
+    }
+    .filter-dropdown .dropdown-content a {
+      color: #f1f1f1;
+      padding: 0.75rem 1rem;
+      text-decoration: none;
+      display: block;
+      transition: background-color 0.2s;
+    }
+    .filter-dropdown .dropdown-content a:hover {
+      background-color: #3a3a3a;
+    }
   </style>
 </head>
 <body>
   <!-- Sticky Header with Logo -->
-  <head>
-    <style>
-        .logo {
-            text-decoration: none; /* Removes the underline */
-        }
-    </style>
-</head>
-
-
-<header>
-  <a href="home.html" class="logo">MathQuest</a>
-  <!-- Links to login and signup pages -->
-  <nav>
-    <a href="login.html" class="login" style="color: #e67e22;">Login</a>
-  </nav>
-</header>
+  <header>
+    <a href="home.html" class="logo">LeetMath</a>
+    <div class="user-account" id="userAccountSection">
+      <!-- This will be populated by JavaScript -->
+    </div>
+  </header>
   
   <!-- Main Container -->
   <div class="container">
@@ -183,12 +284,32 @@
     <div class="main-content">
       <!-- Top Navigation -->
       <div class="top-nav">
-        <button class="nav-btn">Lists</button>
-        <button class="nav-btn">Difficulty</button>
-        <button class="nav-btn">Status</button>
-        <button class="nav-btn">Tags</button>
+        <div class="filter-dropdown">
+          <button class="nav-btn">Lists</button>
+          <div class="dropdown-content">
+            <a href="#" data-filter="all">All Problems</a>
+            <a href="#" data-filter="solved">Solved Problems</a>
+            <a href="#" data-filter="attempted">Attempted Problems</a>
+            <a href="#" data-filter="unsolved">Unsolved Problems</a>
+          </div>
+        </div>
+        <div class="filter-dropdown">
+          <button class="nav-btn">Difficulty</button>
+          <div class="dropdown-content">
+            <a href="#" data-difficulty="all">All Difficulties</a>
+            <a href="#" data-difficulty="easy">Easy</a>
+            <a href="#" data-difficulty="medium">Medium</a>
+            <a href="#" data-difficulty="hard">Hard</a>
+          </div>
+        </div>
+        <div class="filter-dropdown">
+          <button class="nav-btn">Tags</button>
+          <div class="dropdown-content" id="tagFilters">
+            <!-- Tags will be populated dynamically -->
+          </div>
+        </div>
         <div class="search-bar">
-          <input type="text" id="searchInput" placeholder="Search questions..." />
+          <input type="text" id="searchInput" placeholder="Search problems..." />
         </div>
         <button class="pick-one-btn" id="pickOneBtn">Pick One</button>
       </div>
@@ -203,7 +324,7 @@
               <th>Difficulty</th>
               <th>Status</th>
               <th>Tags</th>
-              <th>Frequency</th>
+              <th>Concept</th>
             </tr>
           </thead>
           <tbody>
@@ -215,27 +336,225 @@
     
     <!-- RIGHT SIDEBAR -->
     <div class="right-sidebar">
-      <div class="company-tags">
-        <span class="company-tag">Amazon</span>
-        <span class="company-tag">Google</span>
-        <span class="company-tag">Facebook</span>
-        <span class="company-tag">Apple</span>
-        <span class="company-tag">Microsoft</span>
-        <span class="company-tag">DoorDash</span>
-      </div>
-      <div class="session-stats">
-        <h3>Session</h3>
-        <div class="stats-grid">
-          <div class="stats-item">Easy<br>0</div>
-          <div class="stats-item">Medium<br>0</div>
-          <div class="stats-item">Hard<br>0</div>
+      <!-- User Profile (only shown when logged in) -->
+      <div class="user-profile" id="userProfile" style="display: none;">
+        <h3>
+          Your Progress 
+          <span class="refresh-btn" id="refreshStatsBtn" style="cursor: pointer; font-size: 0.8rem; color: #f39c12;">↻</span>
+        </h3>
+        <div class="progress-bar">
+          <div class="progress-bar-fill" id="progressBarFill" style="width: 0%"></div>
         </div>
+        <div class="completion-text" id="completionText">0%</div>
+      </div>
+      
+      <div class="session-stats">
+        <h3>Problems Solved</h3>
+        <div class="stats-grid">
+          <div class="stats-item">
+            <div class="number" id="easySolved">0</div>
+            <div>Easy</div>
+          </div>
+          <div class="stats-item">
+            <div class="number" id="mediumSolved">0</div>
+            <div>Medium</div>
+          </div>
+          <div class="stats-item">
+            <div class="number" id="hardSolved">0</div>
+            <div>Hard</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="company-tags">
+        <span class="company-tag">Circuits</span>
+        <span class="company-tag">Signal Processing</span>
+        <span class="company-tag">Power</span>
+        <span class="company-tag">Digital</span>
+        <span class="company-tag">Electronics</span>
+        <span class="company-tag">Control Systems</span>
       </div>
     </div>
   </div>
 
   <script>
+    // API URL - Change this to your actual API URL when deploying
+    const API_URL = 'http://localhost:3000/api';
+    
     let problemsData = [];
+    let userProgress = {};
+    let currentFilters = {
+      status: 'all',
+      difficulty: 'all',
+      tag: 'all',
+      search: ''
+    };
+    
+    // Check authentication status
+    function checkAuthStatus() {
+      const token = localStorage.getItem('leetmathToken');
+      const userName = localStorage.getItem('leetmathUserName');
+      const userAccountSection = document.getElementById('userAccountSection');
+      const userProfile = document.getElementById('userProfile');
+      
+      if (token && userName) {
+        // User is logged in
+        userAccountSection.innerHTML = `
+          <div class="user-name">Welcome, ${userName}</div>
+          <div class="user-avatar">${userName.charAt(0)}</div>
+          <button class="logout-btn" id="logoutBtn">Logout</button>
+        `;
+        
+        // Show user profile section
+        userProfile.style.display = 'block';
+        
+        // Set up logout button
+        document.getElementById('logoutBtn').addEventListener('click', logout);
+        
+        // Load user stats
+        loadUserStats();
+        
+        return true;
+      } else {
+        // User is not logged in
+        userAccountSection.innerHTML = `
+          <a href="login.html" class="login-btn">Login</a>
+        `;
+        
+        // Hide user profile section
+        userProfile.style.display = 'none';
+        
+        return false;
+      }
+    }
+    
+    // Logout function
+    function logout() {
+      localStorage.removeItem('leetmathToken');
+      localStorage.removeItem('leetmathUserId');
+      localStorage.removeItem('leetmathUserName');
+      
+      // Refresh the page
+      window.location.reload();
+    }
+    
+    // Load user stats from API
+    async function loadUserStats() {
+      const token = localStorage.getItem('leetmathToken');
+      if (!token) return;
+      
+      try {
+        const response = await fetch(`${API_URL}/user/stats`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        
+        if (!response.ok) {
+          throw new Error('Failed to load user stats');
+        }
+        
+        const stats = await response.json();
+        
+        // Update stats display
+        document.getElementById('easySolved').textContent = stats.easy_solved || 0;
+        document.getElementById('mediumSolved').textContent = stats.medium_solved || 0;
+        document.getElementById('hardSolved').textContent = stats.hard_solved || 0;
+        
+        // Calculate and update progress bar
+        updateProgressBar(stats);
+        
+      } catch (error) {
+        console.error('Error loading user stats:', error);
+      }
+    }
+    
+    // Update progress bar
+    function updateProgressBar(stats) {
+      const totalSolved = (stats.easy_solved || 0) + (stats.medium_solved || 0) + (stats.hard_solved || 0);
+      const totalProblems = problemsData.length;
+      const percentage = totalProblems > 0 ? Math.round((totalSolved / totalProblems) * 100) : 0;
+      
+      document.getElementById('progressBarFill').style.width = `${percentage}%`;
+      document.getElementById('completionText').textContent = `${percentage}% Completed`;
+    }
+    
+    // Load user progress for all problems
+    async function loadUserProgress() {
+      const token = localStorage.getItem('leetmathToken');
+      if (!token) return;
+      
+      try {
+        const response = await fetch(`${API_URL}/progress/all`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        
+        if (!response.ok) {
+          if (response.status !== 404) {
+            throw new Error('Failed to load progress data');
+          }
+          return;
+        }
+        
+        const progressData = await response.json();
+        
+        // Convert array to object with problem_id as key for easier lookup
+        userProgress = {};
+        progressData.forEach(item => {
+          userProgress[item.problem_id] = item;
+        });
+        
+        // Re-render table with progress data
+        renderTable(filterProblems(problemsData));
+        
+      } catch (error) {
+        console.error('Error loading user progress:', error);
+      }
+    }
+    
+    // Apply filters to problems data
+    function filterProblems(data) {
+      return data.filter(problem => {
+        // Filter by status
+        if (currentFilters.status !== 'all') {
+          const problemId = problemsData.indexOf(problem);
+          const progressStatus = userProgress[problemId]?.status || 'not-done';
+          
+          if (currentFilters.status === 'solved' && progressStatus !== 'solved') return false;
+          if (currentFilters.status === 'attempted' && progressStatus !== 'attempted') return false;
+          if (currentFilters.status === 'unsolved' && progressStatus !== 'not-done') return false;
+        }
+        
+        // Filter by difficulty
+        if (currentFilters.difficulty !== 'all' && problem.difficulty?.toLowerCase() !== currentFilters.difficulty) {
+          return false;
+        }
+        
+        // Filter by tag
+        if (currentFilters.tag !== 'all' && !(problem.tags?.toLowerCase().includes(currentFilters.tag.toLowerCase()))) {
+          return false;
+        }
+        
+        // Filter by search text
+        if (currentFilters.search && !(
+          problem.title?.toLowerCase().includes(currentFilters.search.toLowerCase()) ||
+          problem.tags?.toLowerCase().includes(currentFilters.search.toLowerCase()) ||
+          problem.concept?.toLowerCase().includes(currentFilters.search.toLowerCase())
+        )) {
+          return false;
+        }
+        
+        return true;
+      });
+    }
+    
+    // Get problem status from user progress
+    function getProblemStatus(problemId) {
+      if (!userProgress[problemId]) return 'not-done';
+      return userProgress[problemId].status || 'not-done';
+    }
 
     async function loadProblems() {
       try {
@@ -251,6 +570,12 @@
         }
 
         renderTable(problemsData);
+        populateTagFilters(problemsData);
+        
+        // After problems are loaded, load user progress if logged in
+        if (checkAuthStatus()) {
+          loadUserProgress();
+        }
       } catch (error) {
         console.error('Failed to load problems:', error);
         const tbody = document.querySelector('#problemsTable tbody');
@@ -280,7 +605,7 @@
         row.appendChild(cellTitle);
 
         const cellDifficulty = document.createElement('td');
-        const difficulty = (problem.difficulty || "Unknown").toLowerCase();
+        const difficulty = (problem.difficulty || "easy").toLowerCase();
         cellDifficulty.textContent = difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
         if (["easy", "medium", "hard"].includes(difficulty)) {
           cellDifficulty.classList.add(`difficulty-${difficulty}`);
@@ -288,29 +613,68 @@
         row.appendChild(cellDifficulty);
 
         const cellStatus = document.createElement('td');
-        cellStatus.textContent = problem.status || "Not Done";
+        const status = getProblemStatus(index);
+        cellStatus.textContent = status.charAt(0).toUpperCase() + status.slice(1);
+        cellStatus.classList.add(`status-${status === 'not-done' ? 'not-done' : status}`);
         row.appendChild(cellStatus);
 
         const cellTags = document.createElement('td');
         cellTags.textContent = problem.tags || "None";
         row.appendChild(cellTags);
 
-        const cellFreq = document.createElement('td');
-        cellFreq.textContent = problem.frequency || 0;
-        row.appendChild(cellFreq);
+        const cellConcept = document.createElement('td');
+        cellConcept.textContent = problem.concept || "General";
+        row.appendChild(cellConcept);
 
         tbody.appendChild(row);
+      });
+    }
+    
+    // Populate tag filters from unique tags in problems
+    function populateTagFilters(problems) {
+      const tagFiltersContainer = document.getElementById('tagFilters');
+      const allTags = new Set();
+      
+      // Collect all tags
+      problems.forEach(problem => {
+        if (problem.tags) {
+          problem.tags.split(',').forEach(tag => {
+            allTags.add(tag.trim());
+          });
+        }
+      });
+      
+      // Add "All Tags" option
+      const allTagsLink = document.createElement('a');
+      allTagsLink.href = '#';
+      allTagsLink.textContent = 'All Tags';
+      allTagsLink.dataset.tag = 'all';
+      allTagsLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        currentFilters.tag = 'all';
+        renderTable(filterProblems(problemsData));
+      });
+      tagFiltersContainer.appendChild(allTagsLink);
+      
+      // Add each unique tag
+      Array.from(allTags).sort().forEach(tag => {
+        const tagLink = document.createElement('a');
+        tagLink.href = '#';
+        tagLink.textContent = tag;
+        tagLink.dataset.tag = tag;
+        tagLink.addEventListener('click', (e) => {
+          e.preventDefault();
+          currentFilters.tag = tag;
+          renderTable(filterProblems(problemsData));
+        });
+        tagFiltersContainer.appendChild(tagLink);
       });
     }
 
     const searchInput = document.getElementById('searchInput');
     searchInput.addEventListener('input', (e) => {
-      const query = e.target.value.toLowerCase();
-      const filtered = problemsData.filter(problem =>
-        (problem.title || '').toLowerCase().includes(query) ||
-        (problem.tags || '').toLowerCase().includes(query)
-      );
-      renderTable(filtered);
+      currentFilters.search = e.target.value.toLowerCase();
+      renderTable(filterProblems(problemsData));
     });
 
     document.getElementById('pickOneBtn').addEventListener('click', () => {
@@ -318,8 +682,35 @@
       const randomIndex = Math.floor(Math.random() * problemsData.length);
       window.location.href = `problem.html?id=${randomIndex}`;
     });
+    
+    // Set up difficulty filter listeners
+    document.querySelectorAll('[data-difficulty]').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        currentFilters.difficulty = e.target.dataset.difficulty;
+        renderTable(filterProblems(problemsData));
+      });
+    });
+    
+    // Set up status filter listeners
+    document.querySelectorAll('[data-filter]').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        currentFilters.status = e.target.dataset.filter;
+        renderTable(filterProblems(problemsData));
+      });
+    });
+    
+    // Refresh stats button
+    document.getElementById('refreshStatsBtn')?.addEventListener('click', () => {
+      loadUserStats();
+      loadUserProgress();
+    });
 
-    document.addEventListener('DOMContentLoaded', loadProblems);
+    document.addEventListener('DOMContentLoaded', () => {
+      checkAuthStatus();
+      loadProblems();
+    });
   </script>
 </body>
 </html>

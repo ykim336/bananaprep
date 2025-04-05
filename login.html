@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MathQuest - Sign In</title>
+  <title>LeetMath - Sign In</title>
   <style>
     /* Basic Reset & Dark Theme */
     * {
@@ -146,6 +146,10 @@
     .submit-btn:hover {
       background-color: #e67e22;
     }
+    .submit-btn:disabled {
+      background-color: #8a8a8a;
+      cursor: not-allowed;
+    }
     .social-login {
       margin-top: 2rem;
       text-align: center;
@@ -228,13 +232,57 @@
       margin-top: 0.5rem;
       display: none;
     }
+    /* Success message styling */
+    .success-message {
+      color: #2ecc71;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+      display: none;
+      text-align: center;
+    }
+    /* Loading spinner */
+    .spinner {
+      display: none;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255,255,255,.3);
+      border-radius: 50%;
+      border-top-color: #f39c12;
+      animation: spin 1s ease-in-out infinite;
+      margin: 0 auto;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .form-loading {
+      display: flex;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+    /* Alert styling */
+    .alert {
+      padding: 0.75rem;
+      border-radius: 4px;
+      margin-bottom: 1rem;
+      display: none;
+    }
+    .alert-danger {
+      background-color: rgba(231, 76, 60, 0.2);
+      border: 1px solid #e74c3c;
+      color: #e74c3c;
+    }
+    .alert-success {
+      background-color: rgba(46, 204, 113, 0.2);
+      border: 1px solid #2ecc71;
+      color: #2ecc71;
+    }
   </style>
 </head>
 <body>
   <!-- Header -->
   <header>
     <a href="home.html" class="back-link">← Back to Home</a>
-    <div class="logo">MathQuest</div>
+    <div class="logo">LeetMath</div>
   </header>
 
   <!-- Main Content -->
@@ -244,6 +292,10 @@
         <div class="tab active" id="signinTab">Sign In</div>
         <div class="tab" id="signupTab">Sign Up</div>
       </div>
+      
+      <!-- Alert Messages -->
+      <div class="alert alert-danger" id="errorAlert"></div>
+      <div class="alert alert-success" id="successAlert"></div>
       
       <!-- Sign In Form -->
       <form id="signinForm">
@@ -265,7 +317,10 @@
           </div>
           <a href="#" class="forgot-password">Forgot Password?</a>
         </div>
-        <button type="submit" class="submit-btn">Sign In</button>
+        <button type="submit" class="submit-btn" id="signinButton">Sign In</button>
+        <div class="form-loading">
+          <div class="spinner" id="signinSpinner"></div>
+        </div>
         
         <div class="social-login">
           <p>Or sign in with</p>
@@ -283,6 +338,7 @@
         <div class="form-group">
           <label for="fullName">Full Name</label>
           <input type="text" id="fullName" name="fullName" required>
+          <div class="error-message" id="fullNameError">Please enter your full name</div>
         </div>
         <div class="form-group">
           <label for="signupEmail">Email Address</label>
@@ -299,7 +355,10 @@
           <input type="password" id="confirmPassword" name="confirmPassword" required>
           <div class="error-message" id="confirmPasswordError">Passwords do not match</div>
         </div>
-        <button type="submit" class="submit-btn">Sign Up</button>
+        <button type="submit" class="submit-btn" id="signupButton">Sign Up</button>
+        <div class="form-loading">
+          <div class="spinner" id="signupSpinner"></div>
+        </div>
       </form>
       
       <div class="signup-prompt" id="authPrompt">
@@ -310,10 +369,13 @@
 
   <!-- Footer -->
   <footer>
-    <p>© 2025 MathQuest. All rights reserved.</p>
+    <p>© 2025 LeetMath. All rights reserved.</p>
   </footer>
 
   <script>
+    // API URL - Change this to your actual API URL when deploying
+    const API_URL = 'http://localhost:3000/api';
+
     document.addEventListener('DOMContentLoaded', function() {
       const signinTab = document.getElementById('signinTab');
       const signupTab = document.getElementById('signupTab');
@@ -321,6 +383,52 @@
       const signupForm = document.getElementById('signupForm');
       const toggleAuth = document.getElementById('toggleAuth');
       const authPrompt = document.getElementById('authPrompt');
+      
+      // Alert elements
+      const errorAlert = document.getElementById('errorAlert');
+      const successAlert = document.getElementById('successAlert');
+      
+      // Loading elements
+      const signinSpinner = document.getElementById('signinSpinner');
+      const signupSpinner = document.getElementById('signupSpinner');
+      const signinButton = document.getElementById('signinButton');
+      const signupButton = document.getElementById('signupButton');
+      
+      // Show error alert
+      function showError(message) {
+        errorAlert.textContent = message;
+        errorAlert.style.display = 'block';
+        successAlert.style.display = 'none';
+        
+        // Auto hide after 5 seconds
+        setTimeout(() => {
+          errorAlert.style.display = 'none';
+        }, 5000);
+      }
+      
+      // Show success alert
+      function showSuccess(message) {
+        successAlert.textContent = message;
+        successAlert.style.display = 'block';
+        errorAlert.style.display = 'none';
+        
+        // Auto hide after 5 seconds
+        setTimeout(() => {
+          successAlert.style.display = 'none';
+        }, 5000);
+      }
+      
+      // Toggle loading state for sign in form
+      function toggleSigninLoading(isLoading) {
+        signinSpinner.style.display = isLoading ? 'block' : 'none';
+        signinButton.disabled = isLoading;
+      }
+      
+      // Toggle loading state for sign up form
+      function toggleSignupLoading(isLoading) {
+        signupSpinner.style.display = isLoading ? 'block' : 'none';
+        signupButton.disabled = isLoading;
+      }
       
       // Toggle between sign in and sign up
       function showSignIn() {
@@ -330,6 +438,10 @@
         signupForm.style.display = 'none';
         authPrompt.innerHTML = 'Don\'t have an account? <a href="#" id="toggleAuth">Sign up now</a>';
         document.getElementById('toggleAuth').addEventListener('click', showSignUp);
+        
+        // Clear any visible alerts
+        errorAlert.style.display = 'none';
+        successAlert.style.display = 'none';
       }
       
       function showSignUp() {
@@ -339,6 +451,10 @@
         signinForm.style.display = 'none';
         authPrompt.innerHTML = 'Already have an account? <a href="#" id="toggleAuth">Sign in</a>';
         document.getElementById('toggleAuth').addEventListener('click', showSignIn);
+        
+        // Clear any visible alerts
+        errorAlert.style.display = 'none';
+        successAlert.style.display = 'none';
       }
       
       // Set up event listeners
@@ -346,17 +462,39 @@
       signupTab.addEventListener('click', showSignUp);
       toggleAuth.addEventListener('click', showSignUp);
       
-      // Form validation
-      signinForm.addEventListener('submit', function(e) {
+      // Store auth token in localStorage
+      function saveAuthToken(token, userId, fullName) {
+        localStorage.setItem('leetmathToken', token);
+        localStorage.setItem('leetmathUserId', userId);
+        localStorage.setItem('leetmathUserName', fullName || '');
+      }
+      
+      // Check if user is already logged in
+      function checkAuthStatus() {
+        const token = localStorage.getItem('leetmathToken');
+        if (token) {
+          // Redirect to database page or validate token with server first
+          window.location.href = 'database.html';
+        }
+      }
+      
+      // Run auth check on page load
+      checkAuthStatus();
+      
+      // Handle sign in
+      signinForm.addEventListener('submit', async function(e) {
         e.preventDefault();
         
+        // Get form data
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const remember = document.getElementById('remember').checked;
+        
         // Simple validation
-        const email = document.getElementById('email');
-        const password = document.getElementById('password');
         let isValid = true;
         
         // Email validation
-        if (!email.value.includes('@')) {
+        if (!email.includes('@')) {
           document.getElementById('emailError').style.display = 'block';
           isValid = false;
         } else {
@@ -364,7 +502,7 @@
         }
         
         // Password validation
-        if (password.value.length < 8) {
+        if (password.length < 8) {
           document.getElementById('passwordError').style.display = 'block';
           isValid = false;
         } else {
@@ -372,25 +510,66 @@
         }
         
         if (isValid) {
-          // Mock successful login
-          alert('Sign in successful! Redirecting to dashboard...');
-          // In a real app, you would handle authentication and redirect
-          window.location.href = 'database.html';
+          try {
+            // Show loading
+            toggleSigninLoading(true);
+            
+            // Make API request
+            const response = await fetch(`${API_URL}/login`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ email, password })
+            });
+            
+            const data = await response.json();
+            
+            if (!response.ok) {
+              throw new Error(data.error || 'Failed to sign in');
+            }
+            
+            // Save auth token
+            saveAuthToken(data.token, data.userId, data.fullName);
+            
+            // Show success message
+            showSuccess('Sign in successful! Redirecting...');
+            
+            // Redirect to dashboard after short delay
+            setTimeout(() => {
+              window.location.href = 'database.html';
+            }, 1500);
+          } catch (error) {
+            showError(error.message);
+          } finally {
+            toggleSigninLoading(false);
+          }
         }
       });
       
-      signupForm.addEventListener('submit', function(e) {
+      // Handle sign up
+      signupForm.addEventListener('submit', async function(e) {
         e.preventDefault();
         
+        // Get form data
+        const fullName = document.getElementById('fullName').value;
+        const email = document.getElementById('signupEmail').value;
+        const password = document.getElementById('signupPassword').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        
         // Simple validation
-        const fullName = document.getElementById('fullName');
-        const email = document.getElementById('signupEmail');
-        const password = document.getElementById('signupPassword');
-        const confirmPassword = document.getElementById('confirmPassword');
         let isValid = true;
         
+        // Full name validation
+        if (!fullName.trim()) {
+          document.getElementById('fullNameError').style.display = 'block';
+          isValid = false;
+        } else {
+          document.getElementById('fullNameError').style.display = 'none';
+        }
+        
         // Email validation
-        if (!email.value.includes('@')) {
+        if (!email.includes('@')) {
           document.getElementById('signupEmailError').style.display = 'block';
           isValid = false;
         } else {
@@ -398,7 +577,7 @@
         }
         
         // Password validation
-        if (password.value.length < 8) {
+        if (password.length < 8) {
           document.getElementById('signupPasswordError').style.display = 'block';
           isValid = false;
         } else {
@@ -406,7 +585,7 @@
         }
         
         // Confirm password
-        if (password.value !== confirmPassword.value) {
+        if (password !== confirmPassword) {
           document.getElementById('confirmPasswordError').style.display = 'block';
           isValid = false;
         } else {
@@ -414,9 +593,40 @@
         }
         
         if (isValid) {
-          // Mock successful signup
-          alert('Account created successfully! Please sign in.');
-          showSignIn();
+          try {
+            // Show loading
+            toggleSignupLoading(true);
+            
+            // Make API request
+            const response = await fetch(`${API_URL}/register`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ fullName, email, password })
+            });
+            
+            const data = await response.json();
+            
+            if (!response.ok) {
+              throw new Error(data.error || 'Failed to create account');
+            }
+            
+            // Show success message
+            showSuccess('Account created successfully! Please sign in.');
+            
+            // Clear form
+            signupForm.reset();
+            
+            // Switch to sign in tab after short delay
+            setTimeout(() => {
+              showSignIn();
+            }, 1500);
+          } catch (error) {
+            showError(error.message);
+          } finally {
+            toggleSignupLoading(false);
+          }
         }
       });
     });
