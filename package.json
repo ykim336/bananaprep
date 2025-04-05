@@ -1,0 +1,29 @@
+{
+  "name": "leetmath",
+  "version": "1.0.0",
+  "description": "��#\u0000 \u0000l\u0000e\u0000e\u0000t\u0000m\u0000a\u0000t\u0000h\u0000\r\u0000 \u0000",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ykim336/leetmath.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ykim336/leetmath/issues"
+  },
+  "homepage": "https://github.com/ykim336/leetmath#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "body-parser": "^2.2.0",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "sqlite3": "^5.1.7"
+  }
+}

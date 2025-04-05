@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>MathQuest - Problem Details</title>
+  <title>LeetMath - Problem Details</title>
   <style>
     /* Basic Reset & Dark Theme */
     * {
@@ -89,6 +89,17 @@
     .btn:hover {
       background-color: #555;
     }
+    .btn-success {
+      background-color: #2ecc71;
+    }
+    .btn-success:hover {
+      background-color: #27ae60;
+    }
+    .btn:disabled {
+      background-color: #555;
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
     .code-editor {
       flex: 1;
       background-color: #2f2f2f;
@@ -98,6 +109,9 @@
       margin-bottom: 1rem;
       white-space: pre-wrap;
       overflow-y: auto;
+      min-height: 300px;
+      font-family: monospace;
+      line-height: 1.5;
     }
     .database-section {
       background-color: #2f2f2f;
@@ -117,13 +131,84 @@
       white-space: pre-wrap;
       overflow-y: auto;
       min-height: 100px;
+      font-family: monospace;
+    }
+    /* Status indicator */
+    .problem-status {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      margin-left: 1rem;
+      font-size: 0.8rem;
+      vertical-align: middle;
+    }
+    .status-unsolved {
+      background-color: #e74c3c;
+    }
+    .status-attempted {
+      background-color: #f39c12;
+    }
+    .status-solved {
+      background-color: #2ecc71;
+    }
+    /* Loading spinner */
+    .spinner {
+      display: none;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255,255,255,.3);
+      border-radius: 50%;
+      border-top-color: #f39c12;
+      animation: spin 1s ease-in-out infinite;
+      margin-right: 0.5rem;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .btn-spinner-container {
+      display: flex;
+      align-items: center;
+    }
+    /* Alert styling */
+    .alert {
+      padding: 0.75rem;
+      border-radius: 4px;
+      margin-bottom: 1rem;
+      display: none;
+    }
+    .alert-danger {
+      background-color: rgba(231, 76, 60, 0.2);
+      border: 1px solid #e74c3c;
+      color: #e74c3c;
+    }
+    .alert-success {
+      background-color: rgba(46, 204, 113, 0.2);
+      border: 1px solid #2ecc71;
+      color: #2ecc71;
+    }
+    /* Auth prompt */
+    .auth-prompt {
+      text-align: center;
+      padding: 1rem;
+      background-color: rgba(243, 156, 18, 0.2);
+      border: 1px solid #f39c12;
+      border-radius: 4px;
+      margin-bottom: 1rem;
+    }
+    .auth-prompt a {
+      color: #f39c12;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .auth-prompt a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
 <body>
   <!-- Sticky Header with Logo -->
   <header>
-    <div class="logo">MathQuest</div>
+    <div class="logo">LeetMath</div>
     <a href="database.html">← Back to Database</a>
   </header>
   
@@ -133,6 +218,7 @@
     <div class="problem-details">
       <div class="section">
         <h2 id="problemTitle">Loading Problem Title...</h2>
+        <span id="problemStatus" class="problem-status status-unsolved">Unsolved</span>
         <p id="problemDescription">Loading Problem Description...</p>
       </div>
       <div class="section">
@@ -151,9 +237,25 @@
 
     <!-- Right Panel: MATLAB Code Editor & API Integration -->
     <div class="editor-section">
+      <!-- Alert Messages -->
+      <div class="alert alert-danger" id="errorAlert"></div>
+      <div class="alert alert-success" id="successAlert"></div>
+      
+      <!-- Auth Prompt (shown when not logged in) -->
+      <div class="auth-prompt" id="authPrompt" style="display: none;">
+        <p>Sign in to save your progress and solutions.</p>
+        <a href="login.html">Sign In / Sign Up</a>
+      </div>
+      
       <div class="btn-row">
-        <button id="runBtn" class="btn">Run</button>
-        <button id="submitBtn" class="btn">Submit</button>
+        <div class="btn-spinner-container">
+          <span class="spinner" id="runSpinner"></span>
+          <button id="runBtn" class="btn">Run</button>
+        </div>
+        <div class="btn-spinner-container">
+          <span class="spinner" id="submitSpinner"></span>
+          <button id="submitBtn" class="btn btn-success">Submit</button>
+        </div>
       </div>
       <div id="codeEditor" class="code-editor" contenteditable="true">
 % Write your MATLAB code here...
@@ -173,10 +275,164 @@
   </main>
 
   <script>
+    // API URL - Change this to your actual API URL when deploying
+    const API_URL = 'http://localhost:3000/api';
+    
     // Utility: Get query parameter from URL
     function getQueryParam(param) {
       const params = new URLSearchParams(window.location.search);
       return params.get(param);
+    }
+    
+    // Check authentication status
+    function checkAuthStatus() {
+      const token = localStorage.getItem('leetmathToken');
+      const authPrompt = document.getElementById('authPrompt');
+      
+      if (!token) {
+        authPrompt.style.display = 'block';
+        return false;
+      } else {
+        authPrompt.style.display = 'none';
+        return true;
+      }
+    }
+    
+    // Get auth token
+    function getAuthToken() {
+      return localStorage.getItem('leetmathToken');
+    }
+    
+    // Get current problem ID
+    let currentProblemId = getQueryParam('id') || '0';
+    
+    // Show error alert
+    function showError(message) {
+      const errorAlert = document.getElementById('errorAlert');
+      errorAlert.textContent = message;
+      errorAlert.style.display = 'block';
+      document.getElementById('successAlert').style.display = 'none';
+      
+      // Auto hide after 5 seconds
+      setTimeout(() => {
+        errorAlert.style.display = 'none';
+      }, 5000);
+    }
+    
+    // Show success alert
+    function showSuccess(message) {
+      const successAlert = document.getElementById('successAlert');
+      successAlert.textContent = message;
+      successAlert.style.display = 'block';
+      document.getElementById('errorAlert').style.display = 'none';
+      
+      // Auto hide after 5 seconds
+      setTimeout(() => {
+        successAlert.style.display = 'none';
+      }, 5000);
+    }
+    
+    // Toggle loading state for run button
+    function toggleRunLoading(isLoading) {
+      document.getElementById('runSpinner').style.display = isLoading ? 'block' : 'none';
+      document.getElementById('runBtn').disabled = isLoading;
+    }
+    
+    // Toggle loading state for submit button
+    function toggleSubmitLoading(isLoading) {
+      document.getElementById('submitSpinner').style.display = isLoading ? 'block' : 'none';
+      document.getElementById('submitBtn').disabled = isLoading;
+    }
+    
+    // Update problem status display
+    function updateProblemStatus(status) {
+      const statusElement = document.getElementById('problemStatus');
+      statusElement.className = 'problem-status';
+      
+      switch(status) {
+        case 'solved':
+          statusElement.classList.add('status-solved');
+          statusElement.textContent = 'Solved';
+          break;
+        case 'attempted':
+          statusElement.classList.add('status-attempted');
+          statusElement.textContent = 'Attempted';
+          break;
+        default:
+          statusElement.classList.add('status-unsolved');
+          statusElement.textContent = 'Unsolved';
+      }
+    }
+    
+    // Load user progress for this problem
+    async function loadUserProgress() {
+      if (!checkAuthStatus()) return;
+      
+      try {
+        const response = await fetch(`${API_URL}/progress/${currentProblemId}`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${getAuthToken()}`
+          }
+        });
+        
+        if (!response.ok) {
+          // This might be a 404 if no progress exists yet, which is fine
+          if (response.status !== 404) {
+            console.error('Failed to load progress');
+          }
+          return;
+        }
+        
+        const data = await response.json();
+        
+        // Update code editor with saved solution
+        if (data.solution_code) {
+          document.getElementById('codeEditor').textContent = data.solution_code;
+        }
+        
+        // Update status display
+        updateProblemStatus(data.status);
+        
+      } catch (error) {
+        console.error('Error loading progress:', error);
+      }
+    }
+    
+    // Save user progress
+    async function saveUserProgress(status, solutionCode) {
+      if (!checkAuthStatus()) {
+        showError('Please sign in to save your progress');
+        return false;
+      }
+      
+      try {
+        const response = await fetch(`${API_URL}/progress/update`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${getAuthToken()}`
+          },
+          body: JSON.stringify({
+            problemId: parseInt(currentProblemId),
+            status,
+            solutionCode
+          })
+        });
+        
+        if (!response.ok) {
+          const data = await response.json();
+          throw new Error(data.error || 'Failed to save progress');
+        }
+        
+        // Update status display
+        updateProblemStatus(status);
+        
+        return true;
+      } catch (error) {
+        showError(error.message);
+        return false;
+      }
     }
     
     async function loadProblem() {
@@ -230,6 +486,10 @@
         if (problem.solutionCode) {
           document.getElementById('codeEditor').textContent = problem.solutionCode;
         }
+        
+        // Load user progress after problem is loaded
+        loadUserProgress();
+        
       } catch (error) {
         console.error('Error loading problem:', error);
         document.getElementById('problemTitle').textContent = 'Error loading problem';
@@ -238,31 +498,80 @@
     }
     
     document.getElementById('runBtn').addEventListener('click', async () => {
-      const inputValue = prompt("Enter a number input for the MATLAB function:");
+      const solutionCode = document.getElementById('codeEditor').textContent;
+      const inputValue = prompt("Enter input for your MATLAB function:");
+      
+      if (inputValue === null) return; // User cancelled the prompt
+      
       document.getElementById('matlabOutput').textContent = 'Running MATLAB code...';
+      toggleRunLoading(true);
       
       try {
-        const response = await fetch('http://localhost:5000/execute', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ input: inputValue })
-        });
-        const data = await response.json();
-        if (data.error) {
-          throw new Error(data.error);
-        }
-        document.getElementById('matlabOutput').textContent = 'MATLAB Output: ' + data.output;
+        // For demo purposes, we'll simulate the MATLAB API call
+        // In production, you would make an actual API call to your MATLAB service
+        
+        // Save progress as "attempted"
+        await saveUserProgress('attempted', solutionCode);
+        
+        // Simulated MATLAB execution
+        setTimeout(() => {
+          // This is a very simple simulation, in a real app you'd make an API call
+          let output;
+          try {
+            // Very basic simulation of running the code
+            if (solutionCode.includes('function') && inputValue) {
+              output = `Executed with input: ${inputValue}\nOutput: ${parseFloat(inputValue) * 2} (simulated)`;
+            } else {
+              output = 'Function not properly defined. Please define a function.';
+            }
+          } catch (err) {
+            output = `Error in code execution: ${err.message}`;
+          }
+          
+          document.getElementById('matlabOutput').textContent = output;
+          toggleRunLoading(false);
+        }, 1500);
+        
       } catch (err) {
-        console.error('Error calling MATLAB API:', err);
+        console.error('Error running code:', err);
         document.getElementById('matlabOutput').textContent = 'Error running MATLAB code: ' + err.message;
+        toggleRunLoading(false);
       }
     });
     
-    document.getElementById('submitBtn').addEventListener('click', () => {
-      alert('Submitting your MATLAB solution... (this is a mock alert)');
+    document.getElementById('submitBtn').addEventListener('click', async () => {
+      const solutionCode = document.getElementById('codeEditor').textContent;
+      
+      // Validate solution before submission
+      if (!solutionCode || solutionCode.trim() === '') {
+        showError('Please provide a solution before submitting');
+        return;
+      }
+      
+      toggleSubmitLoading(true);
+      
+      try {
+        // For demo purposes, we'll simulate the solution validation
+        // In production, you would have a more sophisticated validation system
+        
+        // Save progress as "solved"
+        const saved = await saveUserProgress('solved', solutionCode);
+        
+        if (saved) {
+          showSuccess('Solution submitted successfully!');
+        }
+      } catch (error) {
+        showError(error.message || 'Failed to submit solution');
+      } finally {
+        toggleSubmitLoading(false);
+      }
     });
     
-    document.addEventListener('DOMContentLoaded', loadProblem);
+    // Check authentication status on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      loadProblem();
+      checkAuthStatus();
+    });
   </script>
 </body>
 </html>
