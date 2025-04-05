@@ -12,14 +12,33 @@
       padding: 0;
     }
     body {
-      display: flex;
-      flex-direction: row;
-      min-height: 100vh;
       background-color: #1f1f1f;
       color: #f1f1f1;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      overflow-x: hidden;
     }
-    /* Main Content & Right Sidebar */
+    /* Sticky Header at Top */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background-color: #2a2a2a;
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid #444;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    header .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #f39c12;
+    }
+    /* Main Container */
+    .container {
+      display: flex;
+      min-height: calc(100vh - 60px); /* adjust based on header height */
+    }
     .main-content {
       flex: 1;
       display: flex;
@@ -35,8 +54,7 @@
       flex-direction: column;
       gap: 1rem;
     }
-
-    /* Top Navigation */
+    /* Top Navigation inside Main Content */
     .top-nav {
       display: flex;
       align-items: center;
@@ -72,8 +90,7 @@
     .search-bar input::placeholder {
       color: #999;
     }
-
-    /* Table */
+    /* Table Styles */
     .table-wrapper {
       overflow-x: auto;
       margin-bottom: 1rem;
@@ -86,8 +103,7 @@
     thead {
       background-color: #333;
     }
-    th,
-    td {
+    th, td {
       padding: 0.75rem;
       text-align: left;
       border-bottom: 1px solid #444;
@@ -104,18 +120,16 @@
     tbody tr:hover {
       background-color: #3a3a3a;
     }
-
     /* Difficulty color coding */
     .difficulty-easy {
-      color: #5fd38d; /* greenish */
+      color: #5fd38d;
     }
     .difficulty-medium {
-      color: #f1c40f; /* gold */
+      color: #f1c40f;
     }
     .difficulty-hard {
-      color: #e74c3c; /* red */
+      color: #e74c3c;
     }
-
     /* Right Sidebar: Company Tags & Session Stats */
     .company-tags {
       display: flex;
@@ -145,56 +159,65 @@
   </style>
 </head>
 <body>
-  <!-- MAIN CONTENT -->
-  <div class="main-content">
-    <!-- Top Navigation -->
-    <div class="top-nav">
-      <button class="nav-btn">Lists</button>
-      <button class="nav-btn">Difficulty</button>
-      <button class="nav-btn">Status</button>
-      <button class="nav-btn">Tags</button>
-      <div class="search-bar">
-        <input type="text" id="searchInput" placeholder="Search questions..." />
+  <!-- Sticky Header with Logo -->
+  <header>
+    <div class="logo">MathQuest</div>
+    <!-- You can add additional header items here if needed -->
+  </header>
+  
+  <!-- Main Container -->
+  <div class="container">
+    <!-- MAIN CONTENT AREA -->
+    <div class="main-content">
+      <!-- Top Navigation -->
+      <div class="top-nav">
+        <button class="nav-btn">Lists</button>
+        <button class="nav-btn">Difficulty</button>
+        <button class="nav-btn">Status</button>
+        <button class="nav-btn">Tags</button>
+        <div class="search-bar">
+          <input type="text" id="searchInput" placeholder="Search questions..." />
+        </div>
+        <button class="pick-one-btn" id="pickOneBtn">Pick One</button>
       </div>
-      <button class="pick-one-btn" id="pickOneBtn">Pick One</button>
+      
+      <!-- Table of Problems -->
+      <div class="table-wrapper">
+        <table id="problemsTable">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Title</th>
+              <th>Difficulty</th>
+              <th>Status</th>
+              <th>Tags</th>
+              <th>Frequency</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Dynamically populated rows go here -->
+          </tbody>
+        </table>
+      </div>
     </div>
-
-    <!-- Table of Problems -->
-    <div class="table-wrapper">
-      <table id="problemsTable">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Title</th>
-            <th>Difficulty</th>
-            <th>Status</th>
-            <th>Tags</th>
-            <th>Frequency</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Dynamically populated rows go here -->
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- RIGHT SIDEBAR -->
-  <div class="right-sidebar">
-    <div class="company-tags">
-      <span class="company-tag">Amazon</span>
-      <span class="company-tag">Google</span>
-      <span class="company-tag">Facebook</span>
-      <span class="company-tag">Apple</span>
-      <span class="company-tag">Microsoft</span>
-      <span class="company-tag">DoorDash</span>
-    </div>
-    <div class="session-stats">
-      <h3>Session</h3>
-      <div class="stats-grid">
-        <div class="stats-item">Easy<br>0</div>
-        <div class="stats-item">Medium<br>0</div>
-        <div class="stats-item">Hard<br>0</div>
+    
+    <!-- RIGHT SIDEBAR -->
+    <div class="right-sidebar">
+      <div class="company-tags">
+        <span class="company-tag">Amazon</span>
+        <span class="company-tag">Google</span>
+        <span class="company-tag">Facebook</span>
+        <span class="company-tag">Apple</span>
+        <span class="company-tag">Microsoft</span>
+        <span class="company-tag">DoorDash</span>
+      </div>
+      <div class="session-stats">
+        <h3>Session</h3>
+        <div class="stats-grid">
+          <div class="stats-item">Easy<br>0</div>
+          <div class="stats-item">Medium<br>0</div>
+          <div class="stats-item">Hard<br>0</div>
+        </div>
       </div>
     </div>
   </div>
@@ -202,7 +225,6 @@
   <script>
     let problemsData = [];
 
-    // Fetch and render the problems table
     async function loadProblems() {
       try {
         const response = await fetch('problems.json');
@@ -224,7 +246,6 @@
       }
     }
 
-    // Render the table rows
     function renderTable(data) {
       const tbody = document.querySelector('#problemsTable tbody');
       tbody.innerHTML = ''; // Clear existing rows
@@ -237,36 +258,31 @@
           window.location.href = `problem.html?id=${index}`;
         });
 
-        // # Column
+        // Populate row cells
         const cellIndex = document.createElement('td');
         cellIndex.textContent = index + 1;
         row.appendChild(cellIndex);
 
-        // Title
         const cellTitle = document.createElement('td');
         cellTitle.textContent = problem.title || "Untitled";
         row.appendChild(cellTitle);
 
-        // Difficulty (color-coded)
         const cellDifficulty = document.createElement('td');
         const difficulty = (problem.difficulty || "Unknown").toLowerCase();
-        cellDifficulty.textContent = capitalize(difficulty);
-        if (["easy","medium","hard"].includes(difficulty)) {
+        cellDifficulty.textContent = difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
+        if (["easy", "medium", "hard"].includes(difficulty)) {
           cellDifficulty.classList.add(`difficulty-${difficulty}`);
         }
         row.appendChild(cellDifficulty);
 
-        // Status
         const cellStatus = document.createElement('td');
         cellStatus.textContent = problem.status || "Not Done";
         row.appendChild(cellStatus);
 
-        // Tags
         const cellTags = document.createElement('td');
         cellTags.textContent = problem.tags || "None";
         row.appendChild(cellTags);
 
-        // Frequency
         const cellFreq = document.createElement('td');
         cellFreq.textContent = problem.frequency || 0;
         row.appendChild(cellFreq);
@@ -275,7 +291,6 @@
       });
     }
 
-    // Search function
     const searchInput = document.getElementById('searchInput');
     searchInput.addEventListener('input', (e) => {
       const query = e.target.value.toLowerCase();
@@ -286,19 +301,12 @@
       renderTable(filtered);
     });
 
-    // "Pick One" function: picks a random problem and redirects
     document.getElementById('pickOneBtn').addEventListener('click', () => {
       if (!problemsData.length) return;
       const randomIndex = Math.floor(Math.random() * problemsData.length);
       window.location.href = `problem.html?id=${randomIndex}`;
     });
 
-    // Capitalize the first letter
-    function capitalize(str) {
-      return str.charAt(0).toUpperCase() + str.slice(1);
-    }
-
-    // On page load
     document.addEventListener('DOMContentLoaded', loadProblems);
   </script>
 </body>
