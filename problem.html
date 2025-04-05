@@ -309,7 +309,7 @@
   <!-- Sticky Header with Logo -->
   <header>
     <a href="home.html" class="logo">LeetMath</a>
-    <a href="database.html">← Back to Database</a>
+    <a href="database.html" style="color: orange; text-decoration: none;">← Back to Database</a>
   </header>
   
   <!-- Main Content: Problem details and solution tabs -->
@@ -744,21 +744,6 @@
       document.getElementById('codeSection').classList.add('active');
       document.getElementById('answerSection').classList.remove('active');
     });
-    
-    //       // The server already updated the status to 'solved'
-    //       showAnswerFeedback(true, 'Correct answer! Great job!');
-    //       updateProblemStatus('solved');
-    //     } else {
-    //       // The server already updated the status to 'attempted'
-    //       showAnswerFeedback(false, 'Not quite right. Please try again.');
-    //       updateProblemStatus('attempted');
-    //     }
-    //   } catch (error) {
-    //     showError(error.message || 'Failed to process answer');
-    //   } finally {
-    //     toggleAnswerLoading(false);
-    //   }
-    // });
     
     // Code tab button listeners
     document.getElementById('runBtn').addEventListener('click', async () => {
