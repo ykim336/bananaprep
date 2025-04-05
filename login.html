@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MathQuest - Sign In</title>
+  <style>
+    /* Basic Reset & Dark Theme */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      min-height: 100vh;
+      background-color: #1f1f1f;
+      color: #f1f1f1;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      flex-direction: column;
+    }
+    /* Header */
+    header {
+      background-color: #2a2a2a;
+      padding: 1.5rem 0;
+      text-align: center;
+      border-bottom: 1px solid #444;
+    }
+    .logo {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #f39c12;
+    }
+    .back-link {
+      position: absolute;
+      left: 1.5rem;
+      top: 1.5rem;
+      color: #f39c12;
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+    /* Main Content */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    /* Form Styling */
+    .auth-container {
+      width: 100%;
+      max-width: 400px;
+      background-color: #2a2a2a;
+      border-radius: 8px;
+      padding: 2rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      border: 1px solid #444;
+    }
+    .auth-tabs {
+      display: flex;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid #444;
+    }
+    .tab {
+      flex: 1;
+      text-align: center;
+      padding: 0.75rem 0;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .tab.active {
+      color: #f39c12;
+      border-bottom: 2px solid #f39c12;
+    }
+    .tab:hover:not(.active) {
+      color: #e67e22;
+    }
+    .form-title {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      font-size: 1.5rem;
+      color: #f1f1f1;
+    }
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #ddd;
+    }
+    input[type="email"],
+    input[type="password"],
+    input[type="text"] {
+      width: 100%;
+      padding: 0.75rem;
+      border-radius: 4px;
+      border: 1px solid #444;
+      background-color: #333;
+      color: #f1f1f1;
+      font-size: 1rem;
+      transition: border-color 0.2s;
+    }
+    input[type="email"]:focus,
+    input[type="password"]:focus,
+    input[type="text"]:focus {
+      border-color: #f39c12;
+      outline: none;
+    }
+    .form-footer {
+      margin-top: 0.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.9rem;
+    }
+    .remember-me {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .forgot-password {
+      color: #f39c12;
+      text-decoration: none;
+    }
+    .forgot-password:hover {
+      text-decoration: underline;
+    }
+    .submit-btn {
+      width: 100%;
+      padding: 0.75rem;
+      background-color: #f39c12;
+      color: #333;
+      border: none;
+      border-radius: 4px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      margin-top: 1rem;
+    }
+    .submit-btn:hover {
+      background-color: #e67e22;
+    }
+    .social-login {
+      margin-top: 2rem;
+      text-align: center;
+    }
+    .social-login p {
+      margin-bottom: 1rem;
+      color: #aaa;
+      position: relative;
+    }
+    .social-login p::before,
+    .social-login p::after {
+      content: "";
+      display: inline-block;
+      width: 40%;
+      height: 1px;
+      background-color: #444;
+      position: absolute;
+      top: 50%;
+    }
+    .social-login p::before {
+      left: 0;
+    }
+    .social-login p::after {
+      right: 0;
+    }
+    .social-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+    }
+    .social-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: #333;
+      border: 1px solid #444;
+      color: #f1f1f1;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .social-btn:hover {
+      background-color: #444;
+      transform: translateY(-2px);
+    }
+    .signup-prompt {
+      text-align: center;
+      margin-top: 2rem;
+      color: #aaa;
+    }
+    .signup-prompt a {
+      color: #f39c12;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .signup-prompt a:hover {
+      text-decoration: underline;
+    }
+    /* Footer */
+    footer {
+      background-color: #2a2a2a;
+      text-align: center;
+      padding: 1.5rem;
+      border-top: 1px solid #444;
+    }
+    footer p {
+      color: #aaa;
+      font-size: 0.9rem;
+    }
+    /* Sign Up Form - Hidden by default */
+    #signupForm {
+      display: none;
+    }
+    /* Error message styling */
+    .error-message {
+      color: #e74c3c;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <a href="index.html" class="back-link">← Back to Home</a>
+    <div class="logo">MathQuest</div>
+  </header>
+
+  <!-- Main Content -->
+  <div class="container">
+    <div class="auth-container">
+      <div class="auth-tabs">
+        <div class="tab active" id="signinTab">Sign In</div>
+        <div class="tab" id="signupTab">Sign Up</div>
+      </div>
+      
+      <!-- Sign In Form -->
+      <form id="signinForm">
+        <h2 class="form-title">Welcome Back</h2>
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" required>
+          <div class="error-message" id="emailError">Please enter a valid email address</div>
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" required>
+          <div class="error-message" id="passwordError">Password must be at least 8 characters</div>
+        </div>
+        <div class="form-footer">
+          <div class="remember-me">
+            <input type="checkbox" id="remember">
+            <label for="remember">Remember me</label>
+          </div>
+          <a href="#" class="forgot-password">Forgot Password?</a>
+        </div>
+        <button type="submit" class="submit-btn">Sign In</button>
+        
+        <div class="social-login">
+          <p>Or sign in with</p>
+          <div class="social-buttons">
+            <a href="#" class="social-btn">G</a>
+            <a href="#" class="social-btn">f</a>
+            <a href="#" class="social-btn">in</a>
+          </div>
+        </div>
+      </form>
+      
+      <!-- Sign Up Form -->
+      <form id="signupForm">
+        <h2 class="form-title">Create Account</h2>
+        <div class="form-group">
+          <label for="fullName">Full Name</label>
+          <input type="text" id="fullName" name="fullName" required>
+        </div>
+        <div class="form-group">
+          <label for="signupEmail">Email Address</label>
+          <input type="email" id="signupEmail" name="email" required>
+          <div class="error-message" id="signupEmailError">Please enter a valid email address</div>
+        </div>
+        <div class="form-group">
+          <label for="signupPassword">Password</label>
+          <input type="password" id="signupPassword" name="password" required>
+          <div class="error-message" id="signupPasswordError">Password must be at least 8 characters</div>
+        </div>
+        <div class="form-group">
+          <label for="confirmPassword">Confirm Password</label>
+          <input type="password" id="confirmPassword" name="confirmPassword" required>
+          <div class="error-message" id="confirmPasswordError">Passwords do not match</div>
+        </div>
+        <button type="submit" class="submit-btn">Sign Up</button>
+      </form>
+      
+      <div class="signup-prompt" id="authPrompt">
+        Don't have an account? <a href="#" id="toggleAuth">Sign up now</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 MathQuest. All rights reserved.</p>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const signinTab = document.getElementById('signinTab');
+      const signupTab = document.getElementById('signupTab');
+      const signinForm = document.getElementById('signinForm');
+      const signupForm = document.getElementById('signupForm');
+      const toggleAuth = document.getElementById('toggleAuth');
+      const authPrompt = document.getElementById('authPrompt');
+      
+      // Toggle between sign in and sign up
+      function showSignIn() {
+        signinTab.classList.add('active');
+        signupTab.classList.remove('active');
+        signinForm.style.display = 'block';
+        signupForm.style.display = 'none';
+        authPrompt.innerHTML = 'Don\'t have an account? <a href="#" id="toggleAuth">Sign up now</a>';
+        document.getElementById('toggleAuth').addEventListener('click', showSignUp);
+      }
+      
+      function showSignUp() {
+        signupTab.classList.add('active');
+        signinTab.classList.remove('active');
+        signupForm.style.display = 'block';
+        signinForm.style.display = 'none';
+        authPrompt.innerHTML = 'Already have an account? <a href="#" id="toggleAuth">Sign in</a>';
+        document.getElementById('toggleAuth').addEventListener('click', showSignIn);
+      }
+      
+      // Set up event listeners
+      signinTab.addEventListener('click', showSignIn);
+      signupTab.addEventListener('click', showSignUp);
+      toggleAuth.addEventListener('click', showSignUp);
+      
+      // Form validation
+      signinForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Simple validation
+        const email = document.getElementById('email');
+        const password = document.getElementById('password');
+        let isValid = true;
+        
+        // Email validation
+        if (!email.value.includes('@')) {
+          document.getElementById('emailError').style.display = 'block';
+          isValid = false;
+        } else {
+          document.getElementById('emailError').style.display = 'none';
+        }
+        
+        // Password validation
+        if (password.value.length < 8) {
+          document.getElementById('passwordError').style.display = 'block';
+          isValid = false;
+        } else {
+          document.getElementById('passwordError').style.display = 'none';
+        }
+        
+        if (isValid) {
+          // Mock successful login
+          alert('Sign in successful! Redirecting to dashboard...');
+          // In a real app, you would handle authentication and redirect
+          window.location.href = 'database.html';
+        }
+      });
+      
+      signupForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Simple validation
+        const fullName = document.getElementById('fullName');
+        const email = document.getElementById('signupEmail');
+        const password = document.getElementById('signupPassword');
+        const confirmPassword = document.getElementById('confirmPassword');
+        let isValid = true;
+        
+        // Email validation
+        if (!email.value.includes('@')) {
+          document.getElementById('signupEmailError').style.display = 'block';
+          isValid = false;
+        } else {
+          document.getElementById('signupEmailError').style.display = 'none';
+        }
+        
+        // Password validation
+        if (password.value.length < 8) {
+          document.getElementById('signupPasswordError').style.display = 'block';
+          isValid = false;
+        } else {
+          document.getElementById('signupPasswordError').style.display = 'none';
+        }
+        
+        // Confirm password
+        if (password.value !== confirmPassword.value) {
+          document.getElementById('confirmPasswordError').style.display = 'block';
+          isValid = false;
+        } else {
+          document.getElementById('confirmPasswordError').style.display = 'none';
+        }
+        
+        if (isValid) {
+          // Mock successful signup
+          alert('Account created successfully! Please sign in.');
+          showSignIn();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
