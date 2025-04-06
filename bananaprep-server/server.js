@@ -1,4 +1,4 @@
-// server.js - A simple Express server to handle LeetMath authentication and database operations
+// server.js - A simple Express server to handle BananaPrep authentication and database operations
 const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const bcrypt = require('bcrypt');
@@ -18,11 +18,11 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Initialize database
-const db = new sqlite3.Database('./leetmath.db', (err) => {
+const db = new sqlite3.Database('./BananaPrep.db', (err) => {
   if (err) {
     console.error('Error opening database:', err.message);
   } else {
-    console.log('Connected to the LeetMath database.');
+    console.log('Connected to the BananaPrep database.');
     initDatabase();
   }
 });
@@ -69,7 +69,7 @@ function initDatabase() {
 }
 
 // Secret key for JWT
-const JWT_SECRET = 'leetmath-secret-key-change-in-production';
+const JWT_SECRET = 'BananaPrep-secret-key-change-in-production';
 
 // Authentication routes
 app.post('/api/register', async (req, res) => {

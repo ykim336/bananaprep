@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>LeetMath - Problem Details</title>
+  <title>BananaPrep - Problem Details</title>
   <style>
     /* Basic Reset & Dark Theme */
     * {
@@ -34,7 +34,7 @@
     header .logo {
       font-size: 1.5rem;
       font-weight: bold;
-      color: #f39c12;
+      color: #FFE135;
       text-decoration: none;
     }
     main {
@@ -193,7 +193,7 @@
       height: 20px;
       border: 3px solid rgba(255,255,255,.3);
       border-radius: 50%;
-      border-top-color: #f39c12;
+      border-top-color: #FFE135;
       animation: spin 1s ease-in-out infinite;
       margin-right: 0.5rem;
     }
@@ -226,12 +226,12 @@
       text-align: center;
       padding: 1rem;
       background-color: rgba(243, 156, 18, 0.2);
-      border: 1px solid #f39c12;
+      border: 1px solid #FFE135;
       border-radius: 4px;
       margin-bottom: 1rem;
     }
     .auth-prompt a {
-      color: #f39c12;
+      color: #FFE135;
       text-decoration: none;
       font-weight: bold;
     }
@@ -308,8 +308,8 @@
 <body>
   <!-- Sticky Header with Logo -->
   <header>
-    <a href="home.html" class="logo">LeetMath</a>
-    <a href="database.html" style="color: orange; text-decoration: none;">← Back to Database</a>
+    <a href="home.html" class="logo">BananaPrep</a>
+    <a href="database.html" style="color: FFE135; text-decoration: none;">← Back to Database</a>
   </header>
   
   <!-- Main Content: Problem details and solution tabs -->
@@ -384,11 +384,13 @@
           </div>
         </div>
         <div id="codeEditor" class="code-editor" contenteditable="true">
-% Write your MATLAB code here...
+          MATLAB implementation comming soon...
+<!-- % Write your MATLAB code here...
 % For example:
 % function result = solveProblem(input)
 %   result = input * 2; % Sample operation
-% end
+% end -->
+
         </div>
         <div class="output-section" id="matlabOutput">
           MATLAB output will appear here...
@@ -415,7 +417,7 @@
     
     // Check authentication status
     function checkAuthStatus() {
-      const token = localStorage.getItem('leetmathToken');
+      const token = localStorage.getItem('BananaPrepToken');
       const authPrompt = document.getElementById('authPrompt');
       
       if (!token) {
@@ -429,7 +431,7 @@
     
     // Get auth token
     function getAuthToken() {
-      return localStorage.getItem('leetmathToken');
+      return localStorage.getItem('BananaPrepToken');
     }
     
     // Get current problem ID

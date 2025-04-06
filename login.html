@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LeetMath - Sign In</title>
+  <title>BananaPrep - Sign In</title>
   <style>
     /* Basic Reset & Dark Theme */
     * {
@@ -29,13 +29,13 @@
     .logo {
       font-size: 2rem;
       font-weight: 700;
-      color: #f39c12;
+      color: #FFE135;
     }
     .back-link {
       position: absolute;
       left: 1.5rem;
       top: 1.5rem;
-      color: #f39c12;
+      color: #FFE135;
       text-decoration: none;
       font-size: 0.9rem;
     }
@@ -73,11 +73,11 @@
       transition: all 0.2s;
     }
     .tab.active {
-      color: #f39c12;
-      border-bottom: 2px solid #f39c12;
+      color: #FFE135;
+      border-bottom: 2px solid #FFE135;
     }
     .tab:hover:not(.active) {
-      color: #e67e22;
+      color: #FFE135;
     }
     .form-title {
       text-align: center;
@@ -108,7 +108,7 @@
     input[type="email"]:focus,
     input[type="password"]:focus,
     input[type="text"]:focus {
-      border-color: #f39c12;
+      border-color: #FFE135;
       outline: none;
     }
     .form-footer {
@@ -124,7 +124,7 @@
       gap: 0.5rem;
     }
     .forgot-password {
-      color: #f39c12;
+      color: #FFE135;
       text-decoration: none;
     }
     .forgot-password:hover {
@@ -133,7 +133,7 @@
     .submit-btn {
       width: 100%;
       padding: 0.75rem;
-      background-color: #f39c12;
+      background-color: #FFE135;
       color: #333;
       border: none;
       border-radius: 4px;
@@ -144,7 +144,7 @@
       margin-top: 1rem;
     }
     .submit-btn:hover {
-      background-color: #e67e22;
+      background-color: #FFE135;
     }
     .submit-btn:disabled {
       background-color: #8a8a8a;
@@ -203,7 +203,7 @@
       color: #aaa;
     }
     .signup-prompt a {
-      color: #f39c12;
+      color: #FFE135;
       text-decoration: none;
       font-weight: 600;
     }
@@ -247,7 +247,7 @@
       height: 20px;
       border: 3px solid rgba(255,255,255,.3);
       border-radius: 50%;
-      border-top-color: #f39c12;
+      border-top-color: #FFE135;
       animation: spin 1s ease-in-out infinite;
       margin: 0 auto;
     }
@@ -282,7 +282,7 @@
   <!-- Header -->
   <header>
     <a href="home.html" class="back-link">← Back to Home</a>
-    <div class="logo">LeetMath</div>
+    <div class="logo">BananaPrep</div>
   </header>
 
   <!-- Main Content -->
@@ -369,7 +369,7 @@
 
   <!-- Footer -->
   <footer>
-    <p>© 2025 LeetMath. All rights reserved.</p>
+    <p>© 2025 BananaPrep. All rights reserved.</p>
   </footer>
 
   <script>
@@ -464,14 +464,14 @@
       
       // Store auth token in localStorage
       function saveAuthToken(token, userId, fullName) {
-        localStorage.setItem('leetmathToken', token);
-        localStorage.setItem('leetmathUserId', userId);
-        localStorage.setItem('leetmathUserName', fullName || '');
+        localStorage.setItem('BananaPrepToken', token);
+        localStorage.setItem('BananaPrepUserId', userId);
+        localStorage.setItem('BananaPrepUserName', fullName || '');
       }
       
       // Check if user is already logged in
       function checkAuthStatus() {
-        const token = localStorage.getItem('leetmathToken');
+        const token = localStorage.getItem('BananaPrepToken');
         if (token) {
           // Redirect to database page or validate token with server first
           window.location.href = 'database.html';
