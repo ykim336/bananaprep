@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BananaPrep - Sign In</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <a href="home.html" class="back-link">← Back to Home</a>
+    <div class="logo">BananaPrep</div>
+  </header>
+
+  <!-- Main Content -->
+  <div class="container">
+    <div class="auth-container">
+      <div class="auth-tabs">
+        <div class="tab active" id="signinTab">Sign In</div>
+        <div class="tab" id="signupTab">Sign Up</div>
+      </div>
+      
+      <!-- Alert Messages -->
+      <div class="alert alert-danger" id="errorAlert"></div>
+      <div class="alert alert-success" id="successAlert"></div>
+      
+      <!-- Sign In Form -->
+      <form id="signinForm">
+        <h2 class="form-title">Welcome Back</h2>
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" required>
+          <div class="error-message" id="emailError">Please enter a valid email address</div>
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" required>
+          <div class="error-message" id="passwordError">Password must be at least 8 characters</div>
+        </div>
+        <div class="form-footer">
+          <div class="remember-me">
+            <input type="checkbox" id="remember">
+            <label for="remember">Remember me</label>
+          </div>
+          <a href="#" class="forgot-password">Forgot Password?</a>
+        </div>
+        <button type="submit" class="submit-btn" id="signinButton">Sign In</button>
+        <div class="form-loading">
+          <div class="spinner" id="signinSpinner"></div>
+        </div>
+        
+        <div class="social-login">
+          <p>Or sign in with</p>
+          <div class="social-buttons">
+            <a href="#" class="social-btn">G</a>
+            <a href="#" class="social-btn">f</a>
+            <a href="#" class="social-btn">in</a>
+          </div>
+        </div>
+      </form>
+      
+      <!-- Sign Up Form -->
+      <form id="signupForm">
+        <h2 class="form-title">Create Account</h2>
+        <div class="form-group">
+          <label for="fullName">Full Name</label>
+          <input type="text" id="fullName" name="fullName" required>
+          <div class="error-message" id="fullNameError">Please enter your full name</div>
+        </div>
+        <div class="form-group">
+          <label for="signupEmail">Email Address</label>
+          <input type="email" id="signupEmail" name="email" required>
+          <div class="error-message" id="signupEmailError">Please enter a valid email address</div>
+        </div>
+        <div class="form-group">
+          <label for="signupPassword">Password</label>
+          <input type="password" id="signupPassword" name="password" required>
+          <div class="error-message" id="signupPasswordError">Password must be at least 8 characters</div>
+        </div>
+        <div class="form-group">
+          <label for="confirmPassword">Confirm Password</label>
+          <input type="password" id="confirmPassword" name="confirmPassword" required>
+          <div class="error-message" id="confirmPasswordError">Passwords do not match</div>
+        </div>
+        <button type="submit" class="submit-btn" id="signupButton">Sign Up</button>
+        <div class="form-loading">
+          <div class="spinner" id="signupSpinner"></div>
+        </div>
+      </form>
+      
+      <div class="signup-prompt" id="authPrompt">
+        Don't have an account? <a href="#" id="toggleAuth">Sign up now</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 BananaPrep. All rights reserved.</p>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/login.js"></script>
+</body>
+</html>

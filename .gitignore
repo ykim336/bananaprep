@@ -1,9 +1,3 @@
-/bananaprep-server/node_modules
-/bananaprep-server/.env
-/bananaprep-server/dist
-/bananaprep-server/.env.local
-/bananaprep-server/.env.development.local
-/bananaprep-server/.env.test.local  
-/bananaprep-server/BananaPrep.db
-/bananaprep-server/package-lock.json
-/bananaprep-server/package.json                                                                  
+/server/node_modules
+/server/package-lock.json
+/server/package.json                                    
