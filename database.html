@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LeetMath - Problem Database</title>
+  <title>BananaPrep - Problem Database</title>
   <style>
     /* Basic Reset & Dark Theme */
     * {
@@ -48,7 +48,7 @@
     .user-account .user-avatar {
       width: 30px;
       height: 30px;
-      background-color: #f39c12;
+      background-color: #FFE135;
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -59,7 +59,7 @@
     }
     .user-account .login-btn, 
     .user-account .logout-btn {
-      background-color: #f39c12;
+      background-color: #FFE135;
       color: #333;
       border: none;
       padding: 0.4rem 0.8rem;
@@ -207,7 +207,7 @@
     .stats-item .number {
       font-size: 1.2rem;
       font-weight: bold;
-      color: #f39c12;
+      color: #FFE135;
     }
     /* User Profile Section */
     .user-profile {
@@ -231,7 +231,7 @@
     }
     .user-profile .progress-bar-fill {
       height: 100%;
-      background-color: #f39c12;
+      background-color: #FFE135;
     }
     .completion-text {
       text-align: right;
@@ -272,7 +272,7 @@
 <body>
   <!-- Sticky Header with Logo -->
   <header>
-    <a href="home.html" class="logo">LeetMath</a>
+    <a href="home.html" class="logo">BananaPrep</a>
     <div class="user-account" id="userAccountSection">
       <!-- This will be populated by JavaScript -->
     </div>
@@ -392,8 +392,8 @@
     
     // Check authentication status
     function checkAuthStatus() {
-      const token = localStorage.getItem('leetmathToken');
-      const userName = localStorage.getItem('leetmathUserName');
+      const token = localStorage.getItem('BananaPrepToken');
+      const userName = localStorage.getItem('BananaPrepUserName');
       const userAccountSection = document.getElementById('userAccountSection');
       const userProfile = document.getElementById('userProfile');
       
@@ -430,9 +430,9 @@
     
     // Logout function
     function logout() {
-      localStorage.removeItem('leetmathToken');
-      localStorage.removeItem('leetmathUserId');
-      localStorage.removeItem('leetmathUserName');
+      localStorage.removeItem('BananaPrepToken');
+      localStorage.removeItem('BananaPrepUserId');
+      localStorage.removeItem('BananaPrepUserName');
       
       // Refresh the page
       window.location.reload();
@@ -440,7 +440,7 @@
     
     // Load user stats from API
     async function loadUserStats() {
-      const token = localStorage.getItem('leetmathToken');
+      const token = localStorage.getItem('BananaPrepToken');
       if (!token) return;
       
       try {
@@ -481,38 +481,179 @@
     
     // Load user progress for all problems
     async function loadUserProgress() {
-      const token = localStorage.getItem('leetmathToken');
-      if (!token) return;
-      
-      try {
-        const response = await fetch(`${API_URL}/progress/all`, {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
-        
-        if (!response.ok) {
-          if (response.status !== 404) {
-            throw new Error('Failed to load progress data');
-          }
-          return;
-        }
-        
-        const progressData = await response.json();
-        
-        // Convert array to object with problem_id as key for easier lookup
-        userProgress = {};
-        progressData.forEach(item => {
-          userProgress[item.problem_id] = item;
-        });
-        
-        // Re-render table with progress data
-        renderTable(filterProblems(problemsData));
-        
-      } catch (error) {
-        console.error('Error loading user progress:', error);
+  const token = localStorage.getItem('BananaPrepToken');
+  if (!token) return;
+  
+  try {
+    const response = await fetch(`${API_URL}/progress/all`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
       }
+    });
+    
+    if (!response.ok) {
+      if (response.status !== 404) {
+        throw new Error('Failed to load progress data');
+      }
+      return;
     }
+    
+    const progressData = await response.json();
+    
+    // Convert array to object with problem_id as key for easier lookup
+    userProgress = {};
+    progressData.forEach(item => {
+      userProgress[item.problem_id] = item;
+    });
+    
+    // Re-render table with progress data
+    renderTable(filterProblems(problemsData));
+    
+  } catch (error) {
+    console.error('Error loading user progress:', error);
+  }
+}
+
+// Update the getProblemStatus function to use the correct terminology
+function getProblemStatus(problemId) {
+  if (!userProgress[problemId]) return 'not-done';
+  
+  // Change the status terminology to match the requirements
+  const status = userProgress[problemId].status;
+  if (status === 'solved') return 'done';
+  if (status === 'attempted') return 'attempted';
+  return 'not-done';
+}
+
+// Update the renderTable function to use the new status labels
+function renderTable(data) {
+  const tbody = document.querySelector('#problemsTable tbody');
+  tbody.innerHTML = ''; // Clear existing rows
+
+  data.forEach((problem, index) => {
+    const row = document.createElement('tr');
+
+    // Make row clickable
+    row.addEventListener('click', () => {
+      window.location.href = `problem.html?id=${index}`;
+    });
+
+    // Populate row cells
+    const cellIndex = document.createElement('td');
+    cellIndex.textContent = index + 1;
+    row.appendChild(cellIndex);
+
+    const cellTitle = document.createElement('td');
+    cellTitle.textContent = problem.title || "Untitled";
+    row.appendChild(cellTitle);
+
+    const cellDifficulty = document.createElement('td');
+    const difficulty = (problem.difficulty || "easy").toLowerCase();
+    cellDifficulty.textContent = difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
+    if (["easy", "medium", "hard"].includes(difficulty)) {
+      cellDifficulty.classList.add(`difficulty-${difficulty}`);
+    }
+    row.appendChild(cellDifficulty);
+
+    const cellStatus = document.createElement('td');
+    const status = getProblemStatus(index);
+    
+    // Use the new status labels
+    if (status === 'done') {
+      cellStatus.textContent = 'Done';
+      cellStatus.classList.add('status-solved');
+    } else if (status === 'attempted') {
+      cellStatus.textContent = 'Attempted';
+      cellStatus.classList.add('status-attempted');
+    } else {
+      cellStatus.textContent = 'Not Done';
+      cellStatus.classList.add('status-not-done');
+    }
+    
+    row.appendChild(cellStatus);
+
+    const cellTags = document.createElement('td');
+    cellTags.textContent = problem.tags || "None";
+    row.appendChild(cellTags);
+
+    const cellConcept = document.createElement('td');
+    cellConcept.textContent = problem.concept || "General";
+    row.appendChild(cellConcept);
+
+    tbody.appendChild(row);
+  });
+}
+
+// Also, let's update the filterProblems function to work with the new status labels
+function filterProblems(data) {
+  return data.filter(problem => {
+    // Filter by status
+    if (currentFilters.status !== 'all') {
+      const problemId = problemsData.indexOf(problem);
+      const progressStatus = getProblemStatus(problemId);
+      
+      if (currentFilters.status === 'solved' && progressStatus !== 'done') return false;
+      if (currentFilters.status === 'attempted' && progressStatus !== 'attempted') return false;
+      if (currentFilters.status === 'unsolved' && progressStatus !== 'not-done') return false;
+    }
+    
+    // Filter by difficulty
+    if (currentFilters.difficulty !== 'all' && problem.difficulty?.toLowerCase() !== currentFilters.difficulty) {
+      return false;
+    }
+    
+    // Filter by tag
+    if (currentFilters.tag !== 'all' && !(problem.tags?.toLowerCase().includes(currentFilters.tag.toLowerCase()))) {
+      return false;
+    }
+    
+    // Filter by search text
+    if (currentFilters.search && !(
+      problem.title?.toLowerCase().includes(currentFilters.search.toLowerCase()) ||
+      problem.tags?.toLowerCase().includes(currentFilters.search.toLowerCase()) ||
+      problem.concept?.toLowerCase().includes(currentFilters.search.toLowerCase())
+    )) {
+      return false;
+    }
+    
+    return true;
+  });
+}
+// Also, let's update the filterProblems function to work with the new status labels
+function filterProblems(data) {
+  return data.filter(problem => {
+    // Filter by status
+    if (currentFilters.status !== 'all') {
+      const problemId = problemsData.indexOf(problem);
+      const progressStatus = getProblemStatus(problemId);
+      
+      if (currentFilters.status === 'solved' && progressStatus !== 'done') return false;
+      if (currentFilters.status === 'attempted' && progressStatus !== 'attempted') return false;
+      if (currentFilters.status === 'unsolved' && progressStatus !== 'not-done') return false;
+    }
+    
+    // Filter by difficulty
+    if (currentFilters.difficulty !== 'all' && problem.difficulty?.toLowerCase() !== currentFilters.difficulty) {
+      return false;
+    }
+    
+    // Filter by tag
+    if (currentFilters.tag !== 'all' && !(problem.tags?.toLowerCase().includes(currentFilters.tag.toLowerCase()))) {
+      return false;
+    }
+    
+    // Filter by search text
+    if (currentFilters.search && !(
+      problem.title?.toLowerCase().includes(currentFilters.search.toLowerCase()) ||
+      problem.tags?.toLowerCase().includes(currentFilters.search.toLowerCase()) ||
+      problem.concept?.toLowerCase().includes(currentFilters.search.toLowerCase())
+    )) {
+      return false;
+    }
+    
+    return true;
+  });
+}
     
     // Apply filters to problems data
     function filterProblems(data) {
@@ -708,8 +849,80 @@
     });
 
     document.addEventListener('DOMContentLoaded', () => {
+      // Initial data load
+      initializePageData();
+      
+      // Listen for page visibility changes to reload data when returning to the tab
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') {
+          refreshUserData();
+        }
+      });
+    });
+
+
+    // Function to handle initial page data loading
+    function initializePageData() {
       checkAuthStatus();
       loadProblems();
+    }
+
+    // Function to refresh user data without reloading problems
+    function refreshUserData() {
+      if (isUserLoggedIn()) {
+        loadUserStats();
+        loadUserProgress();
+      }
+    }
+
+    // Check if user is logged in
+    function isUserLoggedIn() {
+      const token = localStorage.getItem('leetmathToken');
+      return !!token;
+    }
+
+    // Check authentication status
+    function checkAuthStatus() {
+      const token = localStorage.getItem('leetmathToken');
+      const userName = localStorage.getItem('leetmathUserName');
+      const userAccountSection = document.getElementById('userAccountSection');
+      const userProfile = document.getElementById('userProfile');
+      
+      if (token && userName) {
+        // User is logged in
+        userAccountSection.innerHTML = `
+          <div class="user-name">Welcome, ${userName}</div>
+          <div class="user-avatar">${userName.charAt(0)}</div>
+          <button class="logout-btn" id="logoutBtn">Logout</button>
+        `;
+        
+        // Show user profile section
+        userProfile.style.display = 'block';
+        
+        // Set up logout button
+        document.getElementById('logoutBtn').addEventListener('click', logout);
+        
+        // Load user stats
+        loadUserStats();
+        
+        return true;
+      } else {
+        // User is not logged in
+        userAccountSection.innerHTML = `
+          <a href="login.html" class="login-btn">Login</a>
+        `;
+        
+        // Hide user profile section
+        userProfile.style.display = 'none';
+        
+        return false;
+      }
+    }
+
+    // Add beforeunload event listener to support page refresh
+    window.addEventListener('beforeunload', () => {
+      // This ensures data is fresh even when the user manually refreshes the page
+      // We don't need to actually do anything here, as the DOMContentLoaded will handle reloading
     });
   </script>
 </body>

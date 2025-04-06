@@ -1,4 +1,4 @@
-// server.js - A simple Express server to handle LeetMath authentication and database operations
+// server.js - A simple Express server to handle BananaPrep authentication and database operations
 const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const bcrypt = require('bcrypt');
@@ -6,6 +6,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const path = require('path');
 const jwt = require('jsonwebtoken');
+const fs = require('fs');
 
 // Initialize Express app
 const app = express();
@@ -17,11 +18,11 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Initialize database
-const db = new sqlite3.Database('./leetmath.db', (err) => {
+const db = new sqlite3.Database('./BananaPrep.db', (err) => {
   if (err) {
     console.error('Error opening database:', err.message);
   } else {
-    console.log('Connected to the LeetMath database.');
+    console.log('Connected to the BananaPrep database.');
     initDatabase();
   }
 });
@@ -68,7 +69,7 @@ function initDatabase() {
 }
 
 // Secret key for JWT
-const JWT_SECRET = 'leetmath-secret-key-change-in-production';
+const JWT_SECRET = 'BananaPrep-secret-key-change-in-production';
 
 // Authentication routes
 app.post('/api/register', async (req, res) => {
@@ -184,6 +185,17 @@ function authenticateToken(req, res, next) {
   });
 }
 
+// Load problems data
+let problemsData = [];
+try {
+  const problemsFilePath = path.join(__dirname, 'public', 'problems.json');
+  const problemsJson = fs.readFileSync(problemsFilePath, 'utf8');
+  problemsData = JSON.parse(problemsJson);
+  console.log(`Loaded ${problemsData.length} problems from problems.json`);
+} catch (error) {
+  console.error('Error loading problems data:', error);
+}
+
 // Protected user routes
 app.get('/api/user/profile', authenticateToken, (req, res) => {
   db.get('SELECT id, full_name, email, date_joined, last_login FROM users WHERE id = ?', 
@@ -219,6 +231,97 @@ app.get('/api/user/stats', authenticateToken, (req, res) => {
   );
 });
 
+// NEW: Validate answer endpoint
+app.post('/api/validate-answer', authenticateToken, (req, res) => {
+  try {
+    const { problemId, userAnswer } = req.body;
+    
+    if (problemId === undefined || userAnswer === undefined) {
+      return res.status(400).json({ error: 'Problem ID and user answer are required' });
+    }
+    
+    // Get the problem from our loaded data
+    const problem = problemsData[problemId];
+    
+    if (!problem) {
+      return res.status(404).json({ error: 'Problem not found' });
+    }
+    
+    // Check if the problem has a defined answer
+    if (!problem.answer) {
+      return res.status(400).json({ error: 'This problem does not have a defined answer' });
+    }
+    
+    // Normalize both answers for comparison (convert to string, trim whitespace, lowercase)
+    const normalizedUserAnswer = String(userAnswer).trim().toLowerCase();
+    const normalizedCorrectAnswer = String(problem.answer).trim().toLowerCase();
+    
+    // Check if the answer is correct
+    const isCorrect = normalizedUserAnswer === normalizedCorrectAnswer;
+    
+    // Update user progress based on answer correctness
+    const status = isCorrect ? 'solved' : 'attempted';
+    
+    // Update progress in database
+    db.get('SELECT * FROM user_progress WHERE user_id = ? AND problem_id = ?',
+      [req.user.id, problemId],
+      (err, progress) => {
+        if (err) {
+          return res.status(500).json({ error: err.message });
+        }
+        
+        if (progress) {
+          // Update existing progress
+          db.run(`UPDATE user_progress 
+                 SET status = ?, attempts = attempts + 1, 
+                     last_attempt_date = CURRENT_TIMESTAMP
+                 WHERE user_id = ? AND problem_id = ?`,
+            [status, req.user.id, problemId],
+            function(err) {
+              if (err) {
+                return res.status(500).json({ error: err.message });
+              }
+              
+              // If answer is correct, update user stats
+              if (isCorrect) {
+                updateUserStats(req.user.id, problem.difficulty);
+              }
+              
+              res.json({ 
+                isCorrect,
+                message: isCorrect ? 'Correct answer!' : 'Incorrect answer. Try again.'
+              });
+            }
+          );
+        } else {
+          // Create new progress entry
+          db.run(`INSERT INTO user_progress (user_id, problem_id, status)
+                  VALUES (?, ?, ?)`,
+            [req.user.id, problemId, status],
+            function(err) {
+              if (err) {
+                return res.status(500).json({ error: err.message });
+              }
+              
+              // If answer is correct, update user stats
+              if (isCorrect) {
+                updateUserStats(req.user.id, problem.difficulty);
+              }
+              
+              res.json({ 
+                isCorrect,
+                message: isCorrect ? 'Correct answer!' : 'Incorrect answer. Try again.'
+              });
+            }
+          );
+        }
+      }
+    );
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Problem progress tracking
 app.post('/api/progress/update', authenticateToken, (req, res) => {
   try {
@@ -247,7 +350,9 @@ app.post('/api/progress/update', authenticateToken, (req, res) => {
               
               // Update user stats if problem is solved
               if (status === 'solved') {
-                updateUserStats(req.user.id, problemId);
+                if (problemsData[problemId]) {
+                  updateUserStats(req.user.id, problemsData[problemId].difficulty);
+                }
               }
               
               res.json({ message: 'Progress updated successfully' });
@@ -265,7 +370,9 @@ app.post('/api/progress/update', authenticateToken, (req, res) => {
               
               // Update user stats if problem is solved
               if (status === 'solved') {
-                updateUserStats(req.user.id, problemId);
+                if (problemsData[problemId]) {
+                  updateUserStats(req.user.id, problemsData[problemId].difficulty);
+                }
               }
               
               res.json({ message: 'Progress created successfully' });
@@ -279,41 +386,91 @@ app.post('/api/progress/update', authenticateToken, (req, res) => {
   }
 });
 
-// Update user stats when a problem is solved
-function updateUserStats(userId, problemId) {
-  // Get problem difficulty
-  db.get('SELECT difficulty FROM problems WHERE id = ?', [problemId], (err, problem) => {
-    if (err || !problem) {
-      console.error('Error getting problem difficulty:', err ? err.message : 'Problem not found');
-      return;
-    }
+// Get specific problem progress
+app.get('/api/progress/:problemId', authenticateToken, (req, res) => {
+  try {
+    const { problemId } = req.params;
     
-    let field;
-    switch (problem.difficulty.toLowerCase()) {
-      case 'easy':
-        field = 'easy_solved';
-        break;
-      case 'medium':
-        field = 'medium_solved';
-        break;
-      case 'hard':
-        field = 'hard_solved';
-        break;
-      default:
-        field = 'easy_solved'; // Default to easy if difficulty not recognized
-    }
-    
-    // Update the appropriate counter
-    db.run(`UPDATE user_stats SET ${field} = ${field} + 1, 
-            last_updated = CURRENT_TIMESTAMP WHERE user_id = ?`,
-      [userId],
-      (err) => {
+    db.get('SELECT * FROM user_progress WHERE user_id = ? AND problem_id = ?',
+      [req.user.id, problemId],
+      (err, progress) => {
         if (err) {
-          console.error('Error updating user stats:', err.message);
+          return res.status(500).json({ error: err.message });
         }
+        
+        if (!progress) {
+          return res.status(404).json({ error: 'No progress found for this problem' });
+        }
+        
+        // Add problem data for reference (without exposing the answer)
+        const problem = problemsData[problemId];
+        if (problem) {
+          // Create a copy without the answer field
+          const { answer, ...problemWithoutAnswer } = problem;
+          progress.problemData = problemWithoutAnswer;
+        }
+        
+        res.json(progress);
       }
     );
-  });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Get all user progress
+app.get('/api/progress/all', authenticateToken, (req, res) => {
+  try {
+    db.all('SELECT * FROM user_progress WHERE user_id = ?',
+      [req.user.id],
+      (err, progress) => {
+        if (err) {
+          return res.status(500).json({ error: err.message });
+        }
+        
+        if (!progress || progress.length === 0) {
+          return res.status(404).json({ error: 'No progress found' });
+        }
+        
+        res.json(progress);
+      }
+    );
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Update user stats based on difficulty
+function updateUserStats(userId, difficulty) {
+  // Normalize difficulty to lowercase
+  const difficultyLower = (difficulty || 'easy').toLowerCase();
+  
+  // Determine which field to update
+  let field;
+  switch (difficultyLower) {
+    case 'easy':
+      field = 'easy_solved';
+      break;
+    case 'medium':
+      field = 'medium_solved';
+      break;
+    case 'hard':
+      field = 'hard_solved';
+      break;
+    default:
+      field = 'easy_solved'; // Default to easy if difficulty not recognized
+  }
+  
+  // Update the appropriate counter
+  db.run(`UPDATE user_stats SET ${field} = ${field} + 1, 
+          last_updated = CURRENT_TIMESTAMP WHERE user_id = ?`,
+    [userId],
+    (err) => {
+      if (err) {
+        console.error('Error updating user stats:', err.message);
+      }
+    }
+  );
 }
 
 // Start the server

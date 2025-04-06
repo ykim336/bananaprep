@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>LeetMath - Problem Details</title>
+  <title>BananaPrep - Problem Details</title>
   <style>
     /* Basic Reset & Dark Theme */
     * {
@@ -34,7 +34,7 @@
     header .logo {
       font-size: 1.5rem;
       font-weight: bold;
-      color: #f39c12;
+      color: #FFE135;
       text-decoration: none;
     }
     main {
@@ -100,7 +100,7 @@
       color: #777;
       font-size: 0.9rem;
     }
-    /* Right Panel: MATLAB Code Editor & Integration */
+    /* Right Panel: Solution Area */
     .editor-section {
       flex: 1;
       padding: 1rem;
@@ -193,7 +193,7 @@
       height: 20px;
       border: 3px solid rgba(255,255,255,.3);
       border-radius: 50%;
-      border-top-color: #f39c12;
+      border-top-color: #FFE135;
       animation: spin 1s ease-in-out infinite;
       margin-right: 0.5rem;
     }
@@ -226,28 +226,93 @@
       text-align: center;
       padding: 1rem;
       background-color: rgba(243, 156, 18, 0.2);
-      border: 1px solid #f39c12;
+      border: 1px solid #FFE135;
       border-radius: 4px;
       margin-bottom: 1rem;
     }
     .auth-prompt a {
-      color: #f39c12;
+      color: #FFE135;
       text-decoration: none;
       font-weight: bold;
     }
     .auth-prompt a:hover {
       text-decoration: underline;
     }
+
+    /* NEW STYLES FOR ANSWER SECTION */
+    .solution-tabs {
+      display: flex;
+      margin-bottom: 1rem;
+    }
+    .tab {
+      padding: 0.5rem 1rem;
+      background-color: #2f2f2f;
+      border: 1px solid #444;
+      border-bottom: none;
+      border-radius: 4px 4px 0 0;
+      cursor: pointer;
+      margin-right: 0.5rem;
+    }
+    .tab.active {
+      background-color: #3a3a3a;
+      border-bottom: 1px solid #3a3a3a;
+    }
+    .tab-content {
+      display: none;
+      border: 1px solid #444;
+      border-radius: 0 4px 4px 4px;
+      padding: 1rem;
+      background-color: #2f2f2f;
+      margin-bottom: 1rem;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    .answer-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .answer-form label {
+      font-weight: bold;
+    }
+    .answer-input {
+      padding: 0.75rem;
+      background-color: #1f1f1f;
+      border: 1px solid #444;
+      border-radius: 4px;
+      color: #f1f1f1;
+      font-family: monospace;
+    }
+    .answer-form .btn {
+      align-self: flex-start;
+    }
+    .answer-feedback {
+      margin-top: 1rem;
+      padding: 0.75rem;
+      border-radius: 4px;
+      display: none;
+    }
+    .answer-correct {
+      background-color: rgba(46, 204, 113, 0.2);
+      border: 1px solid #2ecc71;
+      color: #2ecc71;
+    }
+    .answer-incorrect {
+      background-color: rgba(231, 76, 60, 0.2);
+      border: 1px solid #e74c3c;
+      color: #e74c3c;
+    }
   </style>
 </head>
 <body>
   <!-- Sticky Header with Logo -->
   <header>
-    <a href="home.html" class="logo">LeetMath</a>
-    <a href="database.html">← Back to Database</a>
+    <a href="home.html" class="logo">BananaPrep</a>
+    <a href="database.html" style="color: FFE135; text-decoration: none;">← Back to Database</a>
   </header>
   
-  <!-- Main Content: Problem details and code editor -->
+  <!-- Main Content: Problem details and solution tabs -->
   <main>
     <!-- Left Panel: Problem Statement -->
     <div class="problem-details">
@@ -256,7 +321,7 @@
         <span id="problemStatus" class="problem-status status-unsolved">Unsolved</span>
         <p id="problemDescription">Loading Problem Description...</p>
         
-        <!-- Problem Image (New) -->
+        <!-- Problem Image -->
         <figure class="problem-image" id="problemImageContainer">
           <!-- Image will be inserted here -->
         </figure>
@@ -275,7 +340,7 @@
       </div>
     </div>
 
-    <!-- Right Panel: MATLAB Code Editor & API Integration -->
+    <!-- Right Panel: Solution Tabs for Answer and Code -->
     <div class="editor-section">
       <!-- Alert Messages -->
       <div class="alert alert-danger" id="errorAlert"></div>
@@ -287,25 +352,49 @@
         <a href="login.html">Sign In / Sign Up</a>
       </div>
       
-      <div class="btn-row">
-        <div class="btn-spinner-container">
-          <span class="spinner" id="runSpinner"></span>
-          <button id="runBtn" class="btn">Run</button>
-        </div>
-        <div class="btn-spinner-container">
-          <span class="spinner" id="submitSpinner"></span>
-          <button id="submitBtn" class="btn btn-success">Submit</button>
-        </div>
+      <!-- Solution Tabs -->
+      <div class="solution-tabs">
+        <div class="tab active" id="answerTab">Submit Answer</div>
+        <div class="tab" id="codeTab">Write Code</div>
       </div>
-      <div id="codeEditor" class="code-editor" contenteditable="true">
-% Write your MATLAB code here...
+      
+      <!-- Answer Input Section -->
+      <div class="tab-content active" id="answerSection">
+        <form class="answer-form" id="answerForm">
+          <label for="userAnswer">Your Answer:</label>
+          <input type="text" id="userAnswer" class="answer-input" placeholder="Enter your answer here" required>
+          <div class="btn-spinner-container">
+            <span class="spinner" id="answerSpinner"></span>
+            <button type="submit" class="btn btn-success" id="submitAnswerBtn">Submit Answer</button>
+          </div>
+        </form>
+        <div class="answer-feedback" id="answerFeedback"></div>
+      </div>
+      
+      <!-- Code Editor Section -->
+      <div class="tab-content" id="codeSection">
+        <div class="btn-row">
+          <div class="btn-spinner-container">
+            <span class="spinner" id="runSpinner"></span>
+            <button id="runBtn" class="btn">Run</button>
+          </div>
+          <div class="btn-spinner-container">
+            <span class="spinner" id="submitSpinner"></span>
+            <button id="submitBtn" class="btn btn-success">Submit</button>
+          </div>
+        </div>
+        <div id="codeEditor" class="code-editor" contenteditable="true">
+          MATLAB implementation comming soon...
+<!-- % Write your MATLAB code here...
 % For example:
 % function result = solveProblem(input)
 %   result = input * 2; % Sample operation
-% end
-      </div>
-      <div class="output-section" id="matlabOutput">
-        MATLAB output will appear here...
+% end -->
+
+        </div>
+        <div class="output-section" id="matlabOutput">
+          MATLAB output will appear here...
+        </div>
       </div>
     </div>
   </main>
@@ -317,6 +406,9 @@
     // Base path for problem images
     const IMAGE_BASE_PATH = 'images/problems/';
     
+    // Track current problem data
+    let currentProblem = null;
+    
     // Utility: Get query parameter from URL
     function getQueryParam(param) {
       const params = new URLSearchParams(window.location.search);
@@ -325,7 +417,7 @@
     
     // Check authentication status
     function checkAuthStatus() {
-      const token = localStorage.getItem('leetmathToken');
+      const token = localStorage.getItem('BananaPrepToken');
       const authPrompt = document.getElementById('authPrompt');
       
       if (!token) {
@@ -339,7 +431,7 @@
     
     // Get auth token
     function getAuthToken() {
-      return localStorage.getItem('leetmathToken');
+      return localStorage.getItem('BananaPrepToken');
     }
     
     // Get current problem ID
@@ -383,6 +475,12 @@
       document.getElementById('submitBtn').disabled = isLoading;
     }
     
+    // Toggle loading state for answer submit button
+    function toggleAnswerLoading(isLoading) {
+      document.getElementById('answerSpinner').style.display = isLoading ? 'block' : 'none';
+      document.getElementById('submitAnswerBtn').disabled = isLoading;
+    }
+    
     // Update problem status display
     function updateProblemStatus(status) {
       const statusElement = document.getElementById('problemStatus');
@@ -403,16 +501,28 @@
       }
     }
     
+    // Show answer feedback
+    function showAnswerFeedback(isCorrect, message) {
+      const feedbackElement = document.getElementById('answerFeedback');
+      feedbackElement.textContent = message;
+      feedbackElement.className = 'answer-feedback';
+      
+      if (isCorrect) {
+        feedbackElement.classList.add('answer-correct');
+      } else {
+        feedbackElement.classList.add('answer-incorrect');
+      }
+      
+      feedbackElement.style.display = 'block';
+    }
+    
     // Improved display problem image function with better error handling
     function displayProblemImage(imagePath, problemTitle) {
       const imageContainer = document.getElementById('problemImageContainer');
       
-      console.log("Image path:", imagePath);
-      
       if (imagePath) {
         // Direct image display with inline error handling
         const fullImagePath = IMAGE_BASE_PATH + imagePath;
-        console.log("Full image path:", fullImagePath);
         
         imageContainer.innerHTML = `
           <img src="${fullImagePath}" alt="${problemTitle} illustration" 
@@ -422,7 +532,6 @@
         `;
       } else {
         // No image provided, show placeholder
-        console.log("No image path provided");
         imageContainer.innerHTML = `
           <div class="image-placeholder">
             <i>📷</i>
@@ -461,6 +570,13 @@
         
         // Update status display
         updateProblemStatus(data.status);
+        
+        // If the problem is already solved, disable the answer input
+        if (data.status === 'solved') {
+          document.getElementById('userAnswer').disabled = true;
+          document.getElementById('submitAnswerBtn').disabled = true;
+          showAnswerFeedback(true, 'You have already solved this problem!');
+        }
         
       } catch (error) {
         console.error('Error loading progress:', error);
@@ -503,10 +619,42 @@
       }
     }
     
+    // Validate user answer against correct solution via server API
+    async function validateAnswer(userAnswer) {
+      if (!checkAuthStatus()) {
+        showError('Please sign in to submit your answer');
+        return false;
+      }
+      
+      try {
+        const response = await fetch(`${API_URL}/validate-answer`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${getAuthToken()}`
+          },
+          body: JSON.stringify({
+            problemId: parseInt(currentProblemId),
+            userAnswer: userAnswer
+          })
+        });
+        
+        if (!response.ok) {
+          const data = await response.json();
+          throw new Error(data.error || 'Failed to validate answer');
+        }
+        
+        const result = await response.json();
+        return result.isCorrect;
+      } catch (error) {
+        showError(error.message || 'Error validating answer');
+        return false;
+      }
+    }
+    
     // Improved loadProblem function with better error handling and debugging
     async function loadProblem() {
       try {
-        console.log("Attempting to load problems.json...");
         const response = await fetch('problems.json');
         
         if (!response.ok) {
@@ -516,9 +664,7 @@
           return;
         }
         
-        console.log("Problems.json loaded successfully");
         const problems = await response.json();
-        console.log("JSON parsed successfully");
         
         if (!Array.isArray(problems)) {
           console.error("JSON is not an array:", typeof problems, problems);
@@ -528,30 +674,26 @@
         }
         
         const id = getQueryParam('id');
-        console.log("Looking for problem with id:", id);
         
-        const problem = problems.find((_, index) => index.toString() === id) || problems[0];
+        currentProblem = problems.find((_, index) => index.toString() === id) || problems[0];
         
-        if (!problem) {
+        if (!currentProblem) {
           console.error("No problem found for id:", id);
           document.getElementById('problemTitle').textContent = 'Error: Problem not found';
           document.getElementById('problemDescription').textContent = 'No problem found with the specified ID.';
           return;
         }
         
-        console.log("Found problem:", problem);
-        console.log("Problem image:", problem.image);
-        
-        document.getElementById('problemTitle').textContent = problem.title || 'Untitled Problem';
-        document.getElementById('problemDescription').textContent = problem.description || 'No description available.';
+        document.getElementById('problemTitle').textContent = currentProblem.title || 'Untitled Problem';
+        document.getElementById('problemDescription').textContent = currentProblem.description || 'No description available.';
         
         // Display problem image
-        displayProblemImage(problem.image, problem.title);
+        displayProblemImage(currentProblem.image, currentProblem.title);
         
         const examplesDiv = document.getElementById('problemExamples');
         examplesDiv.innerHTML = '';
-        if (Array.isArray(problem.examples)) {
-          problem.examples.forEach(example => {
+        if (Array.isArray(currentProblem.examples)) {
+          currentProblem.examples.forEach(example => {
             const exDiv = document.createElement('div');
             exDiv.classList.add('example-item');
             exDiv.innerHTML = `<strong>Input:</strong> ${example.input}<br>
@@ -565,8 +707,8 @@
         
         const constraintsUl = document.getElementById('problemConstraints');
         constraintsUl.innerHTML = '';
-        if (Array.isArray(problem.constraints)) {
-          problem.constraints.forEach(constraint => {
+        if (Array.isArray(currentProblem.constraints)) {
+          currentProblem.constraints.forEach(constraint => {
             const li = document.createElement('li');
             li.classList.add('constraint-item');
             li.textContent = constraint;
@@ -576,8 +718,8 @@
           constraintsUl.textContent = 'No constraints provided.';
         }
         
-        if (problem.solutionCode) {
-          document.getElementById('codeEditor').textContent = problem.solutionCode;
+        if (currentProblem.solutionCode) {
+          document.getElementById('codeEditor').textContent = currentProblem.solutionCode;
         }
         
         // Load user progress after problem is loaded
@@ -590,6 +732,22 @@
       }
     }
     
+    // Setup tab switching functionality
+    document.getElementById('answerTab').addEventListener('click', function() {
+      document.getElementById('answerTab').classList.add('active');
+      document.getElementById('codeTab').classList.remove('active');
+      document.getElementById('answerSection').classList.add('active');
+      document.getElementById('codeSection').classList.remove('active');
+    });
+    
+    document.getElementById('codeTab').addEventListener('click', function() {
+      document.getElementById('codeTab').classList.add('active');
+      document.getElementById('answerTab').classList.remove('active');
+      document.getElementById('codeSection').classList.add('active');
+      document.getElementById('answerSection').classList.remove('active');
+    });
+    
+    // Code tab button listeners
     document.getElementById('runBtn').addEventListener('click', async () => {
       const solutionCode = document.getElementById('codeEditor').textContent;
       const inputValue = prompt("Enter input for your MATLAB function:");

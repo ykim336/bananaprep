@@ -2,161 +2,401 @@
   {
     "title": "Ohm's Law Calculation",
     "concept": "Circuits",
-    "description": "Find the current through the circuit using Ohm's law.",
+    "description": "Find the current through the circuit using Ohm's law. A 10V battery is connected to a 5Ω resistor. What is the current in amperes?",
     "tags": "Circuits, Ohm's Law",
     "solution": "The two resistors are in parallel, so use the formula I = V/R. Calculate the equivalent resistance first if needed. R_eq = (R1 * R2) / (R1 + R2). Then, I = V/R_eq.",
-    "image": "ohms-law.png"
+    "image": "ohms-law.png",
+    "answer": "2",
+    "difficulty": "easy"
   },
   {
     "title": "Kirchhoff's Voltage Law",
     "concept": "Circuit Analysis",
-    "description": "Given a closed circuit loop with multiple voltage sources, determine the missing voltage.",
+    "description": "Given a closed circuit loop with a 12V source and two resistors of 4Ω and 8Ω in series, determine the voltage drop across the 8Ω resistor.",
     "tags": "Circuits, Kirchhoff's Voltage Law",
     "solution": "Apply Kirchhoff's Voltage Law: the sum of the voltage gains equals the sum of the voltage drops in a closed loop.",
-    "image": "kirchhoff-voltage.png"
+    "image": "kirchhoff-voltage.png",
+    "answer": "8",
+    "difficulty": "medium"
   },
   {
     "title": "Resistor Network Equivalent",
     "concept": "Circuit Analysis",
-    "description": "Determine the equivalent resistance of a combination of resistors in series and parallel.",
+    "description": "Determine the equivalent resistance of the following resistor network: two 10Ω resistors in parallel, connected in series with a 5Ω resistor. Give your answer in ohms.",
     "tags": "Circuits, Resistors",
     "solution": "For resistors in series, add them directly. For parallel, use 1/Req = 1/R1 + 1/R2 + ... and then take the reciprocal.",
-    "image": "resistor-network.png"
+    "image": "resistor-network.png",
+    "answer": "10",
+    "difficulty": "medium"
   },
   {
     "title": "AC Circuit Impedance",
     "concept": "AC Circuits",
-    "description": "Calculate the impedance of an RLC circuit at a specific frequency.",
+    "description": "Calculate the impedance magnitude of an RLC circuit with R=10Ω, L=0.02H, and C=100μF at a frequency of 50Hz. Round to the nearest ohm.",
     "tags": "AC Circuits, RLC",
     "solution": "Impedance Z = sqrt(R² + (X_L - X_C)²), where X_L = 2πfL and X_C = 1/(2πfC).",
-    "image": "rlc-circuit.png"
+    "image": "rlc-circuit.png",
+    "answer": "22",
+    "difficulty": "hard"
   },
   {
     "title": "Transformer Turns Ratio",
     "concept": "Electromagnetism",
-    "description": "Determine the primary and secondary voltages given the transformer turns ratio.",
+    "description": "A transformer has 400 turns in its primary winding and 100 turns in its secondary winding. If the primary voltage is 240V, what is the secondary voltage?",
     "tags": "Transformers, Electromagnetism",
     "solution": "The voltage ratio equals the turns ratio: V_primary/V_secondary = N_primary/N_secondary.",
-    "image": "transformer.png"
+    "image": "transformer.png",
+    "answer": "60",
+    "difficulty": "medium"
   },
   {
     "title": "Power Factor Correction",
     "concept": "AC Power",
-    "description": "Calculate the capacitor size required for power factor correction in an AC circuit.",
+    "description": "An inductive load draws 100kVA at 0.8 lagging power factor. What is the reactive power in kVAR that needs to be compensated by capacitors to achieve unity power factor?",
     "tags": "AC Power, Power Factor",
     "solution": "Use the reactive power equation Q = V²/X_C. Adjust the capacitance so that the reactive power compensates for the lagging power factor.",
-    "image": "power-factor.png"
+    "image": "power-factor.png",
+    "answer": "60",
+    "difficulty": "hard"
   },
   {
     "title": "RC Circuit Time Constant",
     "concept": "Transient Analysis",
-    "description": "Determine the time constant of an RC circuit used for capacitor charging.",
+    "description": "In an RC circuit with R=10kΩ and C=47μF, calculate the time constant in seconds.",
     "tags": "Transient, RC Circuit",
     "solution": "The time constant τ = RC, which indicates how quickly the capacitor charges.",
-    "image": "rc-circuit.png"
+    "image": "rc-circuit.png",
+    "answer": "0.47",
+    "difficulty": "easy"
   },
   {
     "title": "RL Circuit Decay",
     "concept": "Transient Analysis",
-    "description": "Determine the decay of current in an RL circuit over time.",
+    "description": "In an RL circuit with R=100Ω and L=0.5H, how long (in milliseconds) will it take for the current to decay to 36.8% of its initial value?",
     "tags": "Transient, RL Circuit",
     "solution": "Current decay follows I(t) = I₀ * exp(-t/τ) with τ = L/R.",
-    "image": "rl-circuit.png"
+    "image": "rl-circuit.png",
+    "answer": "5",
+    "difficulty": "medium"
   },
   {
     "title": "DC Circuit Power Calculation",
     "concept": "DC Circuits",
-    "description": "Calculate the power dissipated by a resistor in a DC circuit.",
+    "description": "A 12V DC source supplies 2A of current to a resistor. How much power (in watts) is dissipated by the resistor?",
     "tags": "Power, DC Circuits",
     "solution": "Power can be calculated using P = I²R or P = V²/R, depending on the given values.",
-    "image": "dc-power.png"
+    "image": "dc-power.png",
+    "answer": "24",
+    "difficulty": "easy"
   },
   {
     "title": "Diode Forward Bias",
     "concept": "Electronics",
-    "description": "Explain the behavior of a diode in a forward bias condition.",
+    "description": "At what approximate voltage (in volts) does a silicon diode begin conducting current when forward biased?",
     "tags": "Electronics, Diodes",
     "solution": "When forward biased, a diode begins conducting current after surpassing its threshold voltage (about 0.7V for silicon diodes).",
-    "image": "diode-forward.png"
+    "image": "diode-forward.png",
+    "answer": "0.7",
+    "difficulty": "easy"
   },
   {
     "title": "MOSFET Saturation Region",
     "concept": "Electronics",
-    "description": "Describe how a MOSFET operates in the saturation region.",
+    "description": "For a MOSFET to operate in the saturation region, what relationship must exist between V_DS and V_GS - V_TH? Express your answer using these variables.",
     "tags": "Electronics, MOSFET",
     "solution": "In saturation, the MOSFET functions as a constant current source, where the drain current is relatively insensitive to the drain-source voltage.",
-    "image": "mosfet.png"
+    "image": "mosfet.png",
+    "answer": "V_DS ≥ V_GS - V_TH",
+    "difficulty": "hard"
   },
   {
     "title": "2-Input AND Gate Truth Table",
     "concept": "Digital Systems",
-    "description": "Construct the truth table for a 2-input AND gate.",
+    "description": "What is the output of a 2-input AND gate when inputs A=1 and B=0?",
     "tags": "Digital, Logic Gates",
     "solution": "The truth table: 0 AND 0 = 0, 0 AND 1 = 0, 1 AND 0 = 0, and 1 AND 1 = 1.",
-    "image": "and-gate.png"
+    "image": "and-gate.png",
+    "answer": "0",
+    "difficulty": "easy"
   },
   {
     "title": "Ideal Op-Amp in Negative Feedback",
     "concept": "Analog Electronics",
-    "description": "Describe the ideal behavior of an operational amplifier configured with negative feedback.",
+    "description": "What is the voltage difference between the inverting and non-inverting inputs of an ideal op-amp in negative feedback configuration?",
     "tags": "Op-Amp, Analog",
     "solution": "An ideal op-amp in negative feedback will drive its output such that the voltage difference between the inverting and non-inverting inputs is nearly zero.",
-    "image": "op-amp.png"
+    "image": "op-amp.png",
+    "answer": "0",
+    "difficulty": "medium"
   },
   {
     "title": "RC Low-Pass Filter Cutoff Frequency",
     "concept": "Signal Processing",
-    "description": "Calculate the cutoff frequency of an RC low-pass filter.",
+    "description": "Calculate the cutoff frequency (in Hz) of an RC low-pass filter with R=1kΩ and C=0.1μF.",
     "tags": "Filters, RC",
     "solution": "The cutoff frequency is given by f_c = 1/(2πRC).",
-    "image": "low-pass-filter.png"
+    "image": "low-pass-filter.png",
+    "answer": "1591",
+    "difficulty": "medium"
   },
   {
     "title": "Laplace Transform in RLC Circuit",
     "concept": "Control Systems",
-    "description": "Use Laplace transforms to solve a differential equation describing an RLC circuit.",
+    "description": "What is the Laplace transform of the differential equation L(di/dt) + Ri + (1/C)∫i dt = V(t)? Express in terms of I(s), R, L, C, and V(s).",
     "tags": "Control Systems, Laplace",
     "solution": "Transform the circuit to the s-domain, solve the resulting algebraic equation, and then apply the inverse Laplace transform to return to the time domain.",
-    "image": "laplace-rlc.png"
+    "image": "laplace-rlc.png",
+    "answer": "sLI(s) + RI(s) + I(s)/(sC) = V(s)",
+    "difficulty": "hard"
   },
   {
     "title": "Fourier Series Representation",
     "concept": "Signal Processing",
-    "description": "Determine the Fourier series representation of a given periodic waveform.",
+    "description": "For a square wave with amplitude 1 and period 2π, what is the coefficient of the first harmonic in its Fourier series expansion?",
     "tags": "Signal Processing, Fourier",
     "solution": "Express the waveform as a sum of sine and cosine functions with coefficients computed over one period.",
-    "image": "fourier-series.png"
+    "image": "fourier-series.png",
+    "answer": "4/π",
+    "difficulty": "hard"
   },
   {
     "title": "Bode Plot Analysis",
     "concept": "Control Systems",
-    "description": "Interpret a Bode plot to assess system stability and gain margin.",
+    "description": "What is the slope (in dB/decade) of the magnitude Bode plot for a first-order low-pass filter at frequencies well above the cutoff frequency?",
     "tags": "Control Systems, Bode Plot",
     "solution": "Examine the phase and gain margins on the Bode plot; positive margins generally indicate a stable system.",
-    "image": "bode-plot.png"
+    "image": "bode-plot.png",
+    "answer": "-20",
+    "difficulty": "medium"
   },
   {
     "title": "Circuit Simulation with SPICE",
     "concept": "Circuit Design",
-    "description": "Explain the process of simulating a circuit using SPICE software.",
+    "description": "In SPICE, what command is used to perform a DC sweep analysis for a voltage source named Vin from 0V to 5V in steps of 0.1V?",
     "tags": "Simulation, SPICE",
     "solution": "Model the circuit components in SPICE, set up simulation parameters, run the simulation, and analyze the voltage/current responses.",
-    "image": "spice-simulation.png"
+    "image": "spice-simulation.png",
+    "answer": ".DC Vin 0 5 0.1",
+    "difficulty": "medium"
   },
   {
     "title": "Thermal Analysis of an Electronic Component",
     "concept": "Electronics",
-    "description": "Calculate the temperature rise of an electronic component due to power dissipation.",
+    "description": "A power transistor dissipates 5W and has a thermal resistance of 10°C/W. If the ambient temperature is 25°C, what is the junction temperature in °C?",
     "tags": "Thermal, Electronics",
     "solution": "Use the formula ΔT = P × θ, where P is the power dissipated and θ is the thermal resistance.",
-    "image": "thermal-analysis.png"
+    "image": "thermal-analysis.png",
+    "answer": "75",
+    "difficulty": "medium"
   },
   {
     "title": "Electric Field of a Charged Sphere",
     "concept": "Electromagnetics",
-    "description": "Determine the electric field at a point outside a uniformly charged sphere.",
+    "description": "At what distance from the center of a uniformly charged sphere does the electric field strength become equal to that of a point charge with the same total charge?",
     "tags": "Electromagnetics, Field Theory",
     "solution": "For points outside the sphere, treat it as a point charge: E = kQ/r², where k is Coulomb's constant.",
-    "image": "electric-field.png"
+    "image": "electric-field.png",
+    "answer": "R",
+    "difficulty": "hard"
+  },
+  {
+    "title": "Capacitance Calculation",
+    "concept": "Electrostatics",
+    "description": "Calculate the capacitance of a parallel plate capacitor with area 0.01m² and separation distance of 0.001m, using ε₀ = 8.85 × 10⁻¹² F/m.",
+    "tags": "Capacitance, Electrostatics",
+    "solution": "Use the formula C = ε₀(A/d), where A is the area and d is the separation distance.",
+    "image": "capacitance.png",
+    "answer": "8.85e-12",
+    "difficulty": "easy"
+  },
+  {
+    "title": "Inductance of a Solenoid",
+    "concept": "Electromagnetics",
+    "description": "Calculate the inductance of a solenoid with 1000 turns, length 0.5m, and cross-sectional area 0.01m², using μ₀ = 4π × 10⁻⁷ H/m.",
+    "tags": "Inductance, Electromagnetics",
+    "solution": "Use the formula L = (μ₀N²A)/l, where N is the number of turns, A is the area, and l is the length.",
+    "image": "inductance.png",
+    "answer": "0.00251",
+    "difficulty": "medium"
+  },
+  {
+    "title": "Magnetic Flux Calculation",
+    "concept": "Electromagnetics",
+    "description": "Calculate the magnetic flux through a circular loop of radius 0.1m in a uniform magnetic field of strength 0.5T.",
+    "tags": "Magnetic Flux, Electromagnetics",
+    "solution": "Use the formula Φ = B * A * cos(θ), where A is the area of the loop and θ is the angle between B and the normal to the surface.",
+    "image": "magnetic-flux.png",
+    "answer": "0.0157",
+    "difficulty": "medium"
+  },
+  {
+    "title": "Faraday's Law of Induction",
+    "concept": "Electromagnetics",
+    "description": "A coil with 200 turns is placed in a changing magnetic field that induces an emf of 0.5V. Calculate the rate of change of magnetic flux.",
+    "tags": "Faraday's Law, Electromagnetics",
+    "solution": "Use Faraday's Law: ε = -N(dΦ/dt), where N is the number of turns and dΦ/dt is the rate of change of magnetic flux.",
+    "image": "faradays-law.png",
+    "answer": "0.0025",
+    "difficulty": "medium"
+  },  
+  {
+    "title": "Lenz's Law Application",
+    "concept": "Electromagnetics",
+    "description": "A magnet is moved towards a coil, inducing a current. What direction does the induced current flow according to Lenz's Law?",
+    "tags": "Lenz's Law, Electromagnetics",
+    "solution": "The induced current will flow in a direction that opposes the change in magnetic flux through the coil.",
+    "image": "lenz-law.png",
+    "answer": "Opposite to the magnet's motion",
+    "difficulty": "medium"
+  },
+  {
+    "title": "Capacitor Discharge Time",
+    "concept": "Electrostatics",
+    "description": "Calculate the time it takes for a capacitor to discharge to 37% of its initial voltage in an RC circuit with R=1kΩ and C=100μF.",
+    "tags": "Capacitor, Discharge",
+    "solution": "The time constant τ = RC, and the voltage across the capacitor at time t is V(t) = V₀ * e^(-t/τ).",
+    "image": "capacitor-discharge.png",
+    "answer": "0.1",
+    "difficulty": "medium"
+  },
+  {
+    "title": "Nodal Analysis in Circuits",
+    "concept": "Circuit Analysis",
+    "description": "Using nodal analysis, find the voltage at node A in a circuit with two resistors (R1=10Ω, R2=20Ω) connected to a 12V source.",
+    "tags": "Nodal Analysis, Circuit Analysis",
+    "solution": "Set up the nodal equations based on KCL and solve for the unknown voltages.",
+    "image": "nodal-analysis.png",
+    "answer": "8",
+    "difficulty": "medium"
+  },
+  {
+    "title": "Thevenin's Theorem Application",
+    "concept": "Circuit Analysis",
+    "description": "Use Thevenin's theorem to find the equivalent voltage and resistance seen by a load resistor in a circuit with a 10V source and two resistors (5Ω and 10Ω) in series.",
+    "tags": "Thevenin's Theorem, Circuit Analysis",
+    "solution": "Calculate the open-circuit voltage and the equivalent resistance looking back into the circuit.",
+    "image": "thevenins-theorem.png",
+    "answer": "6.67",
+    "difficulty": "medium"
+  },
+  {
+    "title": "Superposition Theorem Application",
+    "concept": "Circuit Analysis",
+    "description": "Apply the superposition theorem to find the current through a 10Ω resistor in a circuit with two voltage sources (5V and 10V) and two resistors (5Ω and 10Ω).",
+    "tags": "Superposition, Circuit Analysis",
+    "solution": "Calculate the contribution of each source separately and then sum the results.",
+    "image": "superposition.png",
+    "answer": "0.5",
+    "difficulty": "medium"
+  },
+  {
+    "title": "RLC Circuit Resonance",
+    "concept": "AC Circuits",
+    "description": "Calculate the resonant frequency of a series RLC circuit with R=10Ω, L=0.1H, and C=100μF.",
+    "tags": "RLC Circuit, Resonance",
+    "solution": "The resonant frequency f₀ = 1/(2π√(LC)).",
+    "image": "rlc-resonance.png",
+    "answer": "15.9",
+    "difficulty": "medium"
+  },
+  {
+    "title": "BJT Common Emitter Configuration",
+    "concept": "Electronics",
+    "description": "In a common emitter configuration, if the base current is 10μA and the current gain (β) is 100, what is the collector current?",
+    "tags": "BJT, Electronics",
+    "solution": "The collector current I_C = β * I_B.",
+    "image": "bjt-common-emitter.png",
+    "answer": "1",
+    "difficulty": "medium"
+  },  
+  {
+    "title": "Operational Amplifier Gain Calculation",
+    "concept": "Analog Electronics",
+    "description": "Calculate the gain of a non-inverting operational amplifier with R1=10kΩ and R2=100kΩ.",
+    "tags": "Op-Amp, Gain",
+    "solution": "The gain of a non-inverting op-amp is given by 1 + (R2/R1).",
+    "image": "op-amp-gain.png",
+    "answer": "11",
+    "difficulty": "medium"
+  },
+  {
+    "title": "Nyquist Stability Criterion",
+    "concept": "Control Systems",
+    "description": "Using the Nyquist stability criterion, determine if a system with a gain margin of 10dB and a phase margin of 45° is stable.",
+    "tags": "Control Systems, Stability",
+    "solution": "A positive gain margin and phase margin indicate that the system is stable.",
+    "image": "nyquist-criterion.png",
+    "answer": "Stable",
+    "difficulty": "hard"
+  },
+  {
+    "title": "Zener Diode Voltage Regulation",
+    "concept": "Electronics",
+    "description": "A Zener diode with a breakdown voltage of 5.1V is used in a circuit. If the input voltage is 12V, what is the output voltage across the Zener diode?",
+    "tags": "Zener Diode, Voltage Regulation",
+    "solution": "In reverse bias, the Zener diode maintains a constant voltage equal to its breakdown voltage.",
+    "image": "zener-diode.png",
+    "answer": "5.1",
+    "difficulty": "easy"
+  },
+  {
+    "title": "Frequency Response of a System",
+    "concept": "Control Systems",
+    "description": "Determine the frequency response of a first-order system with a time constant of 0.5s at a frequency of 1Hz.",
+    "tags": "Control Systems, Frequency Response",
+    "solution": "The frequency response can be calculated using the transfer function H(s) = 1/(τs + 1).",
+    "image": "frequency-response.png",
+    "answer": "0.707",
+    "difficulty": "medium"
+  },
+  {
+    "title": "Signal Sampling Theorem",
+    "concept": "Signal Processing",
+    "description": "According to the Nyquist theorem, what is the minimum sampling frequency required to avoid aliasing for a signal with a maximum frequency of 1kHz?",
+    "tags": "Signal Processing, Sampling",
+    "solution": "The minimum sampling frequency is twice the maximum frequency of the signal.",
+    "image": "sampling-theorem.png",
+    "answer": "2000",
+    "difficulty": "easy"
+  },
+  {
+    "title": "Nyquist Plot Analysis",
+    "concept": "Control Systems",
+    "description": "Analyze the Nyquist plot of a system with a gain margin of 20dB and a phase margin of 60°. Is the system stable?",
+    "tags": "Control Systems, Nyquist Plot",
+    "solution": "A positive gain margin and phase margin indicate that the system is stable.",
+    "image": "nyquist-plot.png",
+    "answer": "Stable",
+    "difficulty": "hard"
+  },  
+  {
+    "title": "Signal-to-Noise Ratio Calculation",
+    "concept": "Signal Processing",
+    "description": "Calculate the signal-to-noise ratio (SNR) in decibels for a signal power of 100mW and noise power of 1mW.",
+    "tags": "Signal Processing, SNR",
+    "solution": "SNR(dB) = 10 * log10(P_signal/P_noise).",
+    "image": "snr-calculation.png",
+    "answer": "10",
+    "difficulty": "medium"
+  },
+  {
+    "title": "Phase Shift in RC Circuit",
+    "concept": "AC Circuits",
+    "description": "Calculate the phase shift introduced by a capacitor in an RC circuit at a frequency of 1kHz with R=1kΩ and C=100μF.",
+    "tags": "AC Circuits, Phase Shift",
+    "solution": "The phase shift φ = -arctan(ωRC), where ω = 2πf.",
+    "image": "phase-shift.png",
+    "answer": "-45",
+    "difficulty": "medium"
+  },
+  {
+    "title": "Magnetic Field of a Long Straight Wire",
+    "concept": "Electromagnetics",
+    "description": "Calculate the magnetic field strength at a distance of 0.1m from a long straight wire carrying a current of 5A.",
+    "tags": "Electromagnetics, Magnetic Field",
+    "solution": "Use Ampere's Law: B = (μ₀I)/(2πr), where μ₀ is the permeability of free space.",
+    "image": "magnetic-field.png",
+    "answer": "0.0001",
+    "difficulty": "medium"
   }
 ]
