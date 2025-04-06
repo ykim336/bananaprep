@@ -138,9 +138,11 @@ const API = {
    */
   problems: {
     getAll: async () => {
-      const response = await fetch('problems.json');
+      // Use the correct path to problems.json relative to the client directory
+      const response = await fetch('/data/problems.json');
       
       if (!response.ok) {
+        console.error(`Failed to fetch problems.json: ${response.status} ${response.statusText}`);
         throw new Error('Network response was not ok');
       }
       
