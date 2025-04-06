@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BananaPrep - Home</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/home.css">
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="logo">BananaPrep</div>
+    <div class="tagline">Crush your engineering interview!</div>
+  </header>
+
+  <!-- Navigation -->
+  <nav>
+    <a href="home.html" class="active">Home</a>
+    <a href="database.html">Problem Database</a>
+    <a href="about.html">About</a>
+    <a href="login.html">Login</a>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="container">
+    <!-- Hero Section -->
+    <section class="hero">
+      <h2>Enhance Your Math & Engineering Skills</h2>
+      <p>MathQuest provides a comprehensive platform for solving mathematical and electrical engineering problems. Practice with our collection of curated problems, track your progress, and improve your problem-solving abilities.</p>
+      <a href="database.html" class="cta-button">Explore Problems</a>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+      <div class="feature-card">
+        <h3>Curated Problem Database</h3>
+        <p>Access our extensive collection of math and electrical engineering problems designed by engineering professors and industry professionals. All topics are organized by difficulty and relevance to industry applications so you can focus your attention where it matters!</p>
+      </div>
+      <div class="feature-card">
+        <h3>Interactive Solution Environment</h3>
+        <p>Code your solutions directly in our integrated MATLAB environment, run tests, and get immediate feedback on your approach. For written solutions, a fourm of peers and profesionals discuss different approaches to problems.</p>
+      </div>
+      <div class="feature-card">
+        <h3>Progress Tracking</h3>
+        <p>Monitor your learning journey with detailed progress statistics, identify areas for improvement, and celebrate your achievements.</p>
+      </div>
+    </section>
+
+    <!-- Sample Problems Section -->
+    <section class="sample-problems">
+      <h2>Featured Problems</h2>
+      <div class="problem-cards">
+        <div class="problem-card" onclick="window.location.href='problem.html?id=0'">
+          <h3>Ohm's Law Calculation</h3>
+          <p>Calculate the current flowing through a resistor when a voltage is applied across it.</p>
+          <div class="tags">
+            <span class="tag">Circuits</span>
+            <span class="tag">Ohm's Law</span>
+          </div>
+        </div>
+        <div class="problem-card" onclick="window.location.href='problem.html?id=4'">
+          <h3>Transformer Turns Ratio</h3>
+          <p>Determine the primary and secondary voltages given the transformer turns ratio.</p>
+          <div class="tags">
+            <span class="tag">Transformers</span>
+            <span class="tag">Electromagnetism</span>
+          </div>
+        </div>
+        <div class="problem-card" onclick="window.location.href='problem.html?id=16'">
+          <h3>Fourier Series Representation</h3>
+          <p>Determine the Fourier series representation of a given periodic waveform.</p>
+          <div class="tags">
+            <span class="tag">Signal Processing</span>
+            <span class="tag">Fourier</span>
+          </div>
+        </div>
+        <div class="problem-card" onclick="window.location.href='problem.html?id=11'">
+          <h3>2-Input AND Gate Truth Table</h3>
+          <p>Construct the truth table for a 2-input AND gate.</p>
+          <div class="tags">
+            <span class="tag">Digital</span>
+            <span class="tag">Logic Gates</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="logo">BananaPrep</div>
+    <div class="social-links">
+      <a href="#">GitHub</a>
+      <a href="#">Twitter</a>
+      <a href="#">LinkedIn</a>
+    </div>
+    <p>© 2025 BananaPrep. All rights reserved.</p>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/home.js"></script>
+</body>
+</html>

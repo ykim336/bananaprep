@@ -1,0 +1,217 @@
+/* Home Page Specific Styles */
+
+/* Header */
+header {
+    background-color: var(--bg-medium);
+    padding: 2rem 0;
+    text-align: center;
+    border-bottom: 1px solid var(--border-color);
+  }
+  
+  .logo {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--accent);
+  }
+  
+  .tagline {
+    font-size: 1.2rem;
+    color: var(--text-muted);
+  }
+  
+  /* Navigation */
+  nav {
+    background-color: var(--bg-light);
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+  
+  nav a {
+    color: var(--text-light);
+    text-decoration: none;
+    padding: 0.5rem 1.5rem;
+    margin: 0 0.5rem;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+  }
+  
+  nav a:hover {
+    background-color: #444;
+  }
+  
+  nav a.active {
+    background-color: var(--accent);
+    color: #333;
+  }
+  
+  /* Main Content */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+  }
+  
+  /* Hero Section */
+  .hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  
+  .hero h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .hero p {
+    font-size: 1.1rem;
+    max-width: 800px;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+  }
+  
+  .cta-button {
+    display: inline-block;
+    background-color: var(--accent);
+    color: #333;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.2s;
+  }
+  
+  .cta-button:hover {
+    opacity: 0.9;
+  }
+  
+  /* Features Section */
+  .features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+  }
+  
+  .feature-card {
+    background-color: var(--bg-medium);
+    border-radius: 8px;
+    padding: 1.5rem;
+    border: 1px solid var(--border-color);
+    transition: transform 0.2s;
+  }
+  
+  .feature-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .feature-card h3 {
+    color: var(--accent);
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+  }
+  
+  .feature-card p {
+    line-height: 1.5;
+    color: var(--text-muted);
+  }
+  
+  /* Sample Problems Section */
+  .sample-problems h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+    color: var(--text-light);
+  }
+  
+  .problem-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .problem-card {
+    background-color: var(--bg-light);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .problem-card:hover {
+    background-color: #3a3a3a;
+    transform: translateY(-3px);
+  }
+  
+  .problem-card h3 {
+    margin-bottom: 0.75rem;
+    font-size: 1.2rem;
+  }
+  
+  .problem-card .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+  
+  .problem-card .tag {
+    background-color: #222;
+    color: var(--text-muted);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+  }
+  
+  /* Footer */
+  footer {
+    background-color: var(--bg-medium);
+    text-align: center;
+    padding: 2rem;
+    margin-top: 2rem;
+    border-top: 1px solid var(--border-color);
+  }
+  
+  footer p {
+    color: var(--text-muted);
+    margin-top: 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .social-links {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin: 1rem 0;
+  }
+  
+  .social-links a {
+    color: var(--text-light);
+    font-size: 1.2rem;
+    text-decoration: none;
+  }
+  
+  /* Responsive Adjustments */
+  @media (max-width: 768px) {
+    .hero h2 {
+      font-size: 1.5rem;
+    }
+    
+    .hero p {
+      font-size: 1rem;
+    }
+    
+    nav {
+      flex-wrap: wrap;
+    }
+    
+    nav a {
+      margin-bottom: 0.5rem;
+    }
+  }

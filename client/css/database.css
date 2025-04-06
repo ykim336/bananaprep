@@ -1,0 +1,234 @@
+/* Database Page Specific Styles */
+
+/* Main Container */
+.container {
+    display: flex;
+    min-height: calc(100vh - 60px); /* adjust based on header height */
+  }
+  
+  .main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+  }
+  
+  .right-sidebar {
+    width: 250px;
+    background-color: var(--bg-medium);
+    padding: 1rem;
+    border-left: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  /* Top Navigation inside Main Content */
+  .top-nav {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+  
+  .nav-btn,
+  .pick-one-btn {
+    background-color: var(--bg-light);
+    border: 1px solid var(--border-color);
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    color: var(--text-light);
+  }
+  
+  .nav-btn:hover,
+  .pick-one-btn:hover {
+    background-color: #444;
+  }
+  
+  .search-bar {
+    flex: 1;
+    position: relative;
+  }
+  
+  .search-bar input {
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-light);
+    color: var(--text-light);
+  }
+  
+  .search-bar input::placeholder {
+    color: #999;
+  }
+  
+  /* Table Styles */
+  .table-wrapper {
+    overflow-x: auto;
+    margin-bottom: 1rem;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--bg-light);
+  }
+  
+  thead {
+    background-color: #333;
+  }
+  
+  th, td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+    white-space: nowrap;
+  }
+  
+  th {
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+  
+  tbody tr {
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  tbody tr:hover {
+    background-color: #3a3a3a;
+  }
+  
+  /* Difficulty color coding */
+  .difficulty-easy {
+    color: #5fd38d;
+  }
+  
+  .difficulty-medium {
+    color: #f1c40f;
+  }
+  
+  .difficulty-hard {
+    color: #e74c3c;
+  }
+  
+  /* Status color coding */
+  .status-solved {
+    color: #2ecc71;
+  }
+  
+  .status-attempted {
+    color: #f39c12;
+  }
+  
+  .status-not-done {
+    color: #ccc;
+  }
+  
+  /* Right Sidebar: Company Tags & Session Stats */
+  .company-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  
+  .company-tag {
+    background-color: #3a3a3a;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+  }
+  
+  .session-stats h3 {
+    margin-bottom: 0.5rem;
+  }
+  
+  .session-stats .stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0.5rem;
+    text-align: center;
+  }
+  
+  .session-stats .stats-item {
+    background-color: #3a3a3a;
+    padding: 0.5rem;
+    border-radius: 4px;
+  }
+  
+  .stats-item .number {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--accent);
+  }
+  
+  /* User Profile Section */
+  .user-profile {
+    padding: 1rem;
+    background-color: #3a3a3a;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+  }
+  
+  .user-profile h3 {
+    margin-bottom: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .user-profile .progress-bar {
+    height: 8px;
+    background-color: #444;
+    border-radius: 4px;
+    margin-top: 0.5rem;
+    overflow: hidden;
+  }
+  
+  .user-profile .progress-bar-fill {
+    height: 100%;
+    background-color: var(--accent);
+  }
+  
+  .completion-text {
+    text-align: right;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 0.25rem;
+  }
+  
+  /* Filter dropdown */
+  .filter-dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .filter-dropdown .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: var(--bg-light);
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.5);
+    z-index: 1;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+  }
+  
+  .filter-dropdown:hover .dropdown-content {
+    display: block;
+  }
+  
+  .filter-dropdown .dropdown-content a {
+    color: var(--text-light);
+    padding: 0.75rem 1rem;
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.2s;
+  }
+  
+  .filter-dropdown .dropdown-content a:hover {
+    background-color: #3a3a3a;
+  }
