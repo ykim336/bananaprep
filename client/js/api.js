@@ -148,5 +148,20 @@ const API = {
       
       return response.json();
     }
+  },
+  // In your API.js file
+  matlab: {
+    run: async (code, input) => {
+      const response = await fetch(`${API_URL}/run-octave`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${getAuthToken()}`
+        },
+        body: JSON.stringify({ code, input })
+      });
+      
+      return response.json();
+    }
   }
 };
