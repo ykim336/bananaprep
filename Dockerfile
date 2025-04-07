@@ -1,13 +1,13 @@
-# Simplified Dockerfile with just one server
 FROM node:18-bullseye
 
 # Set working directory
 WORKDIR /app
 
-# Install Octave and required packages
-RUN apt-get update && apt-get install -y \
-    octave \
-    && rm -rf /var/lib/apt/lists/*
+# Install Octave with retry and fix-missing options
+RUN apt-get update && \
+    apt-get install -y --fix-missing octave || \
+    (sleep 5 && apt-get update && apt-get install -y --fix-missing octave) && \
+    rm -rf /var/lib/apt/lists/*
 
 # Create directory structure
 RUN mkdir -p server/public/data/plots
