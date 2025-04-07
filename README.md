@@ -25,7 +25,7 @@ This creates a default `package.json` file.
 ## Step 3: Install Required Dependencies
 
 ```bash
-npm install express sqlite3 bcrypt cors body-parser jsonwebtoken
+npm install express sqlite3 bcrypt cors body-parser jsonwebtoken axios
 ```
 
 This installs:
