@@ -6,12 +6,10 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "3000:3000"  # API server port
-      - "8080:8080"  # HTML/client files port
+      - "3000:3000"  # Only expose the server port
     volumes:
-      # Mount these directories for development to see changes without rebuilding
       - ./server:/app/server
       - ./client:/app/client
     environment:
-      - API_URL=http://localhost:3000/api  # Set API URL for client
+      - NODE_ENV=development
     restart: unless-stopped
