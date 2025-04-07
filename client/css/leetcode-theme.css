@@ -1,0 +1,402 @@
+/* LeetCode-style Theme for BananaPrep Problem Page */
+
+/* Import Source Code Pro font */
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;500;600;700&display=swap');
+
+/* Base styles */
+body {
+  background-color: #1a1a1a;
+  padding: 0;
+  margin: 0;
+}
+
+/* Top Navigation Bar */
+.top-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #282828;
+  padding: 0 16px;
+  height: 50px;
+  border-bottom: 1px solid #444;
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.nav-center {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.problem-list-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-light);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.problem-navigation {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.nav-btn {
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  font-family: var(--font-primary);
+  font-size: 14px;
+}
+
+.run-btn {
+  background-color: #3e4451;
+  color: var(--text-light);
+}
+
+.run-btn:hover {
+  background-color: #4a5162;
+}
+
+.submit-btn {
+  background-color: var(--accent);
+  color: #333;
+  font-weight: 500;
+}
+
+.submit-btn:hover {
+  opacity: 0.9;
+}
+
+/* Main content area with cards */
+.problem-container {
+  display: flex;
+  gap: 16px;
+  padding: 16px;
+  max-height: calc(100vh - 66px);
+}
+
+/* Cards */
+.card {
+  background-color: #282828;
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.card-left {
+  flex: 0 0 50%;
+  min-width: 40%;
+  max-width: 60%;
+  resize: horizontal;
+  overflow: auto;
+  height: calc(100vh - 98px);
+}
+
+.card-right {
+  flex: 1;
+  height: calc(100vh - 98px);
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  border-bottom: 1px solid #444;
+  background-color: #242424;
+}
+
+.tab {
+  padding: 12px 16px;
+  cursor: pointer;
+  color: var(--text-muted);
+  font-size: 14px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tab:hover {
+  color: var(--text-light);
+}
+
+.tab.active {
+  color: var(--accent);
+  border-bottom: 2px solid var(--accent);
+  margin-bottom: -1px;
+}
+
+/* Card Content */
+.card-content {
+  padding: 20px;
+  overflow-y: auto;
+  height: calc(100% - 48px);
+}
+
+/* Problem Title and Details */
+.problem-title {
+  font-size: 20px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Status badges */
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status-unsolved {
+  background-color: rgba(107, 114, 128, 0.2);
+  color: #9ca3af;
+}
+
+.status-attempted {
+  background-color: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+}
+
+.status-solved {
+  background-color: rgba(5, 150, 105, 0.15);
+  color: #10b981;
+}
+
+/* Difficulty badges */
+.difficulty {
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  display: inline-block;
+}
+
+.easy {
+  background-color: rgba(0, 175, 155, 0.15);
+  color: #00af9b;
+}
+
+.medium {
+  background-color: rgba(255, 184, 0, 0.15);
+  color: #ffb800;
+}
+
+.hard {
+  background-color: rgba(255, 55, 95, 0.15);
+  color: #ff375f;
+}
+
+/* Code editor */
+.code-area {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.code-editor {
+  flex: 1;
+  font-family: 'Source Code Pro', monospace !important;
+  border: none;
+  background-color: #282828;
+  padding: 16px;
+  margin: 0;
+  border-radius: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #f1f1f1;
+}
+
+.output-section {
+  height: 120px;
+  font-family: 'Source Code Pro', monospace !important;
+  padding: 16px;
+  background-color: #242424;
+  border-top: 1px solid #444;
+  border-radius: 0;
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #ccc;
+}
+
+/* Examples, Constraints styling */
+.example {
+  background-color: #323232;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 16px;
+  font-family: 'Source Code Pro', monospace;
+}
+
+.example-title {
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: var(--text-light);
+}
+
+.example-code {
+  white-space: pre;
+  color: var(--text-muted);
+}
+
+.constraint-list {
+  padding-left: 20px;
+  color: var(--text-muted);
+}
+
+.constraint-item {
+  margin-bottom: 8px;
+}
+
+/* Icon styles */
+.icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* Resize handle */
+.resize-handle {
+  width: 4px;
+  background-color: #444;
+  cursor: col-resize;
+  transition: background-color 0.2s;
+}
+
+.resize-handle:hover {
+  background-color: var(--accent);
+}
+
+/* Syntax highlighting */
+.keyword {
+  color: #ff5f52;
+}
+
+.comment {
+  color: #7986cb;
+}
+
+.string {
+  color: #ffb62c;
+}
+
+.function {
+  color: #82aaff;
+}
+
+.variable {
+  color: #f1f1f1;
+}
+
+/* Alert styles */
+.alert {
+  position: fixed;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 500px;
+  width: auto;
+  z-index: 100;
+  padding: 12px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.alert-danger {
+  background-color: rgba(239, 68, 68, 0.2);
+  border: 1px solid #ef4444;
+  color: #ef4444;
+}
+
+.alert-success {
+  background-color: rgba(16, 185, 129, 0.2);
+  border: 1px solid #10b981;
+  color: #10b981;
+}
+
+/* Auth prompt */
+.auth-prompt {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: rgba(31, 41, 55, 0.95);
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  z-index: 100;
+  max-width: 300px;
+}
+
+.auth-prompt a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.auth-prompt a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .problem-container {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .card-left, .card-right {
+    flex: none;
+    width: 100%;
+    max-width: 100%;
+    min-width: 100%;
+    height: auto;
+    resize: none;
+  }
+  
+  .resize-handle {
+    display: none;
+  }
+  
+  .card-left {
+    height: 50vh;
+  }
+  
+  .card-right {
+    height: calc(50vh - 110px);
+  }
+  
+  .nav-center {
+    display: none;
+  }
+  
+  .top-nav {
+    padding: 0 8px;
+  }
+  
+  .output-section {
+    height: 80px;
+  }
+}

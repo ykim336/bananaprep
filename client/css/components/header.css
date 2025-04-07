@@ -1,0 +1,88 @@
+/* Standardized Header Styles for BananaPrep */
+
+/* Base header styling */
+header, .top-nav {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    background-color: var(--bg-medium);
+    padding: 0 20px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Consistent header spacing */
+  header > *, .top-nav > * {
+    margin: 0 10px;
+  }
+  
+  /* Logo container styling */
+  .logo-container {
+    display: flex;
+    align-items: center;
+    height: 100%;
+  }
+  
+  /* Logo image size is standardized */
+  .logo-image {
+    height: 36px;
+    width: auto;
+  }
+  
+  /* Ensure back links and other elements are centered */
+  .back-link, .nav-btn, .user-account {
+    display: flex;
+    align-items: center;
+    height: 100%;
+  }
+  
+  /* For problem.html top-nav */
+  .top-nav {
+    justify-content: space-between;
+  }
+  
+  /* Adjust the space between the nav sections */
+  .nav-left, .nav-center, .nav-right {
+    display: flex;
+    align-items: center;
+    height: 100%;
+  }
+  
+  /* Navigation styling adjustments */
+  nav {
+    height: 50px;
+    display: flex;
+    align-items: center;
+    background-color: var(--bg-light);
+    padding: 0 20px;
+    border-bottom: 1px solid var(--border-color);
+  }
+  
+  /* Positioning for various page layouts */
+  .container {
+    margin-top: 20px;
+  }
+  
+  /* Special styling for problem page */
+  .problem-container {
+    margin-top: 0;
+  }
+  
+  /* Ensure proper vertical spacing when headers are sticky */
+  body {
+    padding-top: 0;
+  }
+  
+  /* Mobile responsiveness */
+  @media (max-width: 768px) {
+    header, .top-nav {
+      padding: 0 10px;
+    }
+    
+    .logo-image {
+      height: 30px;
+    }
+  }
