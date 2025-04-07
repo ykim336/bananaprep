@@ -13,7 +13,12 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: ['http://localhost:8080', 'http://127.0.0.1:8080'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -483,18 +488,16 @@ app.post('/api/run-octave', authenticateToken, (req, res) => {
   const { code, input } = req.body;
   const userId = req.user.id;
   
-  // Create unique filenames
+  // Create unique filenames for this execution
   const timestamp = Date.now();
   const filename = `octave_${userId}_${timestamp}.m`;
   const filepath = path.join('/tmp', filename);
-  const plotPath = path.join('/tmp', `plot_${userId}_${timestamp}.png`);
+  const plotPath = path.join('/tmp', 'octave_plot.png');
   
-  // Add code to save plot to a file
-  let fullCode = code.replace(/print\(['"](\/tmp\/plot\.png)['"]/, 
-                             `print('${plotPath}'`);
-  
+  // Prepare the code with input handling
+  let fullCode = code;
   if (input) {
-    fullCode = `input_value = ${input};\n${fullCode}`;
+    fullCode = `input_value = ${input};\n${code}`;
   }
   
   // Save the code to a temporary file
@@ -502,7 +505,7 @@ app.post('/api/run-octave', authenticateToken, (req, res) => {
   
   // Execute the code with Octave
   exec(`octave --no-gui --quiet ${filepath}`, (error, stdout, stderr) => {
-    // Clean up the code file
+    // Clean up the temporary file
     fs.unlinkSync(filepath);
     
     if (error) {
@@ -512,29 +515,32 @@ app.post('/api/run-octave', authenticateToken, (req, res) => {
       });
     }
     
-    // Check if an image was generated
+    // Check if a plot image was generated
     if (fs.existsSync(plotPath)) {
-      // Read the image file
-      const imageData = fs.readFileSync(plotPath);
+      // Read the file as base64
+      const imageData = fs.readFileSync(plotPath, {encoding: 'base64'});
+      
       // Clean up the image file
       fs.unlinkSync(plotPath);
       
-      // Send the image data
-      res.writeHead(200, {
-        'Content-Type': 'image/png',
-        'Content-Length': imageData.length
-      });
-      res.end(imageData);
-    } else {
-      // No image, just return the text output
+      // Return both the text output and the image data
       res.json({
         success: true,
-        output: stdout
+        output: stdout,
+        hasImage: true,
+        imageData: `data:image/png;base64,${imageData}`
+      });
+    } else {
+      // No image, just text output
+      res.json({
+        success: true,
+        output: stdout,
+        hasImage: false
       });
     }
   });
 });
-
+ 
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
