@@ -29,7 +29,7 @@ COPY server/package*.json ./server/
 
 # Install dependencies
 WORKDIR /app/server
-RUN npm install
+# RUN npm install
 
 # Copy server files
 COPY server/ ./

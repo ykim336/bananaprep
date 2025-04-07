@@ -4,7 +4,8 @@
  */
 
 // API URL - Change this to your actual API URL when deploying
-const API_URL = 'http://localhost:3000/api';
+// const API_URL = 'http://localhost:3000/api';
+const API_URL = '/api'; // For same-origin requests
 
 // Helper function to get auth token
 function getAuthToken() {
