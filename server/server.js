@@ -483,15 +483,18 @@ app.post('/api/run-octave', authenticateToken, (req, res) => {
   const { code, input } = req.body;
   const userId = req.user.id;
   
-  // Create a unique filename for this user's code
+  // Create unique filenames
   const timestamp = Date.now();
   const filename = `octave_${userId}_${timestamp}.m`;
   const filepath = path.join('/tmp', filename);
+  const plotPath = path.join('/tmp', `plot_${userId}_${timestamp}.png`);
   
-  // Prepare the code with input handling
-  let fullCode = code;
+  // Add code to save plot to a file
+  let fullCode = code.replace(/print\(['"](\/tmp\/plot\.png)['"]/, 
+                             `print('${plotPath}'`);
+  
   if (input) {
-    fullCode = `input_value = ${input};\n${code}`;
+    fullCode = `input_value = ${input};\n${fullCode}`;
   }
   
   // Save the code to a temporary file
@@ -499,7 +502,7 @@ app.post('/api/run-octave', authenticateToken, (req, res) => {
   
   // Execute the code with Octave
   exec(`octave --no-gui --quiet ${filepath}`, (error, stdout, stderr) => {
-    // Clean up the temporary file
+    // Clean up the code file
     fs.unlinkSync(filepath);
     
     if (error) {
@@ -509,10 +512,26 @@ app.post('/api/run-octave', authenticateToken, (req, res) => {
       });
     }
     
-    res.json({
-      success: true,
-      output: stdout
-    });
+    // Check if an image was generated
+    if (fs.existsSync(plotPath)) {
+      // Read the image file
+      const imageData = fs.readFileSync(plotPath);
+      // Clean up the image file
+      fs.unlinkSync(plotPath);
+      
+      // Send the image data
+      res.writeHead(200, {
+        'Content-Type': 'image/png',
+        'Content-Length': imageData.length
+      });
+      res.end(imageData);
+    } else {
+      // No image, just return the text output
+      res.json({
+        success: true,
+        output: stdout
+      });
+    }
   });
 });
 
