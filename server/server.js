@@ -188,7 +188,7 @@ function authenticateToken(req, res, next) {
 // Load problems data
 let problemsData = [];
 try {
-  const problemsFilePath = path.join(__dirname, 'public', 'problems.json');
+  const problemsFilePath = path.join(__dirname, 'public', 'data', 'problems.json');
   const problemsJson = fs.readFileSync(problemsFilePath, 'utf8');
   problemsData = JSON.parse(problemsJson);
   console.log(`Loaded ${problemsData.length} problems from problems.json`);
