@@ -48,7 +48,7 @@ function setupEventListeners() {
   
   // Code run button
   document.getElementById('runBtn').addEventListener('click', async function() {
-    await runCode();
+    await runMatlabCode();
   });
   
   // Code submit button
@@ -227,7 +227,8 @@ async function loadUserProgress() {
     
     // Update code editor with saved solution
     if (progress.solution_code) {
-      document.getElementById('codeEditor').textContent = progress.solution_code;
+      const editor = ace.edit('codeEditor');
+      editor.setValue(progress.solution_code, -1);  // -1 moves cursor to start
     }
     
     // Update status display
@@ -275,42 +276,40 @@ async function saveUserProgress(status, solutionCode) {
 /**
  * Submit user answer
  */
-async function submitAnswer() {
-  const userAnswer = document.getElementById('userAnswer').value;
+async function runMatlabCode() {
+  // Get code from ACE editor
+  const editor = ace.edit('codeEditor');
+  const code = editor.getValue();
   
-  if (!userAnswer.trim()) {
-    showError('Please provide an answer before submitting');
-    return;
-  }
+  // Get input if provided
+  const input = prompt("Enter input for your MATLAB function (optional):");
   
-  if (!Auth.isLoggedIn()) {
-    showError('Please sign in to submit your answer');
-    return;
-  }
-  
-  toggleAnswerLoading(true);
+  // Show loading state
+  toggleRunLoading(true);
+  document.getElementById('matlabOutput').textContent = 'Running MATLAB code...';
   
   try {
-    const problemId = getQueryParam('id') || '0';
-    const result = await API.progress.validateAnswer(parseInt(problemId), userAnswer);
+    // Send code to server for execution
+    const response = await fetch(`${API_URL}/run-octave`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${Auth.getToken()}`
+      },
+      body: JSON.stringify({ code, input })
+    });
     
-    if (result.isCorrect) {
-      showAnswerFeedback(true, 'Correct! Well done!');
-      // Update status display
-      updateProblemStatus('solved');
-      
-      // Disable input
-      document.getElementById('userAnswer').disabled = true;
-      document.getElementById('submitAnswerBtn').disabled = true;
-    } else {
-      showAnswerFeedback(false, 'Incorrect. Try again!');
-      // Update status as attempted
-      updateProblemStatus('attempted');
-    }
+    const result = await response.json();
+    
+    // Display the result
+    document.getElementById('matlabOutput').textContent = result.output || 'No output generated.';
+    
+    // Save progress as "attempted"
+    await saveUserProgress('attempted', code);
   } catch (error) {
-    showError(error.message || 'Error validating answer');
+    document.getElementById('matlabOutput').textContent = `Error: ${error.message}`;
   } finally {
-    toggleAnswerLoading(false);
+    toggleRunLoading(false);
   }
 }
 

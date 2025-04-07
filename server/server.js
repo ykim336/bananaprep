@@ -473,6 +473,49 @@ function updateUserStats(userId, difficulty) {
   );
 }
 
+// In your server.js file, add a new endpoint:
+const { exec } = require('child_process');
+// const fs = require('fs');
+// const path = require('path');
+
+// Endpoint to execute Octave code
+app.post('/api/run-octave', authenticateToken, (req, res) => {
+  const { code, input } = req.body;
+  const userId = req.user.id;
+  
+  // Create a unique filename for this user's code
+  const timestamp = Date.now();
+  const filename = `octave_${userId}_${timestamp}.m`;
+  const filepath = path.join('/tmp', filename);
+  
+  // Prepare the code with input handling
+  let fullCode = code;
+  if (input) {
+    fullCode = `input_value = ${input};\n${code}`;
+  }
+  
+  // Save the code to a temporary file
+  fs.writeFileSync(filepath, fullCode);
+  
+  // Execute the code with Octave
+  exec(`octave --no-gui --quiet ${filepath}`, (error, stdout, stderr) => {
+    // Clean up the temporary file
+    fs.unlinkSync(filepath);
+    
+    if (error) {
+      return res.status(400).json({
+        success: false,
+        output: stderr || error.message
+      });
+    }
+    
+    res.json({
+      success: true,
+      output: stdout
+    });
+  });
+});
+
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
