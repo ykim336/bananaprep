@@ -6,114 +6,423 @@
     <title>BananaPrep - Problem Details</title>
     <link rel="stylesheet" href="css/styles.css" />
     <link rel="stylesheet" href="css/problem.css" />
+    <style>
+      /* Additional CSS to match the LeetCode-style UI */
+      :root {
+        --bg-dark: #1a1a1a;
+        --bg-medium: #262626;
+        --bg-light: #2d2d2d;
+        --border-color: #3e3e3e;
+        --text-light: #e6e6e6;
+        --text-muted: #b3b3b3;
+        --accent-green: #2cbb5d;
+        --accent-blue: #3e7bfa;
+      }
+
+      body {
+        background-color: var(--bg-dark);
+        color: var(--text-light);
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      header {
+        background-color: var(--bg-medium);
+        border-bottom: 1px solid var(--border-color);
+        padding: 0.5rem 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 50px;
+      }
+
+      .header-left {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .header-right {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .problem-list-btn {
+        display: flex;
+        align-items: center;
+        color: var(--text-light);
+        text-decoration: none;
+        font-weight: 500;
+      }
+
+      .nav-buttons {
+        display: flex;
+        gap: 0.25rem;
+      }
+
+      .nav-btn {
+        background-color: var(--bg-light);
+        border: 1px solid var(--border-color);
+        color: var(--text-light);
+        width: 28px;
+        height: 28px;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+      }
+
+      .action-buttons {
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      .btn-run {
+        background-color: var(--bg-light);
+        color: var(--text-light);
+        border: 1px solid var(--border-color);
+        padding: 0.4rem 1rem;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .btn-submit {
+        background-color: var(--accent-green);
+        color: white;
+        border: none;
+        padding: 0.4rem 1rem;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: 500;
+      }
+
+      main {
+        display: flex;
+        flex: 1;
+        overflow: hidden;
+      }
+
+      .problem-details {
+        width: 50%;
+        background-color: var(--bg-dark);
+        border-right: 1px solid var(--border-color);
+        overflow-y: auto;
+        padding: 1.5rem;
+      }
+
+      .editor-section {
+        width: 50%;
+        background-color: var(--bg-dark);
+        display: flex;
+        flex-direction: column;
+      }
+
+      .tabs {
+        display: flex;
+        border-bottom: 1px solid var(--border-color);
+        background-color: var(--bg-medium);
+      }
+
+      .tab {
+        padding: 0.75rem 1.5rem;
+        cursor: pointer;
+        color: var(--text-light);
+        font-weight: 500;
+      }
+
+      .tab.active {
+        border-bottom: 2px solid var(--accent-green);
+      }
+
+      .code-container {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .code-header {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5rem 1rem;
+        background-color: var(--bg-medium);
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      .code-editor {
+        flex: 1;
+        padding: 1rem;
+        font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+        font-size: 14px;
+        line-height: 1.5;
+      }
+
+      .footer {
+        height: 40px;
+        background-color: var(--bg-medium);
+        border-top: 1px solid var(--border-color);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 1rem;
+        color: var(--text-muted);
+        font-size: 0.85rem;
+      }
+
+      .problem-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+      }
+
+      .difficulty {
+        display: inline-block;
+        padding: 0.25rem 0.5rem;
+        border-radius: 100px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        margin-left: 0.5rem;
+      }
+
+      .easy {
+        background-color: rgba(44, 187, 93, 0.1);
+        color: var(--accent-green);
+      }
+
+      .code-text {
+        font-family: monospace;
+        background-color: var(--bg-medium);
+        padding: 0.1rem 0.3rem;
+        border-radius: 3px;
+        font-size: 0.9em;
+      }
+
+      .problem-description {
+        line-height: 1.6;
+        margin-bottom: 2rem;
+      }
+
+      .example {
+        margin-bottom: 1.5rem;
+      }
+
+      .example-title {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+      }
+
+      .example-content {
+        background-color: var(--bg-medium);
+        border-radius: 6px;
+        padding: 1rem;
+        font-family: monospace;
+        white-space: pre;
+      }
+
+      .constraints {
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+      }
+
+      .constraints-title {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+      }
+
+      .constraints-list {
+        list-style-type: disc;
+        padding-left: 1.5rem;
+        line-height: 1.6;
+      }
+
+      .follow-up {
+        border-top: 1px solid var(--border-color);
+        padding-top: 1rem;
+        margin-top: 2rem;
+      }
+
+      .login-bar {
+        background-color: var(--accent-blue);
+        background: linear-gradient(90deg, #3e7bfa 0%, #6082fb 100%);
+        color: white;
+        padding: 0.75rem 1rem;
+        text-align: center;
+      }
+
+      .login-link {
+        color: white;
+        font-weight: bold;
+        text-decoration: underline;
+      }
+      
+      /* Keep hidden elements needed for JavaScript to work */
+      #answerSection, #codeSection, #answerTab, 
+      #codeTab, .solution-tabs, .tab-content {
+        display: none;
+      }
+      
+      /* Make sure error/success alerts stay visible when needed */
+      .alert-danger, .alert-success {
+        display: none;
+        position: fixed;
+        top: 60px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1000;
+        padding: 1rem;
+        border-radius: 4px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      }
+      
+      .alert-danger.show, .alert-success.show {
+        display: block;
+      }
+    </style>
   </head>
   <body>
-    <!-- Sticky Header with Logo -->
+    <!-- Header with navigation and action buttons -->
     <header>
-      <a href="home.html" class="logo">BananaPrep</a>
-      <a href="database.html" class="back-link">← Back to Database</a>
+      <div class="header-left">
+        <a href="database.html" class="problem-list-btn">
+          <span>Problem List</span>
+        </a>
+        <div class="nav-buttons">
+          <button class="nav-btn">&#8249;</button>
+          <button class="nav-btn">&#8250;</button>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="action-buttons">
+          <button id="runBtn" class="btn-run">
+            <span>&#9658;</span>
+            <span>Run</span>
+          </button>
+          <button id="submitBtn" class="btn-submit">Submit</button>
+        </div>
+        <div class="user-account" id="userAccountSection">
+          <!-- Will be populated by JavaScript -->
+        </div>
+      </div>
     </header>
 
-    <!-- Main Content: Problem details and solution tabs -->
+    <!-- Main content area -->
     <main>
-      <!-- Left Panel: Problem Statement -->
+      <!-- Left Panel: Problem Description -->
       <div class="problem-details">
-        <div class="section">
-          <h2 id="problemTitle">Loading Problem Title...</h2>
-          <span id="problemStatus" class="problem-status status-unsolved"
-            >Unsolved</span
-          >
-          <p id="problemDescription">Loading Problem Description...</p>
-
-          <!-- Problem Image -->
-          <figure class="problem-image" id="problemImageContainer">
-            <!-- Image will be inserted here -->
-          </figure>
+        <!-- Visible problem details -->
+        <div class="problem-title">
+          <span id="problemTitle">1. Two Sum</span>
+          <span class="difficulty easy">Easy</span>
         </div>
-        <div class="section">
-          <h2>Examples</h2>
-          <div id="problemExamples">
-            <!-- Examples will be inserted here -->
+        
+        <div class="problem-description" id="problemDescription">
+          Given an array of integers <span class="code-text">nums</span> and an integer <span class="code-text">target</span>, return indices of the two numbers such that they add up to <span class="code-text">target</span>.
+          <br><br>
+          You may assume that each input would have <strong>exactly one solution</strong>, and you may not use the <em>same</em> element twice.
+          <br><br>
+          You can return the answer in any order.
+        </div>
+
+        <div class="examples">
+          <div class="example" id="example1">
+            <div class="example-title">Example 1:</div>
+            <div class="example-content" id="example1Content">Input: nums = [2,7,11,15], target = 9
+Output: [0,1]
+Explanation: Because nums[0] + nums[1] == 9, we return [0, 1].</div>
+          </div>
+
+          <div class="example" id="example2">
+            <div class="example-title">Example 2:</div>
+            <div class="example-content" id="example2Content">Input: nums = [3,2,4], target = 6
+Output: [1,2]</div>
+          </div>
+
+          <div class="example" id="example3">
+            <div class="example-title">Example 3:</div>
+            <div class="example-content" id="example3Content">Input: nums = [3,3], target = 6
+Output: [0,1]</div>
           </div>
         </div>
-        <div class="section">
-          <h2>Constraints</h2>
-          <ul id="problemConstraints">
-            <!-- Constraints will be inserted here -->
+
+        <div class="constraints">
+          <div class="constraints-title">Constraints:</div>
+          <ul class="constraints-list" id="problemConstraints">
+            <li>2 ≤ nums.length ≤ 10<sup>4</sup></li>
+            <li>-10<sup>9</sup> ≤ nums[i] ≤ 10<sup>9</sup></li>
+            <li>-10<sup>9</sup> ≤ target ≤ 10<sup>9</sup></li>
+            <li>Only one valid answer exists.</li>
           </ul>
+        </div>
+
+        <div class="follow-up">
+          <strong>Follow-up:</strong> Can you come up with an algorithm that is less than O(n<sup>2</sup>) time complexity?
         </div>
       </div>
 
-      <!-- Right Panel: Solution Tabs for Answer and Code -->
+      <!-- Right Panel: Code Editor -->
       <div class="editor-section">
-        <!-- Alert Messages -->
-        <div class="alert alert-danger" id="errorAlert"></div>
-        <div class="alert alert-success" id="successAlert"></div>
-
-        <!-- Auth Prompt (shown when not logged in) -->
-        <div class="auth-prompt" id="authPrompt" style="display: none">
-          <p>Sign in to save your progress and solutions.</p>
-          <a href="login.html">Sign In / Sign Up</a>
+        <div class="tabs">
+          <div class="tab active">Code</div>
         </div>
-
-        <!-- Solution Tabs -->
-        <div class="solution-tabs">
-          <div class="tab active" id="answerTab">Submit Answer</div>
-          <div class="tab" id="codeTab">Write Code</div>
-        </div>
-
-        <!-- Answer Input Section -->
-        <div class="tab-content active" id="answerSection">
-          <form class="answer-form" id="answerForm">
-            <label for="userAnswer">Your Answer:</label>
-            <input
-              type="text"
-              id="userAnswer"
-              class="answer-input"
-              placeholder="Enter your answer here"
-              required
-            />
-            <div class="btn-spinner-container">
-              <span class="spinner" id="answerSpinner"></span>
-              <button
-                type="submit"
-                class="btn btn-success"
-                id="submitAnswerBtn"
-              >
-                Submit Answer
-              </button>
+        <div class="code-container">
+          <div class="code-header">
+            <div class="language-selector">
+              <!-- Language options would go here -->
             </div>
-          </form>
-          <div class="answer-feedback" id="answerFeedback"></div>
-        </div>
-
-        <!-- Code Editor Section -->
-        <div class="tab-content" id="codeSection">
-          <div class="btn-row">
-            <div class="btn-spinner-container">
-              <span class="spinner" id="runSpinner"></span>
-              <button id="runBtn" class="btn">Run</button>
-            </div>
-            <div class="btn-spinner-container">
-              <span class="spinner" id="submitSpinner"></span>
-              <button id="submitBtn" class="btn btn-success">Submit</button>
+            <div class="actions">
+              <!-- Actions (like formatting) would go here -->
             </div>
           </div>
           <div id="codeEditor" class="code-editor" contenteditable="true">
-            MATLAB implementation coming soon...
-            <!-- % Write your MATLAB code here...
-% For example:
-% function result = solveProblem(input)
-%   result = input * 2; % Sample operation
-% end -->
+// Write your solution here
+function twoSum(nums, target) {
+    // Implement the Two Sum solution
+    
+}
           </div>
-          <div class="output-section" id="matlabOutput">
-            MATLAB output will appear here...
+          <div id="matlabOutput" class="output-section" style="display:none;">
+            <!-- Output will be displayed here -->
           </div>
+        </div>
+        <div class="login-bar">
+          You need to <a href="login.html" class="login-link">Login / Sign up</a> to run or submit
         </div>
       </div>
     </main>
 
+    <!-- Footer -->
+    <div class="footer">
+      <div class="footer-left">
+        <span>Ln 1, Col 1</span>
+      </div>
+      <div class="footer-right">
+        <!-- Additional footer content -->
+      </div>
+    </div>
+
+    <!-- Hidden elements preserved for JavaScript functionality -->
+    <div id="authPrompt" style="display: none;"></div>
+    <div class="solution-tabs">
+      <div class="tab" id="answerTab"></div>
+      <div class="tab" id="codeTab"></div>
+    </div>
+    <div class="tab-content" id="answerSection"></div>
+    <div class="tab-content" id="codeSection"></div>
+    
+    <!-- Alert messages -->
+    <div class="alert alert-danger" id="errorAlert"></div>
+    <div class="alert alert-success" id="successAlert"></div>
+
+    <!-- Scripts -->
     <script src="js/api.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/problem.js"></script>
@@ -123,5 +432,40 @@
       charset="utf-8"
     ></script>
     <script src="js/ace-init.js"></script>
+    <script>
+      // This additional script ensures compatibility with existing JS
+      document.addEventListener('DOMContentLoaded', function() {
+        // Make sure the run and submit buttons work with their event listeners
+        const existingRunBtn = document.getElementById('runBtn');
+        const existingSubmitBtn = document.getElementById('submitBtn');
+        
+        // Check if problem.js already attached event listeners
+        // If not, we'll manually trigger them when clicked
+        if (!existingRunBtn.hasAttribute('data-listener-attached')) {
+          existingRunBtn.addEventListener('click', function() {
+            // Trigger the original run button
+            const originalRunBtn = document.querySelector('#runBtn');
+            if (originalRunBtn && typeof originalRunBtn.click === 'function') {
+              originalRunBtn.click();
+            }
+          });
+        }
+        
+        if (!existingSubmitBtn.hasAttribute('data-listener-attached')) {
+          existingSubmitBtn.addEventListener('click', function() {
+            // Trigger the original submit button
+            const originalSubmitBtn = document.querySelector('#submitBtn');
+            if (originalSubmitBtn && typeof originalSubmitBtn.click === 'function') {
+              originalSubmitBtn.click();
+            }
+          });
+        }
+        
+        // Show output panel when run is clicked
+        existingRunBtn.addEventListener('click', function() {
+          document.getElementById('matlabOutput').style.display = 'block';
+        });
+      });
+    </script>
   </body>
 </html>
