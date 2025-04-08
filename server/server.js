@@ -8,19 +8,25 @@ const path = require('path');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
 
+
 // Initialize Express app
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(cors({
-  origin: ['http://localhost:8080', 'http://127.0.0.1:8080'],
+  origin: '*',  // Allow all origins in development
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Add a specific route for problems.json
+app.get('/data/problems.json', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'data', 'problems.json'));
+});
 
 // Initialize database
 const db = new sqlite3.Database('./BananaPrep.db', (err) => {

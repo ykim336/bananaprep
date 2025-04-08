@@ -183,3 +183,12 @@ and
 ```
 https://localhost:8000
 ```
+# For docker
+
+```bash
+chmod +x build-and-run.sh
+```
+and 
+```
+./build-and-run.sh
+```
