@@ -14,3 +14,7 @@ echo "To stop the container: docker stop bananaprep-app"
 
 echo "Starting BananaPrep client at http://localhost:8000"
 python -m http.server 8000
+
+echo "Stopping containers..."
+docker stop bananaprep-app
+docker rm bananaprep-app
