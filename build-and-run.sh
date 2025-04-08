@@ -12,5 +12,5 @@ echo "BananaPrep server is now running at http://localhost:3000"
 echo "To view container logs: docker logs bananaprep-app"
 echo "To stop the container: docker stop bananaprep-app"
 
-python -m http.server 8080
-echo "BananaPrep client is now running at http://localhost:8080"
+echo "Starting BananaPrep client at http://localhost:8000"
+python -m http.server 8000
