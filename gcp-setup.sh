@@ -61,7 +61,7 @@ sudo npm install
 # Set up Nginx
 echo "Configuring Nginx..."
 # Assuming nginx.conf is in the repository or was created separately
-sudo cp /tmp/bananaprep/nginx.conf /etc/nginx/nginx.conf
+sudo cp ~/bananaprep/nginx.conf /etc/nginx/nginx.conf
 
 # Set correct permissions
 echo "Setting file permissions..."
