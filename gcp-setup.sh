@@ -16,80 +16,51 @@ sudo apt-get upgrade -y
 
 # Install dependencies
 echo "Installing required packages..."
-# Install dependencies
-echo "Installing required packages (except Node.js)..."
-sudo apt-get install -y nginx curl git build-essential software-properties-common
+sudo apt-get install -y nginx git curl software-properties-common apt-transport-https ca-certificates gnupg lsb-release
 
-# Add NodeSource repository and install Node.js
+# Install Docker
+echo "Installing Docker..."
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+sudo apt-get update
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io
+
+# Allow current user to use Docker without sudo
+sudo usermod -aG docker $USER
+newgrp docker
+
+# Install Node.js for http-server
 echo "Installing Node.js..."
-curl -sL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -
 sudo apt-get install -y nodejs
 
-# Node.js version check is no longer needed since we just installed the desired version
-
-# Check Node.js version and update if needed
-NODE_VERSION=$(node -v | cut -d "v" -f 2 | cut -d "." -f 1)
-if [ "$NODE_VERSION" -lt 14 ]; then
-    echo "Upgrading Node.js to version 14.x..."
-    curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
-    sudo apt-get install -y nodejs
-fi
-
-# Install PM2 for process management
-echo "Installing PM2 process manager..."
-sudo npm install -g pm2
-
-# Create directory structure
-echo "Creating application directories..."
-sudo mkdir -p /var/www/bananaprep/{server,client}
-
-# Clone the repository (assuming it's public or you have access)
-echo "Downloading BananaPrep code..."
-# Replace with your actual repository URL
-git clone https://github.com/ykim336/bananaprep.git /tmp/bananaprep
-
-# Copy files to the appropriate directories
-echo "Setting up application files..."
-sudo cp -r /tmp/bananaprep/client/* /var/www/bananaprep/client/
-sudo cp -r /tmp/bananaprep/server/* /var/www/bananaprep/server/
-
-# Install server dependencies
-echo "Installing Node.js dependencies..."
-cd /var/www/bananaprep/server
-sudo npm install
+# Install http-server globally
+echo "Installing http-server..."
+sudo npm install -g http-server
 
 # Set up Nginx
 echo "Configuring Nginx..."
-# Assuming nginx.conf is in the repository or was created separately
-sudo cp ~/bananaprep/nginx.conf /etc/nginx/nginx.conf
-
-# Set correct permissions
-echo "Setting file permissions..."
-sudo chown -R www-data:www-data /var/www/bananaprep
-sudo chmod -R 755 /var/www/bananaprep
-
-# Configure client API endpoint
-echo "Updating client API endpoint..."
-# Update the API_URL in api.js to match your server
-# This assumes you're using Nginx to proxy requests and not exposing the Node.js port directly
-sudo sed -i "s|const API_URL = 'http://localhost:3000/api';|const API_URL = '/api';|g" /var/www/bananaprep/client/js/api.js
-
-# Start the Node.js server with PM2
-echo "Starting Node.js server..."
-cd /var/www/bananaprep/server
-sudo pm2 start server.js --name "bananaprep"
-sudo pm2 save
-sudo pm2 startup
-
-# Restart Nginx
-echo "Restarting Nginx..."
+sudo cp nginx.conf /etc/nginx/nginx.conf
 sudo systemctl restart nginx
 
-# Clean up
-echo "Cleaning up..."
-sudo rm -rf /tmp/bananaprep
+# Enable firewall and open necessary ports
+echo "Configuring firewall..."
+sudo apt-get install -y ufw
+sudo ufw allow 22
+sudo ufw allow 80
+sudo ufw allow 443
+# Don't enable the firewall yet to avoid SSH disconnection
+# We'll do this manually after testing
+
+# Install Certbot for SSL
+echo "Installing Certbot for SSL..."
+sudo apt-get install -y certbot python3-certbot-nginx
 
 echo "===== Setup Complete! ====="
-echo "BananaPrep should now be running at http://your-server-ip"
-echo "To secure your site with HTTPS, consider running Certbot:"
-echo "sudo certbot --nginx -d your-domain.com"
+echo "Now you need to:"
+echo "1. Upload your BananaPrep code to this server"
+echo "2. Run the deploy.sh script"
+echo "3. Set up your DNS to point to this server's IP"
+echo "4. Run: sudo certbot --nginx -d bananaprep.com -d www.bananaprep.com"
