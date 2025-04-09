@@ -192,3 +192,8 @@ and
 ```
 ./build-and-run.sh
 ```
+
+# If port alread in use error on deploy.sh
+```bash
+sudo pm2 stop all
+```
