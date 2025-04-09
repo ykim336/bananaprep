@@ -37,7 +37,7 @@ sudo mkdir -p /var/www/bananaprep/{server,client}
 # Clone the repository (assuming it's public or you have access)
 echo "Downloading BananaPrep code..."
 # Replace with your actual repository URL
-git clone https://github.com/yourusername/bananaprep.git /tmp/bananaprep
+git clone https://github.com/ykim336/bananaprep.git /tmp/bananaprep
 
 # Copy files to the appropriate directories
 echo "Setting up application files..."
