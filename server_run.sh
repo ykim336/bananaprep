@@ -7,7 +7,7 @@ docker run -p 3000:3000 -d --name bananaprep-app bananaprep
 # Start the frontend using Python HTTP server in the client directory
 echo "Starting BananaPrep client at http://localhost:8000"
 cd ~/bananaprep/client || exit 1
-python -m http.server 8000 &
+python3 -m http.server 8000 &
 CLIENT_PID=$!
 
 echo ""
