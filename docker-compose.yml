@@ -11,5 +11,5 @@ services:
       - ./server:/app/server
       - ./client:/app/client
     environment:
-      - NODE_ENV=development
+      - NODE_ENV=production
     restart: unless-stopped
