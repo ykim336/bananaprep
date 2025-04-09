@@ -16,7 +16,16 @@ sudo apt-get upgrade -y
 
 # Install dependencies
 echo "Installing required packages..."
-sudo apt-get install -y nginx nodejs npm curl git build-essential software-properties-common
+# Install dependencies
+echo "Installing required packages (except Node.js)..."
+sudo apt-get install -y nginx curl git build-essential software-properties-common
+
+# Add NodeSource repository and install Node.js
+echo "Installing Node.js..."
+curl -sL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+sudo apt-get install -y nodejs
+
+# Node.js version check is no longer needed since we just installed the desired version
 
 # Check Node.js version and update if needed
 NODE_VERSION=$(node -v | cut -d "v" -f 2 | cut -d "." -f 1)
