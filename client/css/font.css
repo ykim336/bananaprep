@@ -1,0 +1,191 @@
+/* 
+ * Typography Styles for BananaPrep
+ * Contains font imports and typography rules
+ */
+
+/* Import DM Sans from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap');
+
+/* Import Source Code Pro for code sections */
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;500;600;700&display=swap');
+
+/* Base typography rules */
+body {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--text-light);
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  margin-top: 0;
+  color: var(--text-light);
+}
+
+/* Text sizing and spacing */
+h1 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  font-size: 1.75rem;
+  margin-bottom: 1.25rem;
+  letter-spacing: -0.01em;
+}
+
+h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+h4 {
+  font-size: 1.25rem;
+  margin-bottom: 0.75rem;
+}
+
+h5 {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+h6 {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+/* Paragraphs */
+p {
+  margin-bottom: 1rem;
+}
+
+/* Text weights */
+.font-normal {
+  font-weight: 400;
+}
+
+.font-medium {
+  font-weight: 500;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+/* Text alignment */
+.text-left {
+  text-align: left;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+/* Text styles */
+.text-muted {
+  color: var(--text-muted);
+}
+
+.text-accent {
+  color: var(--accent);
+}
+
+/* Links */
+a {
+  color: var(--accent);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover, a:focus {
+  color: var(--accent-dark);
+  text-decoration: underline;
+}
+
+/* Code typography */
+code, pre, .code {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 0.9em;
+}
+
+pre {
+  background-color: var(--bg-medium);
+  padding: 1rem;
+  border-radius: var(--radius-sm);
+  overflow-x: auto;
+  margin-bottom: 1rem;
+}
+
+/* Lists */
+ul, ol {
+  margin-bottom: 1rem;
+  padding-left: 1.5rem;
+}
+
+li {
+  margin-bottom: 0.5rem;
+}
+
+/* Small text */
+small, .small {
+  font-size: 0.875em;
+}
+
+/* Responsive typography */
+@media (max-width: 768px) {
+  body {
+    font-size: 15px;
+  }
+  
+  h1 {
+    font-size: 1.75rem;
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+  }
+  
+  h3 {
+    font-size: 1.25rem;
+  }
+  
+  h4 {
+    font-size: 1.1rem;
+  }
+  
+  h5, h6 {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    font-size: 14px;
+  }
+  
+  h1 {
+    font-size: 1.5rem;
+  }
+  
+  h2 {
+    font-size: 1.35rem;
+  }
+  
+  h3 {
+    font-size: 1.2rem;
+  }
+  
+  h4, h5, h6 {
+    font-size: 1rem;
+  }
+}

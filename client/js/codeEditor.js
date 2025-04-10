@@ -1,5 +1,7 @@
-// js/ace-init.js
-
+/**
+ * Initializes the ACE code editor with JetBrains Mono font
+ * Sets up proper syntax highlighting and editor options
+ */
 document.addEventListener("DOMContentLoaded", function() {
     // Defensive check for the codeEditor element
     var editorElement = document.getElementById("codeEditor");
@@ -11,19 +13,25 @@ document.addEventListener("DOMContentLoaded", function() {
     // Initialize ACE Editor
     var editor = ace.edit("codeEditor");
   
-    // Set a cool theme
+    // Set dark theme
     editor.setTheme("ace/theme/monokai");
   
     // Set MATLAB mode for proper syntax highlighting
     editor.session.setMode("ace/mode/matlab");
   
-    // Optional settings
+    // Set font family to JetBrains Mono
     editor.setOptions({
+      fontFamily: "Source Code Pro",
       fontSize: "14px",
       enableBasicAutocompletion: true,
-      enableLiveAutocompletion: true
+      enableLiveAutocompletion: true,
+      highlightActiveLine: true,
+      showPrintMargin: false,
+      wrap: true
     });
   
-    console.log("ACE Editor initialized on #codeEditor");
-  });
+    // Make the editor accessible to the global scope for problem.js to interact with
+    window.codeEditor = editor;
   
+    console.log("ACE Editor initialized with JetBrains Mono font");
+  });
