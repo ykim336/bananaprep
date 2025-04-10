@@ -125,29 +125,13 @@ button, input, select, textarea {
 
 /* Code editor should retain monospace font */
 .code-editor, pre, code, .output-section {
-  font-family: monospace !important;
+  font-family: "Menlo", "Monaco", "Courier New", monospace;
 }
 
 /* Logo styling for headers */
 .logo-container {
   display: flex;
   align-items: center;
-}
-
-.logo-image {
-  height: 36px;
-  width: auto;
-  margin-right: 10px;
-}
-
-/* For the home page larger header */
-header .logo-image {
-  height: 50px;
-}
-
-/* For the problem page top-nav */
-.top-nav .logo-image {
-  height: 28px;
 }
 
 /* If you want to hide the text logo but keep it for screen readers */

@@ -7,7 +7,10 @@
     <link rel="stylesheet" href="css/styles.css" />
     <link rel="stylesheet" href="css/problem.css" />
     <!-- Import Font Awesome for modern icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
     <style>
       /* Additional CSS to match the desired UI */
       :root {
@@ -17,9 +20,9 @@
         --border-color: #3e3e3e;
         --text-light: #e6e6e6;
         --text-muted: #b3b3b3;
-        --accent-green: #2cbb5d;
+        --accent-green: #00000000;
         --accent-blue: #3e7bfa;
-        --accent-yellow: #FFE135; /* BananaPrep yellow */
+        --accent-yellow: #ffe135; /* BananaPrep yellow */
         --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         --card-shadow-hover: 0 8px 15px rgba(0, 0, 0, 0.2);
         --btn-shadow-hover: 0 5px 10px rgba(0, 0, 0, 0.2);
@@ -29,7 +32,8 @@
       body {
         background-color: var(--bg-dark);
         color: var(--text-light);
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
         margin: 0;
         padding: 0;
         height: 100vh;
@@ -57,19 +61,6 @@
         gap: 0.75rem;
       }
 
-      .logo {
-        color: var(--accent-yellow);
-        font-weight: bold;
-        font-size: 1.1rem;
-        text-decoration: none;
-        transition: transform var(--transition-speed);
-        padding: 0.5rem;
-      }
-
-      .logo:hover {
-        transform: scale(1.05);
-      }
-
       .header-center {
         display: flex;
         gap: 0.75rem;
@@ -89,7 +80,8 @@
         font-size: 0.95rem;
         padding: 8px 12px;
         border-radius: 6px;
-        transition: background-color var(--transition-speed), box-shadow var(--transition-speed), transform var(--transition-speed);
+        transition: background-color var(--transition-speed),
+          box-shadow var(--transition-speed), transform var(--transition-speed);
       }
 
       .problem-list-btn:hover {
@@ -114,7 +106,9 @@
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        transition: transform var(--transition-speed), box-shadow var(--transition-speed), background-color var(--transition-speed);
+        transition: transform var(--transition-speed),
+          box-shadow var(--transition-speed),
+          background-color var(--transition-speed);
       }
 
       .nav-btn:hover {
@@ -125,20 +119,22 @@
 
       .action-buttons {
         display: flex;
-        gap: 0.75rem;
+        gap: 0.9rem;
       }
 
-      .btn-run, .btn-submit {
+      .btn-run,
+      .btn-submit {
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 0.6rem 1.2rem;
+        padding: 0.5rem 0.9rem;
         border-radius: 6px;
         cursor: pointer;
         font-weight: 500;
-        font-size: 0.925rem;
+        font-size: 0.9rem;
         border: none;
-        transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+        transition: transform var(--transition-speed),
+          box-shadow var(--transition-speed);
         gap: 0.5rem;
       }
 
@@ -152,7 +148,8 @@
         color: #333;
       }
 
-      .btn-run:hover, .btn-submit:hover {
+      .btn-run:hover,
+      .btn-submit:hover {
         box-shadow: var(--btn-shadow-hover);
         transform: translateY(-2px);
       }
@@ -214,17 +211,19 @@
         background-color: var(--bg-medium);
         padding: 0;
         overflow-x: auto;
-        border-bottom: 1px solid var(--border-color);
+        border-bottom: 0px solid var(--border-color);
       }
 
       .tab {
-        padding: 0.8rem 1.2rem;
+        padding: 0.83rem 1.4rem;
         cursor: pointer;
         color: var(--text-light);
         font-size: 0.95rem;
+        font-weight: 50;
+        letter-spacing: 0.02em;
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 9px;
         position: relative;
         white-space: nowrap;
         transition: background-color var(--transition-speed);
@@ -239,7 +238,7 @@
       }
 
       .tab.active::after {
-        content: '';
+        content: "";
         position: absolute;
         bottom: 0;
         left: 0;
@@ -259,18 +258,19 @@
       .problem-content {
         overflow-y: auto;
         flex: 1;
-        padding: 1.5rem;
+        padding: 1.4rem;
         background-color: var(--bg-medium);
       }
 
       /* Card styling */
       .content-card {
         background-color: var(--bg-light);
-        border-radius: 8px;
-        padding: 1.2rem;
-        margin-bottom: 1.5rem;
+        border-radius: 4px;
+        padding: 0.9rem 1rem 0.7rem 1rem;
+        margin-bottom: 1rem;
         box-shadow: var(--card-shadow);
-        transition: box-shadow var(--transition-speed), transform var(--transition-speed);
+        transition: box-shadow var(--transition-speed),
+          transform var(--transition-speed);
       }
 
       .content-card:hover {
@@ -281,7 +281,7 @@
       .problem-title-card {
         display: flex;
         justify-content: space-between;
-        align-items: center;
+        align-items: start;
       }
 
       .problem-title {
@@ -297,8 +297,14 @@
         color: #2cbb5d;
       }
 
-      .problem-description {
-        line-height: 1.6;
+      .top-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #282828;
+        padding: 14px 0px 12px 6px;
+        height: 50px;
+        border-bottom: 1px solid #444;
       }
 
       /* Example section */
@@ -312,7 +318,7 @@
       .example {
         background-color: var(--bg-dark);
         border-radius: 6px;
-        padding: 1.2rem;
+        padding: 1.4rem;
         margin-bottom: 1rem;
       }
 
@@ -327,8 +333,9 @@
       }
 
       .example-content {
-        font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+        font-family: "Menlo", "Monaco", "Courier New", monospace;
         font-size: 0.95rem;
+        padding: 12px;
       }
 
       /* Constraints */
@@ -371,12 +378,12 @@
         text-align: right;
         user-select: none;
       }
-      
+
       .line-number {
         padding-right: 0.5rem;
         height: 1.5rem;
       }
-      
+
       .code-content {
         position: absolute;
         left: 40px;
@@ -390,23 +397,23 @@
         white-space: pre;
         line-height: 1.5rem;
       }
-      
+
       .comment {
         color: #777;
       }
-      
+
       .function-keyword {
         color: #ff79c6;
       }
-      
+
       .variable-name {
         color: #50fa7b;
       }
-      
+
       .operator {
         color: #f1fa8c;
       }
-      
+
       .string {
         color: #f1fa8c;
       }
@@ -420,7 +427,7 @@
 
       .terminal-body {
         padding: 1rem;
-        font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+        font-family: "Menlo", "Monaco", "Courier New", monospace;
         font-size: 0.95rem;
         color: var(--text-light);
         height: calc(100% - 2rem);
@@ -449,17 +456,21 @@
       }
 
       /* Hide elements needed for JS */
-      #answerSection, #codeSection, #answerTab, 
-      #codeTab, .solution-tabs, .tab-content:not(.active) {
+      #answerSection,
+      #codeSection,
+      #answerTab,
+      #codeTab,
+      .solution-tabs,
+      .tab-content:not(.active) {
         display: none;
       }
-      
+
       /* Spinner for loading */
       .spinner {
         display: none;
         width: 16px;
         height: 16px;
-        border: 2px solid rgba(255,255,255,.2);
+        border: 2px solid rgba(255, 255, 255, 0.2);
         border-radius: 50%;
         border-top-color: var(--text-light);
         animation: spin 1s ease-in-out infinite;
@@ -479,7 +490,9 @@
       }
 
       @keyframes spin {
-        to { transform: rotate(360deg); }
+        to {
+          transform: rotate(360deg);
+        }
       }
     </style>
   </head>
@@ -487,9 +500,15 @@
     <!-- Header with navigation and action buttons -->
     <header>
       <div class="header-left">
-        <a href="database.html" class="logo">bananaprep</a>
+        <a href="home.html">
+          <img
+            src="images/bananaprep_logo.png"
+            alt="BananaPrep Logo"
+            class="logo-image top-nav"
+          />
+        </a>
         <a href="database.html" class="problem-list-btn">
-          <span>≡ Problem List</span>
+          <span>☰ Problem List</span>
         </a>
         <div class="nav-buttons">
           <button class="nav-btn" id="prevProblemBtn" title="Previous Problem">
@@ -542,15 +561,15 @@
         </div>
 
         <div class="problem-content" id="problemContent">
-          <div class="content-card problem-title-card">
-            <span class="problem-title">Ohm's Law Calculation</span>
-            <span class="difficulty-tag">Easy</span>
-          </div>
-          
           <div class="content-card">
+            <div class="problem-title-card">
+              <span class="problem-title">Ohm's Law Calculation</span>
+              <span class="difficulty-tag">Easy</span>
+            </div>
             <div class="problem-description" id="problemDescription">
-              Find the current through the circuit using Ohm's law. A 10V battery is connected to a 5Ω resistor.
-              What is the current in amperes?
+              Find the current through the circuit using Ohm's law. A 10V
+              battery is connected to a 5Ω resistor. What is the current in
+              amperes?
             </div>
           </div>
 
@@ -567,7 +586,7 @@
               </div>
               <div class="example-row">
                 <div class="example-label">Explanation:</div>
-                <div class="example-content">According to Ohm's Law: I = V/R = 10/5 = 2 amperes</div>
+                <div class="example-content">I = V/R = 10/5 = 2 amperes</div>
               </div>
             </div>
           </div>
@@ -580,7 +599,7 @@
             </ul>
           </div>
         </div>
-        
+
         <!-- Resize handle for horizontal adjustment -->
         <div class="resize-handle-horizontal" id="horizontalResizeHandle"></div>
       </div>
@@ -597,33 +616,14 @@
             <span>Testcase</span>
           </div>
         </div>
-        
+
         <div class="code-container">
           <!-- Custom code editor display that resembles the image -->
-          <div id="codeEditor" class="code-editor">
-            <div class="line-numbers">
-              <div class="line-number">1</div>
-              <div class="line-number">2</div>
-              <div class="line-number">3</div>
-              <div class="line-number">4</div>
-              <div class="line-number">5</div>
-              <div class="line-number">6</div>
-              <div class="line-number">7</div>
-              <div class="line-number">8</div>
-            </div>
-            <div class="code-content">
-<span class="comment">% Write your MATLAB code here...</span>
-<span class="comment">% For example:</span>
-<span class="function-keyword">function</span> <span class="variable-name">result</span> = calculateCurrent(voltage, resistance)
-<span class="comment">% Using Ohm's law: I = V/R</span>
-  result = voltage <span class="operator">/</span> resistance;
-<span class="function-keyword">end</span>
-            </div>
-          </div>
-          
+          <div id="codeEditor" class="code-editor"></div>
+
           <!-- Resize handle for vertical adjustment -->
           <div class="resize-handle-vertical" id="verticalResizeHandle"></div>
-          
+
           <!-- Terminal for output -->
           <div class="terminal-container" id="terminalContainer">
             <div class="terminal-body" id="matlabOutput">
@@ -641,14 +641,14 @@
     </div>
 
     <!-- Hidden elements preserved for JavaScript functionality -->
-    <div id="authPrompt" style="display: none;"></div>
+    <div id="authPrompt" style="display: none"></div>
     <div class="solution-tabs">
       <div class="tab" id="answerTab"></div>
       <div class="tab" id="codeTab"></div>
     </div>
     <div class="tab-content" id="answerSection"></div>
     <div class="tab-content" id="codeSection"></div>
-    
+
     <!-- Alert messages -->
     <div class="alert alert-danger" id="errorAlert"></div>
     <div class="alert alert-success" id="successAlert"></div>
@@ -666,44 +666,43 @@
     <script src="js/ace-init.js"></script>
     <script>
       // This additional script ensures compatibility with existing JS and adds navigation & resizing functionality
-      document.addEventListener('DOMContentLoaded', function() {
+      document.addEventListener("DOMContentLoaded", function () {
         // Function to get and parse the current problem ID from URL
         function getCurrentProblemId() {
           const urlParams = new URLSearchParams(window.location.search);
-          const id = urlParams.get('id');
+          const id = urlParams.get("id");
           return id ? parseInt(id, 10) : 0; // Default to 0 if no ID is present
         }
-        
+
         // Function to navigate to a different problem
         function navigateToProblem(id) {
           // Ensure ID is valid (non-negative)
           id = Math.max(0, id);
           window.location.href = `problem.html?id=${id}`;
         }
-        
+
         // Set up problem navigation buttons
-        const prevProblemBtn = document.getElementById('prevProblemBtn');
-        const nextProblemBtn = document.getElementById('nextProblemBtn');
-        
+        const prevProblemBtn = document.getElementById("prevProblemBtn");
+        const nextProblemBtn = document.getElementById("nextProblemBtn");
+
         if (prevProblemBtn) {
-          prevProblemBtn.addEventListener('click', function() {
+          prevProblemBtn.addEventListener("click", function () {
             const currentId = getCurrentProblemId();
             if (currentId > 0) {
               navigateToProblem(currentId - 1);
             }
           });
         }
-        
+
         if (nextProblemBtn) {
-          nextProblemBtn.addEventListener('click', function() {
+          nextProblemBtn.addEventListener("click", function () {
             const currentId = getCurrentProblemId();
             navigateToProblem(currentId + 1);
           });
         }
-        
+
         // Store initial content for ACE editor
-        const initialMatlabCode = 
-`% Write your MATLAB code here...
+        const initialMatlabCode = `% Write your MATLAB code here...
 % For example:
 function result = calculateCurrent(voltage, resistance)
 % Using Ohm's law: I = V/R
@@ -711,7 +710,7 @@ function result = calculateCurrent(voltage, resistance)
 end`;
 
         // Initialize ACE editor if available
-        if (typeof ace !== 'undefined') {
+        if (typeof ace !== "undefined") {
           try {
             // Wait a brief moment to make sure the DOM is fully ready
             setTimeout(() => {
@@ -720,138 +719,152 @@ end`;
               editor.session.setMode("ace/mode/matlab");
               editor.setValue(initialMatlabCode);
               editor.clearSelection();
-              
+
               // Hide our placeholder once ACE is initialized
-              const placeholderElements = document.querySelectorAll(".line-numbers, .code-content");
-              placeholderElements.forEach(el => {
+              const placeholderElements = document.querySelectorAll(
+                ".line-numbers, .code-content"
+              );
+              placeholderElements.forEach((el) => {
                 el.style.display = "none";
               });
             }, 100);
-          } catch(e) {
+          } catch (e) {
             console.warn("ACE editor initialization failed:", e);
             // Keep our placeholder visible if ACE fails
           }
         }
-        
+
         // Make sure the run and submit buttons work with their event listeners
-        const existingRunBtn = document.getElementById('runBtn');
-        const existingSubmitBtn = document.getElementById('submitBtn');
-        
+        const existingRunBtn = document.getElementById("runBtn");
+        const existingSubmitBtn = document.getElementById("submitBtn");
+
         // Update the auth prompt visibility based on login status
-        const updateAuthPrompt = function() {
-          const authPrompt = document.getElementById('authPrompt');
+        const updateAuthPrompt = function () {
+          const authPrompt = document.getElementById("authPrompt");
           if (authPrompt) {
-            if (localStorage.getItem('BananaPrepToken')) {
-              authPrompt.style.display = 'none';
+            if (localStorage.getItem("BananaPrepToken")) {
+              authPrompt.style.display = "none";
             } else {
-              authPrompt.style.display = 'block';
+              authPrompt.style.display = "block";
             }
           }
         };
-        
+
         // Call this on page load
         updateAuthPrompt();
-        
+
         // Check if problem.js already attached event listeners
         // If not, we'll manually trigger them when clicked
-        if (!existingRunBtn.hasAttribute('data-listener-attached')) {
-          existingRunBtn.addEventListener('click', function() {
+        if (!existingRunBtn.hasAttribute("data-listener-attached")) {
+          existingRunBtn.addEventListener("click", function () {
             // Show terminal output area when Run is clicked
-            document.getElementById('matlabOutput').textContent = 'Running code...';
-            
+            document.getElementById("matlabOutput").textContent =
+              "Running code...";
+
             // Trigger the original run button
-            const originalRunBtn = document.querySelector('#runBtn');
-            if (originalRunBtn && typeof originalRunBtn.click === 'function') {
+            const originalRunBtn = document.querySelector("#runBtn");
+            if (originalRunBtn && typeof originalRunBtn.click === "function") {
               originalRunBtn.click();
             }
           });
         }
-        
-        if (!existingSubmitBtn.hasAttribute('data-listener-attached')) {
-          existingSubmitBtn.addEventListener('click', function() {
+
+        if (!existingSubmitBtn.hasAttribute("data-listener-attached")) {
+          existingSubmitBtn.addEventListener("click", function () {
             // Trigger the original submit button
-            const originalSubmitBtn = document.querySelector('#submitBtn');
-            if (originalSubmitBtn && typeof originalSubmitBtn.click === 'function') {
+            const originalSubmitBtn = document.querySelector("#submitBtn");
+            if (
+              originalSubmitBtn &&
+              typeof originalSubmitBtn.click === "function"
+            ) {
               originalSubmitBtn.click();
             }
           });
         }
-        
+
         // Tab functionality
-        document.querySelectorAll('.tab').forEach(tab => {
-          tab.addEventListener('click', function() {
+        document.querySelectorAll(".tab").forEach((tab) => {
+          tab.addEventListener("click", function () {
             // Find all siblings and remove active class
             const siblings = Array.from(this.parentNode.children);
-            siblings.forEach(sibling => sibling.classList.remove('active'));
-            
+            siblings.forEach((sibling) => sibling.classList.remove("active"));
+
             // Add active class to clicked tab
-            this.classList.add('active');
+            this.classList.add("active");
           });
         });
-        
+
         // Horizontal resize functionality
-        const horizontalResizeHandle = document.getElementById('horizontalResizeHandle');
+        const horizontalResizeHandle = document.getElementById(
+          "horizontalResizeHandle"
+        );
         if (horizontalResizeHandle) {
-          horizontalResizeHandle.addEventListener('mousedown', function(e) {
+          horizontalResizeHandle.addEventListener("mousedown", function (e) {
             e.preventDefault();
-            document.addEventListener('mousemove', resizeHorizontal);
-            document.addEventListener('mouseup', stopResize);
+            document.addEventListener("mousemove", resizeHorizontal);
+            document.addEventListener("mouseup", stopResize);
           });
         }
-        
+
         // Vertical resize functionality
-        const verticalResizeHandle = document.getElementById('verticalResizeHandle');
+        const verticalResizeHandle = document.getElementById(
+          "verticalResizeHandle"
+        );
         if (verticalResizeHandle) {
-          verticalResizeHandle.addEventListener('mousedown', function(e) {
+          verticalResizeHandle.addEventListener("mousedown", function (e) {
             e.preventDefault();
-            document.addEventListener('mousemove', resizeVertical);
-            document.addEventListener('mouseup', stopResize);
+            document.addEventListener("mousemove", resizeVertical);
+            document.addEventListener("mouseup", stopResize);
           });
         }
-        
+
         function resizeHorizontal(e) {
-          const container = document.querySelector('main');
-          const leftPanel = document.querySelector('.problem-section');
-          const rightPanel = document.querySelector('.editor-section');
-          
+          const container = document.querySelector("main");
+          const leftPanel = document.querySelector(".problem-section");
+          const rightPanel = document.querySelector(".editor-section");
+
           if (!container || !leftPanel || !rightPanel) return;
-          
+
           const containerWidth = container.clientWidth;
           const percentage = (e.clientX / containerWidth) * 100;
-          
+
           // Limit to reasonable sizes (15% - 85%)
           if (percentage > 15 && percentage < 85) {
-            leftPanel.style.width = percentage + '%';
-            rightPanel.style.width = (100 - percentage) + '%';
+            leftPanel.style.width = percentage + "%";
+            rightPanel.style.width = 100 - percentage + "%";
           }
         }
-        
+
         function resizeVertical(e) {
-          const editorContainer = document.querySelector('.code-container');
-          const editor = document.querySelector('.code-editor');
-          const terminal = document.querySelector('.terminal-container');
-          
+          const editorContainer = document.querySelector(".code-container");
+          const editor = document.querySelector(".code-editor");
+          const terminal = document.querySelector(".terminal-container");
+
           if (!editorContainer || !editor || !terminal) return;
-          
+
           const containerHeight = editorContainer.clientHeight;
           const editorBottom = editor.getBoundingClientRect().bottom;
-          const containerBottom = editorContainer.getBoundingClientRect().bottom;
-          
+          const containerBottom =
+            editorContainer.getBoundingClientRect().bottom;
+
           // Calculate new terminal height
           const newTerminalHeight = containerBottom - e.clientY;
-          
+
           // Ensure reasonable min/max heights
           const minTerminalHeight = 50;
           const maxTerminalHeight = containerHeight - 100;
-          
-          if (newTerminalHeight >= minTerminalHeight && newTerminalHeight <= maxTerminalHeight) {
-            terminal.style.height = newTerminalHeight + 'px';
+
+          if (
+            newTerminalHeight >= minTerminalHeight &&
+            newTerminalHeight <= maxTerminalHeight
+          ) {
+            terminal.style.height = newTerminalHeight + "px";
           }
         }
-        
+
         function stopResize() {
-          document.removeEventListener('mousemove', resizeHorizontal);
-          document.removeEventListener('mousemove', resizeVertical);
+          document.removeEventListener("mousemove", resizeHorizontal);
+          document.removeEventListener("mousemove", resizeVertical);
         }
       });
     </script>

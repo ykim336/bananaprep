@@ -21,8 +21,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Set font family to Source Code Pro
   editor.setOptions({
-    fontFamily: "Source Code Pro",
-    fontSize: "14px",
+    fontFamily: 'Menlo',
+    fontSize: "16px",
     enableBasicAutocompletion: true,
     enableLiveAutocompletion: true,
     highlightActiveLine: true,
