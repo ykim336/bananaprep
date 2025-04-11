@@ -6,6 +6,9 @@
     <title>BananaPrep - Problem Details</title>
     <link rel="stylesheet" href="css/styles.css" />
     <link rel="stylesheet" href="css/problem.css" />
+    <link rel="stylesheet" href="css/font.css">
+    <!-- Import Source Code Pro font explicitly -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;500;600;700&display=swap">
     <!-- Import Font Awesome for modern icons -->
     <link
       rel="stylesheet"
@@ -27,6 +30,16 @@
         --card-shadow-hover: 0 8px 15px rgba(0, 0, 0, 0.2);
         --btn-shadow-hover: 0 5px 10px rgba(0, 0, 0, 0.2);
         --transition-speed: 0.2s;
+        --code-font: 'Source Code Pro', 'Menlo', 'Monaco', 'Courier New', monospace;
+      }
+
+      /* Specifically target ACE editor for Source Code Pro */
+      .ace_editor,
+      .ace_text-input,
+      .ace_editor div,
+      .ace_line,
+      .ace_content {
+        font-family: 'Source Code Pro', monospace !important;
       }
 
       body {
@@ -333,7 +346,7 @@
       }
 
       .example-content {
-        font-family: "Menlo", "Monaco", "Courier New", monospace;
+        font-family: var(--code-font);
         font-size: 0.95rem;
         padding: 12px;
       }
@@ -372,7 +385,7 @@
         width: 40px;
         background-color: var(--bg-dark);
         padding-top: 5px;
-        font-family: monospace;
+        font-family: var(--code-font);
         font-size: 0.9rem;
         color: var(--text-muted);
         text-align: right;
@@ -391,7 +404,7 @@
         bottom: 0;
         right: 0;
         padding: 5px 0 0 0.75rem;
-        font-family: "Menlo", "Monaco", "Courier New", monospace;
+        font-family: var(--code-font);
         color: var(--text-light);
         font-size: 0.95rem;
         white-space: pre;
@@ -407,7 +420,7 @@
 
       .terminal-body {
         padding: 1rem;
-        font-family: "Menlo", "Monaco", "Courier New", monospace;
+        font-family: var(--code-font);
         font-size: 0.95rem;
         color: var(--text-light);
         height: calc(100% - 2rem);
@@ -473,6 +486,38 @@
         to {
           transform: rotate(360deg);
         }
+      }
+
+      #aceEditorContainer {
+        /* Reset all inherited styles */
+        all: initial;
+
+        /* Set only required properties */
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+
+      /* Ensure ACE editor has proper dimensions */
+      #codeEditor {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        font-family: 'Source Code Pro', monospace !important;
+      }
+
+      /* Set font for the Ace editor specifically */
+      .ace_editor {
+        font-family: 'Source Code Pro', monospace !important;
+        font-size: 14px !important;
+      }
+      
+      /* Additional styling to ensure Source Code Pro is applied everywhere in the editor */
+      .ace_editor, 
+      .ace_editor * {
+        font-family: 'Source Code Pro', monospace !important;
       }
     </style>
   </head>
@@ -558,7 +603,7 @@
             <div class="example">
               <div class="example-row">
                 <div class="example-label">Input:</div>
-                <div class="example-content">V = 10, R = 5</div>
+                <div class="example-content font-mono">V = 10, R = 5</div>
               </div>
               <div class="example-row">
                 <div class="example-label">Output:</div>
@@ -643,209 +688,25 @@
       charset="utf-8"
     ></script>
     <script src="js/ace-init.js"></script>
-    <!-- <script>
-      // This additional script ensures compatibility with existing JS and adds navigation & resizing functionality
-      document.addEventListener("DOMContentLoaded", function () {
-        // Function to get and parse the current problem ID from URL
-        function getCurrentProblemId() {
-          const urlParams = new URLSearchParams(window.location.search);
-          const id = urlParams.get("id");
-          return id ? parseInt(id, 10) : 0; // Default to 0 if no ID is present
-        }
-
-        // Function to navigate to a different problem
-        function navigateToProblem(id) {
-          // Ensure ID is valid (non-negative)
-          id = Math.max(0, id);
-          window.location.href = `problem.html?id=${id}`;
-        }
-
-        // Set up problem navigation buttons
-        const prevProblemBtn = document.getElementById("prevProblemBtn");
-        const nextProblemBtn = document.getElementById("nextProblemBtn");
-
-        if (prevProblemBtn) {
-          prevProblemBtn.addEventListener("click", function () {
-            const currentId = getCurrentProblemId();
-            if (currentId > 0) {
-              navigateToProblem(currentId - 1);
-            }
-          });
-        }
-
-        if (nextProblemBtn) {
-          nextProblemBtn.addEventListener("click", function () {
-            const currentId = getCurrentProblemId();
-            navigateToProblem(currentId + 1);
-          });
-        }
-
-        // Store initial content for ACE editor
-        const initialMatlabCode = `% Write your MATLAB code here...
-% For example:
-function result = calculateCurrent(voltage, resistance)
-% Using Ohm's law: I = V/R
-  result = voltage / resistance;
-end`;
-
-        // Initialize ACE editor if available
-        if (typeof ace !== "undefined") {
-          try {
-            // Wait a brief moment to make sure the DOM is fully ready
-            setTimeout(() => {
-              const editor = ace.edit("codeEditor");
-              editor.setTheme("ace/theme/monokai");
-              editor.session.setMode("ace/mode/matlab");
-              editor.setValue(initialMatlabCode);
-              editor.clearSelection();
-
-              // Hide our placeholder once ACE is initialized
-              const placeholderElements = document.querySelectorAll(
-                ".line-numbers, .code-content"
-              );
-              placeholderElements.forEach((el) => {
-                el.style.display = "none";
-              });
-            }, 100);
-          } catch (e) {
-            console.warn("ACE editor initialization failed:", e);
-            // Keep our placeholder visible if ACE fails
+    <!-- Additional script to set Source Code Pro font for ACE editor -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        // Set up ACE editor with Source Code Pro font
+        setTimeout(() => {
+          if (typeof ace !== "undefined") {
+            const editor = ace.edit("codeEditor");
+            
+            // Set the font family specifically to Source Code Pro
+            document.getElementById('codeEditor').style.fontFamily = "'Source Code Pro', monospace";
+            
+            // Set font family via ACE API
+            editor.setOptions({
+              fontFamily: "'Source Code Pro', monospace",
+              fontSize: "14px"
+            });
           }
-        }
-
-        // Make sure the run and submit buttons work with their event listeners
-        const existingRunBtn = document.getElementById("runBtn");
-        const existingSubmitBtn = document.getElementById("submitBtn");
-
-        // Update the auth prompt visibility based on login status
-        const updateAuthPrompt = function () {
-          const authPrompt = document.getElementById("authPrompt");
-          if (authPrompt) {
-            if (localStorage.getItem("BananaPrepToken")) {
-              authPrompt.style.display = "none";
-            } else {
-              authPrompt.style.display = "block";
-            }
-          }
-        };
-
-        // Call this on page load
-        updateAuthPrompt();
-
-        // Check if problem.js already attached event listeners
-        // If not, we'll manually trigger them when clicked
-        if (!existingRunBtn.hasAttribute("data-listener-attached")) {
-          existingRunBtn.addEventListener("click", function () {
-            // Show terminal output area when Run is clicked
-            document.getElementById("matlabOutput").textContent =
-              "Running code...";
-
-            // Trigger the original run button
-            const originalRunBtn = document.querySelector("#runBtn");
-            if (originalRunBtn && typeof originalRunBtn.click === "function") {
-              originalRunBtn.click();
-            }
-          });
-        }
-
-        if (!existingSubmitBtn.hasAttribute("data-listener-attached")) {
-          existingSubmitBtn.addEventListener("click", function () {
-            // Trigger the original submit button
-            const originalSubmitBtn = document.querySelector("#submitBtn");
-            if (
-              originalSubmitBtn &&
-              typeof originalSubmitBtn.click === "function"
-            ) {
-              originalSubmitBtn.click();
-            }
-          });
-        }
-
-        // Tab functionality
-        document.querySelectorAll(".tab").forEach((tab) => {
-          tab.addEventListener("click", function () {
-            // Find all siblings and remove active class
-            const siblings = Array.from(this.parentNode.children);
-            siblings.forEach((sibling) => sibling.classList.remove("active"));
-
-            // Add active class to clicked tab
-            this.classList.add("active");
-          });
-        });
-
-        // Horizontal resize functionality
-        const horizontalResizeHandle = document.getElementById(
-          "horizontalResizeHandle"
-        );
-        if (horizontalResizeHandle) {
-          horizontalResizeHandle.addEventListener("mousedown", function (e) {
-            e.preventDefault();
-            document.addEventListener("mousemove", resizeHorizontal);
-            document.addEventListener("mouseup", stopResize);
-          });
-        }
-
-        // Vertical resize functionality
-        const verticalResizeHandle = document.getElementById(
-          "verticalResizeHandle"
-        );
-        if (verticalResizeHandle) {
-          verticalResizeHandle.addEventListener("mousedown", function (e) {
-            e.preventDefault();
-            document.addEventListener("mousemove", resizeVertical);
-            document.addEventListener("mouseup", stopResize);
-          });
-        }
-
-        function resizeHorizontal(e) {
-          const container = document.querySelector("main");
-          const leftPanel = document.querySelector(".problem-section");
-          const rightPanel = document.querySelector(".editor-section");
-
-          if (!container || !leftPanel || !rightPanel) return;
-
-          const containerWidth = container.clientWidth;
-          const percentage = (e.clientX / containerWidth) * 100;
-
-          // Limit to reasonable sizes (15% - 85%)
-          if (percentage > 15 && percentage < 85) {
-            leftPanel.style.width = percentage + "%";
-            rightPanel.style.width = 100 - percentage + "%";
-          }
-        }
-
-        function resizeVertical(e) {
-          const editorContainer = document.querySelector(".code-container");
-          const editor = document.querySelector(".code-editor");
-          const terminal = document.querySelector(".terminal-container");
-
-          if (!editorContainer || !editor || !terminal) return;
-
-          const containerHeight = editorContainer.clientHeight;
-          const editorBottom = editor.getBoundingClientRect().bottom;
-          const containerBottom =
-            editorContainer.getBoundingClientRect().bottom;
-
-          // Calculate new terminal height
-          const newTerminalHeight = containerBottom - e.clientY;
-
-          // Ensure reasonable min/max heights
-          const minTerminalHeight = 50;
-          const maxTerminalHeight = containerHeight - 100;
-
-          if (
-            newTerminalHeight >= minTerminalHeight &&
-            newTerminalHeight <= maxTerminalHeight
-          ) {
-            terminal.style.height = newTerminalHeight + "px";
-          }
-        }
-
-        function stopResize() {
-          document.removeEventListener("mousemove", resizeHorizontal);
-          document.removeEventListener("mousemove", resizeVertical);
-        }
+        }, 100);
       });
-    </script> -->
+    </script>
   </body>
 </html>

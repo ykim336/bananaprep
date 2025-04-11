@@ -1,7 +1,8 @@
 /* Common Styles for BananaPrep */
 
-/* Import DM Sans font */
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap');
+/* Import font variables */
+@import url('font-variables.css');
+@import url('font.css');
 
 /* CSS Variables for consistent theming */
 :root {
@@ -9,10 +10,13 @@
   --bg-medium: #2a2a2a;
   --bg-light: #2f2f2f;
   --accent: #FFE135;
+  --accent-dark: #EAD010;
   --text-light: #f1f1f1;
   --text-muted: #ccc;
   --border-color: #444;
-  --font-primary: 'DM Sans', sans-serif;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
 }
 
 /* Basic Reset & Dark Theme */
@@ -82,7 +86,7 @@ header .logo {
   color: #333;
   border: none;
   padding: 0.4rem 0.8rem;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   font-size: 0.8rem;
   cursor: pointer;
   text-decoration: none;
@@ -96,7 +100,7 @@ header .logo {
 /* Alert styling */
 .alert {
   padding: 0.75rem;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   margin-bottom: 1rem;
   display: none;
 }
@@ -113,19 +117,41 @@ header .logo {
   color: #2ecc71;
 }
 
-/* Font overrides for specific elements */
-h1, h2, h3, h4, h5, h6 {
+/* Button styling */
+.btn {
   font-family: var(--font-primary);
-  font-weight: 700;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm);
+  border: none;
+  cursor: pointer;
+  font-weight: var(--font-weight-medium);
+  transition: background-color 0.2s, transform 0.2s;
 }
 
-button, input, select, textarea {
-  font-family: var(--font-primary);
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn-primary {
+  background-color: var(--accent);
+  color: #333;
+}
+
+.btn-secondary {
+  background-color: #444;
+  color: var(--text-light);
+}
+
+/* Container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
 }
 
 /* Code editor should retain monospace font */
 .code-editor, pre, code, .output-section {
-  font-family: "Menlo", "Monaco", "Courier New", monospace;
+  font-family: var(--font-monospace);
 }
 
 /* Logo styling for headers */

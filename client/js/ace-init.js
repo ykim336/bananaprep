@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // Optional settings
     editor.setOptions({
       fontSize: "14px",
+      fontFamily: "Source Code Pro, Monaco, 'Courier New', monospace"
     });
   
     console.log("ACE Editor initialized on #codeEditor");
