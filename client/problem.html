@@ -391,31 +391,11 @@
         bottom: 0;
         right: 0;
         padding: 5px 0 0 0.75rem;
-        font-family: monospace;
+        font-family: "Menlo", "Monaco", "Courier New", monospace;
         color: var(--text-light);
         font-size: 0.95rem;
         white-space: pre;
         line-height: 1.5rem;
-      }
-
-      .comment {
-        color: #777;
-      }
-
-      .function-keyword {
-        color: #ff79c6;
-      }
-
-      .variable-name {
-        color: #50fa7b;
-      }
-
-      .operator {
-        color: #f1fa8c;
-      }
-
-      .string {
-        color: #f1fa8c;
       }
 
       /* Terminal styles */
@@ -656,14 +636,14 @@
     <!-- Scripts -->
     <script src="js/api.js"></script>
     <script src="js/auth.js"></script>
-    <script src="js/resize-handler.js"></script>
+    <script src="js/problem.js"></script>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js"
       type="text/javascript"
       charset="utf-8"
     ></script>
     <script src="js/ace-init.js"></script>
-    <script>
+    <!-- <script>
       // This additional script ensures compatibility with existing JS and adds navigation & resizing functionality
       document.addEventListener("DOMContentLoaded", function () {
         // Function to get and parse the current problem ID from URL
@@ -866,6 +846,6 @@ end`;
           document.removeEventListener("mousemove", resizeVertical);
         }
       });
-    </script>
+    </script> -->
   </body>
 </html>

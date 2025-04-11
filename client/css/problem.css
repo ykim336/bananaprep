@@ -153,7 +153,7 @@ main {
 }
 
 .code-text {
-  font-family: monospace;
+  font-family: "Menlo";
   background-color: var(--bg-medium);
   padding: 0.1rem 0.3rem;
   border-radius: 3px;
