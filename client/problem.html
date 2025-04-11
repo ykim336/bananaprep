@@ -503,7 +503,7 @@
         position: absolute;
         top: 0;
         right: 0;
-        bottom: 0;
+        bottom: 100px;
         left: 0;
         font-family: 'Source Code Pro', monospace !important;
       }
@@ -690,22 +690,174 @@
     <script src="js/ace-init.js"></script>
     <!-- Additional script to set Source Code Pro font for ACE editor -->
     <script>
-      document.addEventListener("DOMContentLoaded", function() {
-        // Set up ACE editor with Source Code Pro font
-        setTimeout(() => {
-          if (typeof ace !== "undefined") {
-            const editor = ace.edit("codeEditor");
-            
-            // Set the font family specifically to Source Code Pro
-            document.getElementById('codeEditor').style.fontFamily = "'Source Code Pro', monospace";
-            
-            // Set font family via ACE API
-            editor.setOptions({
-              fontFamily: "'Source Code Pro', monospace",
-              fontSize: "14px"
-            });
+      // This additional script ensures compatibility with existing JS and adds navigation & resizing functionality
+      document.addEventListener("DOMContentLoaded", function () {
+        // Function to get and parse the current problem ID from URL
+        function getCurrentProblemId() {
+          const urlParams = new URLSearchParams(window.location.search);
+          const id = urlParams.get("id");
+          return id ? parseInt(id, 10) : 0; // Default to 0 if no ID is present
+        }
+
+        // Function to navigate to a different problem
+        function navigateToProblem(id) {
+          // Ensure ID is valid (non-negative)
+          id = Math.max(0, id);
+          window.location.href = `problem.html?id=${id}`;
+        }
+
+        // Set up problem navigation buttons
+        const prevProblemBtn = document.getElementById("prevProblemBtn");
+        const nextProblemBtn = document.getElementById("nextProblemBtn");
+
+        if (prevProblemBtn) {
+          prevProblemBtn.addEventListener("click", function () {
+            const currentId = getCurrentProblemId();
+            if (currentId > 0) {
+              navigateToProblem(currentId - 1);
+            }
+          });
+        }
+
+        if (nextProblemBtn) {
+          nextProblemBtn.addEventListener("click", function () {
+            const currentId = getCurrentProblemId();
+            navigateToProblem(currentId + 1);
+          });
+        }
+
+        // Make sure the run and submit buttons work with their event listeners
+        const existingRunBtn = document.getElementById("runBtn");
+        const existingSubmitBtn = document.getElementById("submitBtn");
+
+        // Update the auth prompt visibility based on login status
+        const updateAuthPrompt = function () {
+          const authPrompt = document.getElementById("authPrompt");
+          if (authPrompt) {
+            if (localStorage.getItem("BananaPrepToken")) {
+              authPrompt.style.display = "none";
+            } else {
+              authPrompt.style.display = "block";
+            }
           }
-        }, 100);
+        };
+
+        // Call this on page load
+        updateAuthPrompt();
+
+        // Check if problem.js already attached event listeners
+        // If not, we'll manually trigger them when clicked
+        if (!existingRunBtn.hasAttribute("data-listener-attached")) {
+          existingRunBtn.addEventListener("click", function () {
+            // Show terminal output area when Run is clicked
+            document.getElementById("matlabOutput").textContent =
+              "Running code...";
+
+            // Trigger the original run button
+            const originalRunBtn = document.querySelector("#runBtn");
+            if (originalRunBtn && typeof originalRunBtn.click === "function") {
+              originalRunBtn.click();
+            }
+          });
+        }
+
+        if (!existingSubmitBtn.hasAttribute("data-listener-attached")) {
+          existingSubmitBtn.addEventListener("click", function () {
+            // Trigger the original submit button
+            const originalSubmitBtn = document.querySelector("#submitBtn");
+            if (
+              originalSubmitBtn &&
+              typeof originalSubmitBtn.click === "function"
+            ) {
+              originalSubmitBtn.click();
+            }
+          });
+        }
+
+        // Tab functionality
+        document.querySelectorAll(".tab").forEach((tab) => {
+          tab.addEventListener("click", function () {
+            // Find all siblings and remove active class
+            const siblings = Array.from(this.parentNode.children);
+            siblings.forEach((sibling) => sibling.classList.remove("active"));
+
+            // Add active class to clicked tab
+            this.classList.add("active");
+          });
+        });
+
+        // Horizontal resize functionality
+        const horizontalResizeHandle = document.getElementById(
+          "horizontalResizeHandle"
+        );
+        if (horizontalResizeHandle) {
+          horizontalResizeHandle.addEventListener("mousedown", function (e) {
+            e.preventDefault();
+            document.addEventListener("mousemove", resizeHorizontal);
+            document.addEventListener("mouseup", stopResize);
+          });
+        }
+
+        // Vertical resize functionality
+        const verticalResizeHandle = document.getElementById(
+          "verticalResizeHandle"
+        );
+        if (verticalResizeHandle) {
+          verticalResizeHandle.addEventListener("mousedown", function (e) {
+            e.preventDefault();
+            document.addEventListener("mousemove", resizeVertical);
+            document.addEventListener("mouseup", stopResize);
+          });
+        }
+
+        function resizeHorizontal(e) {
+          const container = document.querySelector("main");
+          const leftPanel = document.querySelector(".problem-section");
+          const rightPanel = document.querySelector(".editor-section");
+
+          if (!container || !leftPanel || !rightPanel) return;
+
+          const containerWidth = container.clientWidth;
+          const percentage = (e.clientX / containerWidth) * 100;
+
+          // Limit to reasonable sizes (15% - 85%)
+          if (percentage > 15 && percentage < 85) {
+            leftPanel.style.width = percentage + "%";
+            rightPanel.style.width = 100 - percentage + "%";
+          }
+        }
+
+        function resizeVertical(e) {
+          const editorContainer = document.querySelector(".code-container");
+          const editor = document.querySelector(".code-editor");
+          const terminal = document.querySelector(".terminal-container");
+
+          if (!editorContainer || !editor || !terminal) return;
+
+          const containerHeight = editorContainer.clientHeight;
+          const editorBottom = editor.getBoundingClientRect().bottom;
+          const containerBottom =
+            editorContainer.getBoundingClientRect().bottom;
+
+          // Calculate new terminal height
+          const newTerminalHeight = containerBottom - e.clientY;
+
+          // Ensure reasonable min/max heights
+          const minTerminalHeight = 50;
+          const maxTerminalHeight = containerHeight - 100;
+
+          if (
+            newTerminalHeight >= minTerminalHeight &&
+            newTerminalHeight <= maxTerminalHeight
+          ) {
+            terminal.style.height = newTerminalHeight + "px";
+          }
+        }
+
+        function stopResize() {
+          document.removeEventListener("mousemove", resizeHorizontal);
+          document.removeEventListener("mousemove", resizeVertical);
+        }
       });
     </script>
   </body>
