@@ -1,0 +1,33 @@
+/* Logo styling for headers */
+.logo-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  .logo-image {
+    height: 0px;
+    margin-right: 10px;
+  }
+  
+  /* For the home page larger header */
+  header .logo-image {
+    height: 0px;
+  }
+  
+  /* For the problem page top-nav */
+  .top-nav .logo-image {
+    height: 0px;
+  }  
+  
+  /* If you want to hide the text logo but keep it for screen readers */
+  .logo-text {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
