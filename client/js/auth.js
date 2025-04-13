@@ -86,6 +86,14 @@ const Auth = {
     Auth.clearUserProfile();
     window.location.href = '/api/logout';
   },
+
+  /**
+   * Get the authentication token
+   * @returns {string} The user's auth token, or an empty string if not set
+   */
+  getToken: () => {
+    return localStorage.getItem('BananaPrepToken') || '';
+  },
   
   /**
    * Update user account section in the UI
