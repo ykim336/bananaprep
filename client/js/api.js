@@ -7,62 +7,36 @@
 // const API_URL = 'http://localhost:3000/api';
 const API_URL = '/api'; // For same-origin requests
 
-// Helper function to get auth token
-function getAuthToken() {
-  return localStorage.getItem('BananaPrepToken');
-}
-
 // API Service object
 const API = {
-  /**
-   * Authentication APIs
-   */
-  auth: {
-    login: async (email, password) => {
-      const response = await fetch(`${API_URL}/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ email, password })
-      });
-      
-      return response.json();
-    },
-    
-    register: async (fullName, email, password) => {
-      const response = await fetch(`${API_URL}/register`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ fullName, email, password })
-      });
-      
-      return response.json();
-    }
-  },
-  
   /**
    * User APIs
    */
   user: {
     getProfile: async () => {
-      const response = await fetch(`${API_URL}/user/profile`, {
-        headers: {
-          'Authorization': `Bearer ${getAuthToken()}`
+      const response = await fetch(`${API_URL}/user/profile`);
+      
+      if (!response.ok) {
+        if (response.status === 401) {
+          // Not authenticated
+          return null;
         }
-      });
+        throw new Error('Failed to fetch user profile');
+      }
       
       return response.json();
     },
     
     getStats: async () => {
-      const response = await fetch(`${API_URL}/user/stats`, {
-        headers: {
-          'Authorization': `Bearer ${getAuthToken()}`
+      const response = await fetch(`${API_URL}/user/stats`);
+      
+      if (!response.ok) {
+        if (response.status === 401) {
+          window.location.href = `${API_URL}/login`;
+          return null;
         }
-      });
+        throw new Error('Failed to fetch user stats');
+      }
       
       return response.json();
     }
@@ -73,39 +47,44 @@ const API = {
    */
   progress: {
     getAll: async () => {
-      const response = await fetch(`${API_URL}/progress/all`, {
-        headers: {
-          'Authorization': `Bearer ${getAuthToken()}`
-        }
-      });
+      const response = await fetch(`${API_URL}/progress/all`);
       
-      if (!response.ok && response.status !== 404) {
-        throw new Error('Failed to load progress data');
+      if (!response.ok) {
+        if (response.status === 401) {
+          window.location.href = `${API_URL}/login`;
+          return [];
+        }
+        if (response.status !== 404) {
+          throw new Error('Failed to load progress data');
+        }
+        return [];
       }
       
-      return response.ok ? response.json() : [];
+      return response.json();
     },
     
     getOne: async (problemId) => {
-      const response = await fetch(`${API_URL}/progress/${problemId}`, {
-        headers: {
-          'Authorization': `Bearer ${getAuthToken()}`
-        }
-      });
+      const response = await fetch(`${API_URL}/progress/${problemId}`);
       
-      if (!response.ok && response.status !== 404) {
-        throw new Error('Failed to load progress');
+      if (!response.ok) {
+        if (response.status === 401) {
+          window.location.href = `${API_URL}/login`;
+          return null;
+        }
+        if (response.status !== 404) {
+          throw new Error('Failed to load progress');
+        }
+        return null;
       }
       
-      return response.ok ? response.json() : null;
+      return response.json();
     },
     
     update: async (problemId, status, solutionCode) => {
       const response = await fetch(`${API_URL}/progress/update`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${getAuthToken()}`
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           problemId,
@@ -114,6 +93,14 @@ const API = {
         })
       });
       
+      if (!response.ok) {
+        if (response.status === 401) {
+          window.location.href = `${API_URL}/login`;
+          return null;
+        }
+        throw new Error('Failed to update progress');
+      }
+      
       return response.json();
     },
     
@@ -121,14 +108,21 @@ const API = {
       const response = await fetch(`${API_URL}/validate-answer`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${getAuthToken()}`
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           problemId,
           userAnswer
         })
       });
+      
+      if (!response.ok) {
+        if (response.status === 401) {
+          window.location.href = `${API_URL}/login`;
+          return null;
+        }
+        throw new Error('Failed to validate answer');
+      }
       
       return response.json();
     }
@@ -150,19 +144,46 @@ const API = {
       return response.json();
     }
   },
-  // In your API.js file
+  
+  /**
+   * MATLAB/Octave APIs
+   */
   matlab: {
     run: async (code, input) => {
       const response = await fetch(`${API_URL}/run-octave`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${getAuthToken()}`
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({ code, input })
       });
       
+      if (!response.ok) {
+        if (response.status === 401) {
+          window.location.href = `${API_URL}/login`;
+          return null;
+        }
+        throw new Error('Failed to run MATLAB/Octave code');
+      }
+      
       return response.json();
     }
+  },
+  
+  /**
+   * Utility to handle API errors
+   */
+  handleError: (error, redirectOnAuth = true) => {
+    console.error('API Error:', error);
+    
+    if (error.status === 401 && redirectOnAuth) {
+      // Redirect to login page
+      window.location.href = `${API_URL}/login`;
+    }
+    
+    return {
+      error: true,
+      message: error.message || 'An unknown error occurred'
+    };
   }
 };

@@ -1,17 +1,32 @@
-// server.js - A simple Express server to handle BananaPrep authentication and database operations
+// server.js - A simple Express server with Auth0 authentication for BananaPrep
 const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
-const bcrypt = require('bcrypt');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const path = require('path');
-const jwt = require('jsonwebtoken');
 const fs = require('fs');
-
+const { exec } = require('child_process');
+const { auth } = require('express-openid-connect');
 
 // Initialize Express app
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// Auth0 Configuration
+// IMPORTANT: Replace these with your own Auth0 credentials
+const auth0Config = {
+  authRequired: false,
+  auth0Logout: true,
+  secret: 'T_l_j5sH36W19NX4N7ApTSI6_vaF0_mKiUoa4VaEp1FdZkfJ838o3dJ88rDNd23y',
+  baseURL: 'http://localhost:3000',
+  clientID: 'L8JkJ6ayIp6izQbtduXo0mLPrGy1LK0a',
+  issuerBaseURL: 'https://dev-q56oefqulqq0pvyb.us.auth0.com',
+  routes: {
+    login: '/api/login',
+    callback: '/api/callback',
+    logout: '/api/logout'
+  }
+};
 
 // Middleware
 app.use(cors({
@@ -22,6 +37,15 @@ app.use(cors({
 }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(auth(auth0Config));
+
+// Serve the client files
+app.use(express.static(path.join(__dirname, '../client')));
+
+// Serve index.html for the root path
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/index.html'));
+});
 
 // Add a specific route for problems.json
 app.get('/data/problems.json', (req, res) => {
@@ -41,12 +65,12 @@ const db = new sqlite3.Database('./BananaPrep.db', (err) => {
 // Initialize database tables
 function initDatabase() {
   db.serialize(() => {
-    // Users table
+    // Users table - simplified schema for Auth0
     db.run(`CREATE TABLE IF NOT EXISTS users (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
+      auth0_id TEXT UNIQUE NOT NULL,
       full_name TEXT NOT NULL,
       email TEXT UNIQUE NOT NULL,
-      password TEXT NOT NULL,
       date_joined TEXT DEFAULT CURRENT_TIMESTAMP,
       last_login TEXT
     )`);
@@ -79,123 +103,6 @@ function initDatabase() {
   });
 }
 
-// Secret key for JWT
-const JWT_SECRET = 'BananaPrep-secret-key-change-in-production';
-
-// Authentication routes
-app.post('/api/register', async (req, res) => {
-  try {
-    const { fullName, email, password } = req.body;
-    
-    // Validate inputs
-    if (!fullName || !email || !password) {
-      return res.status(400).json({ error: 'All fields are required' });
-    }
-    
-    // Check if user already exists
-    db.get('SELECT * FROM users WHERE email = ?', [email], async (err, user) => {
-      if (err) {
-        return res.status(500).json({ error: err.message });
-      }
-      
-      if (user) {
-        return res.status(400).json({ error: 'User already exists with this email' });
-      }
-      
-      // Hash password
-      const saltRounds = 10;
-      const hashedPassword = await bcrypt.hash(password, saltRounds);
-      
-      // Insert new user
-      db.run('INSERT INTO users (full_name, email, password) VALUES (?, ?, ?)',
-        [fullName, email, hashedPassword],
-        function(err) {
-          if (err) {
-            return res.status(500).json({ error: err.message });
-          }
-          
-          // Create initial stats record for the user
-          db.run('INSERT INTO user_stats (user_id) VALUES (?)', [this.lastID]);
-          
-          // Generate JWT token
-          const token = jwt.sign({ id: this.lastID, email }, JWT_SECRET, { expiresIn: '24h' });
-          
-          res.status(201).json({
-            message: 'User registered successfully',
-            token,
-            userId: this.lastID
-          });
-        }
-      );
-    });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-app.post('/api/login', (req, res) => {
-  try {
-    const { email, password } = req.body;
-    
-    // Validate inputs
-    if (!email || !password) {
-      return res.status(400).json({ error: 'Email and password are required' });
-    }
-    
-    // Find user
-    db.get('SELECT * FROM users WHERE email = ?', [email], async (err, user) => {
-      if (err) {
-        return res.status(500).json({ error: err.message });
-      }
-      
-      if (!user) {
-        return res.status(401).json({ error: 'Invalid email or password' });
-      }
-      
-      // Compare password
-      const passwordMatch = await bcrypt.compare(password, user.password);
-      
-      if (!passwordMatch) {
-        return res.status(401).json({ error: 'Invalid email or password' });
-      }
-      
-      // Update last login
-      db.run('UPDATE users SET last_login = CURRENT_TIMESTAMP WHERE id = ?', [user.id]);
-      
-      // Generate JWT token
-      const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: '24h' });
-      
-      res.json({
-        message: 'Login successful',
-        token,
-        userId: user.id,
-        fullName: user.full_name
-      });
-    });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// Middleware to authenticate token
-function authenticateToken(req, res, next) {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
-  
-  if (!token) {
-    return res.status(401).json({ error: 'Authentication token is required' });
-  }
-  
-  jwt.verify(token, JWT_SECRET, (err, user) => {
-    if (err) {
-      return res.status(403).json({ error: 'Invalid or expired token' });
-    }
-    
-    req.user = user;
-    next();
-  });
-}
-
 // Load problems data
 let problemsData = [];
 try {
@@ -207,27 +114,84 @@ try {
   console.error('Error loading problems data:', error);
 }
 
-// Protected user routes
-app.get('/api/user/profile', authenticateToken, (req, res) => {
-  db.get('SELECT id, full_name, email, date_joined, last_login FROM users WHERE id = ?', 
-    [req.user.id], 
-    (err, user) => {
-      if (err) {
-        return res.status(500).json({ error: err.message });
-      }
-      
-      if (!user) {
-        return res.status(404).json({ error: 'User not found' });
-      }
-      
-      res.json(user);
+// Auth0 User Profile Route
+app.get('/api/user/profile', (req, res) => {
+  if (!req.oidc.isAuthenticated()) {
+    return res.status(401).json({ error: 'Not authenticated' });
+  }
+  
+  const auth0Id = req.oidc.user.sub;
+  
+  // Find or create user in our database
+  db.get('SELECT * FROM users WHERE auth0_id = ?', [auth0Id], (err, user) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
     }
-  );
+    
+    if (user) {
+      // Update last login time
+      db.run('UPDATE users SET last_login = CURRENT_TIMESTAMP WHERE id = ?', [user.id]);
+      
+      return res.json({
+        id: user.id,
+        full_name: user.full_name,
+        email: user.email,
+        date_joined: user.date_joined,
+        last_login: user.last_login
+      });
+    } else {
+      // Create new user record
+      const userData = {
+        auth0_id: auth0Id,
+        full_name: req.oidc.user.name || 'BananaPrep User',
+        email: req.oidc.user.email || 'user@example.com'
+      };
+      
+      db.run('INSERT INTO users (auth0_id, full_name, email) VALUES (?, ?, ?)',
+        [userData.auth0_id, userData.full_name, userData.email],
+        function(err) {
+          if (err) {
+            return res.status(500).json({ error: err.message });
+          }
+          
+          // Create initial stats record for the user
+          db.run('INSERT INTO user_stats (user_id) VALUES (?)', [this.lastID]);
+          
+          return res.json({
+            id: this.lastID,
+            full_name: userData.full_name,
+            email: userData.email,
+            date_joined: new Date().toISOString(),
+            last_login: new Date().toISOString()
+          });
+        }
+      );
+    }
+  });
 });
 
-app.get('/api/user/stats', authenticateToken, (req, res) => {
+// Authentication middleware
+function requiresAuth(req, res, next) {
+  if (!req.oidc.isAuthenticated()) {
+    return res.status(401).json({ error: 'Authentication required' });
+  }
+  
+  // Get user from database
+  db.get('SELECT id FROM users WHERE auth0_id = ?', [req.oidc.user.sub], (err, user) => {
+    if (err || !user) {
+      return res.status(401).json({ error: 'User not found in database' });
+    }
+    
+    // Add user ID to request object
+    req.userId = user.id;
+    next();
+  });
+}
+
+// User stats route
+app.get('/api/user/stats', requiresAuth, (req, res) => {
   db.get('SELECT * FROM user_stats WHERE user_id = ?', 
-    [req.user.id], 
+    [req.userId], 
     (err, stats) => {
       if (err) {
         return res.status(500).json({ error: err.message });
@@ -242,8 +206,8 @@ app.get('/api/user/stats', authenticateToken, (req, res) => {
   );
 });
 
-// NEW: Validate answer endpoint
-app.post('/api/validate-answer', authenticateToken, (req, res) => {
+// Validate answer endpoint
+app.post('/api/validate-answer', requiresAuth, (req, res) => {
   try {
     const { problemId, userAnswer } = req.body;
     
@@ -263,7 +227,7 @@ app.post('/api/validate-answer', authenticateToken, (req, res) => {
       return res.status(400).json({ error: 'This problem does not have a defined answer' });
     }
     
-    // Normalize both answers for comparison (convert to string, trim whitespace, lowercase)
+    // Normalize both answers for comparison
     const normalizedUserAnswer = String(userAnswer).trim().toLowerCase();
     const normalizedCorrectAnswer = String(problem.answer).trim().toLowerCase();
     
@@ -275,7 +239,7 @@ app.post('/api/validate-answer', authenticateToken, (req, res) => {
     
     // Update progress in database
     db.get('SELECT * FROM user_progress WHERE user_id = ? AND problem_id = ?',
-      [req.user.id, problemId],
+      [req.userId, problemId],
       (err, progress) => {
         if (err) {
           return res.status(500).json({ error: err.message });
@@ -287,7 +251,7 @@ app.post('/api/validate-answer', authenticateToken, (req, res) => {
                  SET status = ?, attempts = attempts + 1, 
                      last_attempt_date = CURRENT_TIMESTAMP
                  WHERE user_id = ? AND problem_id = ?`,
-            [status, req.user.id, problemId],
+            [status, req.userId, problemId],
             function(err) {
               if (err) {
                 return res.status(500).json({ error: err.message });
@@ -295,7 +259,7 @@ app.post('/api/validate-answer', authenticateToken, (req, res) => {
               
               // If answer is correct, update user stats
               if (isCorrect) {
-                updateUserStats(req.user.id, problem.difficulty);
+                updateUserStats(req.userId, problem.difficulty);
               }
               
               res.json({ 
@@ -308,7 +272,7 @@ app.post('/api/validate-answer', authenticateToken, (req, res) => {
           // Create new progress entry
           db.run(`INSERT INTO user_progress (user_id, problem_id, status)
                   VALUES (?, ?, ?)`,
-            [req.user.id, problemId, status],
+            [req.userId, problemId, status],
             function(err) {
               if (err) {
                 return res.status(500).json({ error: err.message });
@@ -316,7 +280,7 @@ app.post('/api/validate-answer', authenticateToken, (req, res) => {
               
               // If answer is correct, update user stats
               if (isCorrect) {
-                updateUserStats(req.user.id, problem.difficulty);
+                updateUserStats(req.userId, problem.difficulty);
               }
               
               res.json({ 
@@ -334,13 +298,13 @@ app.post('/api/validate-answer', authenticateToken, (req, res) => {
 });
 
 // Problem progress tracking
-app.post('/api/progress/update', authenticateToken, (req, res) => {
+app.post('/api/progress/update', requiresAuth, (req, res) => {
   try {
     const { problemId, status, solutionCode } = req.body;
     
     // Check if progress exists
     db.get('SELECT * FROM user_progress WHERE user_id = ? AND problem_id = ?', 
-      [req.user.id, problemId], 
+      [req.userId, problemId], 
       (err, progress) => {
         if (err) {
           return res.status(500).json({ error: err.message });
@@ -353,7 +317,7 @@ app.post('/api/progress/update', authenticateToken, (req, res) => {
                       last_attempt_date = CURRENT_TIMESTAMP, 
                       solution_code = ?
                   WHERE user_id = ? AND problem_id = ?`,
-            [status, solutionCode, req.user.id, problemId],
+            [status, solutionCode, req.userId, problemId],
             function(err) {
               if (err) {
                 return res.status(500).json({ error: err.message });
@@ -362,7 +326,7 @@ app.post('/api/progress/update', authenticateToken, (req, res) => {
               // Update user stats if problem is solved
               if (status === 'solved') {
                 if (problemsData[problemId]) {
-                  updateUserStats(req.user.id, problemsData[problemId].difficulty);
+                  updateUserStats(req.userId, problemsData[problemId].difficulty);
                 }
               }
               
@@ -373,7 +337,7 @@ app.post('/api/progress/update', authenticateToken, (req, res) => {
           // Create new progress
           db.run(`INSERT INTO user_progress (user_id, problem_id, status, solution_code)
                   VALUES (?, ?, ?, ?)`,
-            [req.user.id, problemId, status, solutionCode],
+            [req.userId, problemId, status, solutionCode],
             function(err) {
               if (err) {
                 return res.status(500).json({ error: err.message });
@@ -382,7 +346,7 @@ app.post('/api/progress/update', authenticateToken, (req, res) => {
               // Update user stats if problem is solved
               if (status === 'solved') {
                 if (problemsData[problemId]) {
-                  updateUserStats(req.user.id, problemsData[problemId].difficulty);
+                  updateUserStats(req.userId, problemsData[problemId].difficulty);
                 }
               }
               
@@ -398,12 +362,12 @@ app.post('/api/progress/update', authenticateToken, (req, res) => {
 });
 
 // Get specific problem progress
-app.get('/api/progress/:problemId', authenticateToken, (req, res) => {
+app.get('/api/progress/:problemId', requiresAuth, (req, res) => {
   try {
     const { problemId } = req.params;
     
     db.get('SELECT * FROM user_progress WHERE user_id = ? AND problem_id = ?',
-      [req.user.id, problemId],
+      [req.userId, problemId],
       (err, progress) => {
         if (err) {
           return res.status(500).json({ error: err.message });
@@ -430,10 +394,10 @@ app.get('/api/progress/:problemId', authenticateToken, (req, res) => {
 });
 
 // Get all user progress
-app.get('/api/progress/all', authenticateToken, (req, res) => {
+app.get('/api/progress/all', requiresAuth, (req, res) => {
   try {
     db.all('SELECT * FROM user_progress WHERE user_id = ?',
-      [req.user.id],
+      [req.userId],
       (err, progress) => {
         if (err) {
           return res.status(500).json({ error: err.message });
@@ -451,48 +415,10 @@ app.get('/api/progress/all', authenticateToken, (req, res) => {
   }
 });
 
-// Update user stats based on difficulty
-function updateUserStats(userId, difficulty) {
-  // Normalize difficulty to lowercase
-  const difficultyLower = (difficulty || 'easy').toLowerCase();
-  
-  // Determine which field to update
-  let field;
-  switch (difficultyLower) {
-    case 'easy':
-      field = 'easy_solved';
-      break;
-    case 'medium':
-      field = 'medium_solved';
-      break;
-    case 'hard':
-      field = 'hard_solved';
-      break;
-    default:
-      field = 'easy_solved'; // Default to easy if difficulty not recognized
-  }
-  
-  // Update the appropriate counter
-  db.run(`UPDATE user_stats SET ${field} = ${field} + 1, 
-          last_updated = CURRENT_TIMESTAMP WHERE user_id = ?`,
-    [userId],
-    (err) => {
-      if (err) {
-        console.error('Error updating user stats:', err.message);
-      }
-    }
-  );
-}
-
-// In your server.js file, add a new endpoint:
-const { exec } = require('child_process');
-// const fs = require('fs');
-// const path = require('path');
-
 // Endpoint to execute Octave code
-app.post('/api/run-octave', authenticateToken, (req, res) => {
+app.post('/api/run-octave', requiresAuth, (req, res) => {
   const { code, input } = req.body;
-  const userId = req.user.id;
+  const userId = req.userId;
   
   // Create unique filenames for this execution
   const timestamp = Date.now();
@@ -546,8 +472,42 @@ app.post('/api/run-octave', authenticateToken, (req, res) => {
     }
   });
 });
- 
+
+// Update user stats based on difficulty
+function updateUserStats(userId, difficulty) {
+  // Normalize difficulty to lowercase
+  const difficultyLower = (difficulty || 'easy').toLowerCase();
+  
+  // Determine which field to update
+  let field;
+  switch (difficultyLower) {
+    case 'easy':
+      field = 'easy_solved';
+      break;
+    case 'medium':
+      field = 'medium_solved';
+      break;
+    case 'hard':
+      field = 'hard_solved';
+      break;
+    default:
+      field = 'easy_solved'; // Default to easy if difficulty not recognized
+  }
+  
+  // Update the appropriate counter
+  db.run(`UPDATE user_stats SET ${field} = ${field} + 1, 
+          last_updated = CURRENT_TIMESTAMP WHERE user_id = ?`,
+    [userId],
+    (err) => {
+      if (err) {
+        console.error('Error updating user stats:', err.message);
+      }
+    }
+  );
+}
+
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
+  console.log(`Auth0 integration enabled. Login at: http://localhost:${PORT}/api/login`);
 });

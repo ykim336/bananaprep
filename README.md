@@ -192,3 +192,9 @@ and
 ```
 ./build-and-run.sh
 ```
+
+
+run all docker stuff in one command:
+```
+docker stop bananaprep-app && docker rm bananaprep-app && docker build -t bananaprep . && docker run -p 3000:3000 -d --name bananaprep-app bananaprep && docker image prune -f
+```

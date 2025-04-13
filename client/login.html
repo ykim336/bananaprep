@@ -17,81 +17,34 @@
   <!-- Main Content -->
   <div class="container">
     <div class="auth-container">
-      <div class="auth-tabs">
-        <div class="tab active" id="signinTab">Sign In</div>
-        <div class="tab" id="signupTab">Sign Up</div>
-      </div>
+      <h2 class="form-title">Welcome to BananaPrep</h2>
       
       <!-- Alert Messages -->
       <div class="alert alert-danger" id="errorAlert"></div>
       <div class="alert alert-success" id="successAlert"></div>
       
-      <!-- Sign In Form -->
-      <form id="signinForm">
-        <h2 class="form-title">Welcome Back</h2>
-        <div class="form-group">
-          <label for="email">Email Address</label>
-          <input type="email" id="email" name="email" required>
-          <div class="error-message" id="emailError">Please enter a valid email address</div>
-        </div>
-        <div class="form-group">
-          <label for="password">Password</label>
-          <input type="password" id="password" name="password" required>
-          <div class="error-message" id="passwordError">Password must be at least 8 characters</div>
-        </div>
-        <div class="form-footer">
-          <div class="remember-me">
-            <input type="checkbox" id="remember">
-            <label for="remember">Remember me</label>
+      <p class="auth-description">
+        We've simplified our login process. Just click below to sign in or create an account with Auth0.
+      </p>
+      
+      <a href="/api/login" class="submit-btn" id="auth0LoginBtn">Sign In with Auth0</a>
+      
+      <div class="social-login">
+        <p>Secure Authentication</p>
+        <div class="features">
+          <div class="feature">
+            <span class="feature-icon">🔒</span>
+            <span class="feature-text">Enhanced Security</span>
           </div>
-          <a href="#" class="forgot-password">Forgot Password?</a>
-        </div>
-        <button type="submit" class="submit-btn" id="signinButton">Sign In</button>
-        <div class="form-loading">
-          <div class="spinner" id="signinSpinner"></div>
-        </div>
-        
-        <div class="social-login">
-          <p>Or sign in with</p>
-          <div class="social-buttons">
-            <a href="#" class="social-btn">G</a>
-            <a href="#" class="social-btn">f</a>
-            <a href="#" class="social-btn">in</a>
+          <div class="feature">
+            <span class="feature-icon">🚀</span>
+            <span class="feature-text">Quick Setup</span>
+          </div>
+          <div class="feature">
+            <span class="feature-icon">📱</span>
+            <span class="feature-text">Multi-device Access</span>
           </div>
         </div>
-      </form>
-      
-      <!-- Sign Up Form -->
-      <form id="signupForm">
-        <h2 class="form-title">Create Account</h2>
-        <div class="form-group">
-          <label for="fullName">Full Name</label>
-          <input type="text" id="fullName" name="fullName" required>
-          <div class="error-message" id="fullNameError">Please enter your full name</div>
-        </div>
-        <div class="form-group">
-          <label for="signupEmail">Email Address</label>
-          <input type="email" id="signupEmail" name="email" required>
-          <div class="error-message" id="signupEmailError">Please enter a valid email address</div>
-        </div>
-        <div class="form-group">
-          <label for="signupPassword">Password</label>
-          <input type="password" id="signupPassword" name="password" required>
-          <div class="error-message" id="signupPasswordError">Password must be at least 8 characters</div>
-        </div>
-        <div class="form-group">
-          <label for="confirmPassword">Confirm Password</label>
-          <input type="password" id="confirmPassword" name="confirmPassword" required>
-          <div class="error-message" id="confirmPasswordError">Passwords do not match</div>
-        </div>
-        <button type="submit" class="submit-btn" id="signupButton">Sign Up</button>
-        <div class="form-loading">
-          <div class="spinner" id="signupSpinner"></div>
-        </div>
-      </form>
-      
-      <div class="signup-prompt" id="authPrompt">
-        Don't have an account? <a href="#" id="toggleAuth">Sign up now</a>
       </div>
     </div>
   </div>
@@ -102,7 +55,32 @@
   </footer>
 
   <script src="js/api.js"></script>
-  <script src="js/auth.js"></script>
-  <script src="js/login.js"></script>
+  <script>
+    // Show error message if there's an error in the URL
+    document.addEventListener('DOMContentLoaded', function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const error = urlParams.get('error');
+      const errorDescription = urlParams.get('error_description');
+      
+      if (error) {
+        const errorAlert = document.getElementById('errorAlert');
+        errorAlert.textContent = errorDescription || 'Authentication error occurred.';
+        errorAlert.style.display = 'block';
+      }
+      
+      // Check if redirected with success message
+      const success = urlParams.get('success');
+      if (success) {
+        const successAlert = document.getElementById('successAlert');
+        successAlert.textContent = 'Login successful! Redirecting...';
+        successAlert.style.display = 'block';
+        
+        // Redirect to problem database after short delay
+        setTimeout(() => {
+          window.location.href = 'database.html';
+        }, 1500);
+      }
+    });
+  </script>
 </body>
 </html>
