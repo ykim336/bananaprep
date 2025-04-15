@@ -18,7 +18,7 @@ const API = {
       
       if (!response.ok) {
         if (response.status === 401) {
-          // Not authenticated
+          // Not authenticated, but no worries—practice mode doesn't require a profile.
           return null;
         }
         throw new Error('Failed to fetch user profile');
@@ -32,7 +32,8 @@ const API = {
       
       if (!response.ok) {
         if (response.status === 401) {
-          window.location.href = `${API_URL}/login`;
+          // We know stats are cool, but if you're not logged in, stats are just chillin’ in the background.
+          console.warn('No user stats available in practice mode.');
           return null;
         }
         throw new Error('Failed to fetch user stats');
@@ -51,7 +52,8 @@ const API = {
       
       if (!response.ok) {
         if (response.status === 401) {
-          window.location.href = `${API_URL}/login`;
+          // Hey, you're not logged in and that's totally fine—practice mode activated.
+          console.warn('Not logged in, returning empty progress data.');
           return [];
         }
         if (response.status !== 404) {
@@ -68,7 +70,8 @@ const API = {
       
       if (!response.ok) {
         if (response.status === 401) {
-          window.location.href = `${API_URL}/login`;
+          // No login, no progress. We're all about practicing without the drama.
+          console.warn('Not logged in, returning null for progress on problem:', problemId);
           return null;
         }
         if (response.status !== 404) {
@@ -95,7 +98,8 @@ const API = {
       
       if (!response.ok) {
         if (response.status === 401) {
-          window.location.href = `${API_URL}/login`;
+          // Update failed because you aren't logged in, but that's cool—we won't hold it against you.
+          console.warn('Not logged in, skipping progress update for problem:', problemId);
           return null;
         }
         throw new Error('Failed to update progress');
@@ -118,8 +122,9 @@ const API = {
       
       if (!response.ok) {
         if (response.status === 401) {
-          window.location.href = `${API_URL}/login`;
-          return null;
+          // You're not logged in; in practice mode we won't harsh your vibe with answer validation.
+          console.warn('Not logged in, answer validation skipped for problem:', problemId);
+          return { correct: false, message: "Practice mode: answer validation skipped (no login detected)." };
         }
         throw new Error('Failed to validate answer');
       }
@@ -160,7 +165,8 @@ const API = {
       
       if (!response.ok) {
         if (response.status === 401) {
-          window.location.href = `${API_URL}/login`;
+          // MATLAB/Octave code execution is chillin'—practice mode means skipping auth.
+          console.warn('Not logged in, skipping MATLAB/Octave execution.');
           return null;
         }
         throw new Error('Failed to run MATLAB/Octave code');
@@ -176,9 +182,10 @@ const API = {
   handleError: (error, redirectOnAuth = true) => {
     console.error('API Error:', error);
     
+    // In practice mode, we don't force the user to login on auth errors.
     if (error.status === 401 && redirectOnAuth) {
-      // Redirect to login page
-      window.location.href = `${API_URL}/login`;
+      // Commented out the login redirect for our chill practice session.
+      // window.location.href = `${API_URL}/login`;
     }
     
     return {

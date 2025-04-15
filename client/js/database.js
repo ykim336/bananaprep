@@ -38,10 +38,10 @@ function initializePageData() {
   // Update user account section
   Auth.updateUserAccountSection();
   
-  // Show/hide user profile section based on login status
+  // Toggle user profile based on login status; for practice mode, this might just stay hidden
   toggleUserProfileVisibility();
   
-  // Load problems and user data
+  // Load problems and (if logged in) user data
   loadProblems();
 }
 
@@ -86,10 +86,14 @@ function setupEventListeners() {
     });
   });
   
-  // Refresh stats button
+  // Refresh stats button—if you're not logged in, chill out, no stats available
   const refreshStatsBtn = document.getElementById('refreshStatsBtn');
   if (refreshStatsBtn) {
     refreshStatsBtn.addEventListener('click', () => {
+      if (!Auth.isLoggedIn()) {
+        console.info("Practice mode: You're not logged in, so no stats are available.");
+        return;
+      }
       loadUserStats();
       loadUserProgress();
     });
@@ -97,11 +101,13 @@ function setupEventListeners() {
 }
 
 /**
- * Show/hide user profile section based on login status
+ * Show/hide user profile section based on login status.
+ * In practice mode, we keep it low-key and avoid nagging prompts.
  */
 function toggleUserProfileVisibility() {
   const userProfile = document.getElementById('userProfile');
   if (userProfile) {
+    // You can tweak this if you want to show a "Practice Mode" message instead.
     userProfile.style.display = Auth.isLoggedIn() ? 'block' : 'none';
   }
 }
@@ -121,10 +127,12 @@ async function loadProblems() {
     renderTable(problemsData);
     populateTagFilters(problemsData);
     
-    // After problems are loaded, load user progress if logged in
+    // After problems are loaded, load user progress/stats only if logged in
     if (Auth.isLoggedIn()) {
       await loadUserProgress();
       await loadUserStats();
+    } else {
+      console.info("Practice mode: Skipping user stats/progress load (anonymous session).");
     }
   } catch (error) {
     console.error('Failed to load problems:', error);
@@ -136,10 +144,14 @@ async function loadProblems() {
 }
 
 /**
- * Load user progress for all problems
+ * Load user progress for all problems.
+ * In practice mode, we skip this since no account = no persistent progress.
  */
 async function loadUserProgress() {
-  if (!Auth.isLoggedIn()) return;
+  if (!Auth.isLoggedIn()) {
+    console.info("Practice mode: No user progress to load—fly solo, coder.");
+    return;
+  }
   
   try {
     const progressData = await API.progress.getAll();
@@ -160,10 +172,14 @@ async function loadUserProgress() {
 }
 
 /**
- * Load user stats from API
+ * Load user stats from API.
+ * In practice mode, anonymous users won’t have stats—so chill out.
  */
 async function loadUserStats() {
-  if (!Auth.isLoggedIn()) return;
+  if (!Auth.isLoggedIn()) {
+    console.info("Practice mode: Stats are only for signed-in users. Keep grinding!");
+    return;
+  }
   
   try {
     const stats = await API.user.getStats();
@@ -209,7 +225,7 @@ function updateProgressBar(stats) {
 }
 
 /**
- * Refresh user data without reloading problems
+ * Refresh user data without reloading problems.
  */
 function refreshUserData() {
   if (Auth.isLoggedIn()) {
@@ -218,10 +234,6 @@ function refreshUserData() {
   }
 }
 
-/**
- * Render table with provided data
- * @param {Array} data - Array of problem objects
- */
 /**
  * Render table with provided data
  * @param {Array} data - Array of problem objects
@@ -314,9 +326,9 @@ function filterProblems(data) {
     
     // Filter by search text
     if (currentFilters.search && !(
-      problem.title?.toLowerCase().includes(currentFilters.search.toLowerCase()) ||
-      problem.tags?.toLowerCase().includes(currentFilters.search.toLowerCase()) ||
-      problem.concept?.toLowerCase().includes(currentFilters.search.toLowerCase())
+      problem.title?.toLowerCase().includes(currentFilters.search) ||
+      problem.tags?.toLowerCase().includes(currentFilters.search) ||
+      problem.concept?.toLowerCase().includes(currentFilters.search)
     )) {
       return false;
     }

@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // Load the problem data from the API
   loadProblem();
   
-  // Check and update authentication status
+  // Check and update authentication status (practice mode means no forced login)
   checkAuthStatus();
 });
 
@@ -94,16 +94,13 @@ function getQueryParam(param) {
 
 /**
  * Check authentication status and update the UI accordingly.
+ * In practice mode, we don't force you to log in. Keep it breezy.
  */
 function checkAuthStatus() {
   const authPrompt = document.getElementById('authPrompt');
-  if (!Auth.isLoggedIn()) {
-    if (authPrompt) authPrompt.style.display = 'block';
-    return false;
-  } else {
-    if (authPrompt) authPrompt.style.display = 'none';
-    return true;
-  }
+  // Regardless of login status, hide the auth prompt—practice mode is in full effect.
+  if (authPrompt) authPrompt.style.display = 'none';
+  return Auth.isLoggedIn();
 }
 
 /**
@@ -248,7 +245,7 @@ function displayProblemImage(imagePath, problemTitle) {
     const fullImagePath = `images/problems/${imagePath}`;
     imageContainer.innerHTML = `
       <img src="${fullImagePath}" alt="${problemTitle} illustration"
-           onerror="this.onerror=null; this.parentNode.innerHTML='<div class=\\'image-placeholder\\'><i>📷</i><p>Image not available</p></div>';"
+           onerror="this.onerror=null; this.parentNode.innerHTML='<div class=\\'image-placeholder\\'><p>Image not available</p></div>';"
            style="max-width: 100%; border: 1px solid var(--border-color);">
       <figcaption>Illustration for ${problemTitle}</figcaption>
     `;
@@ -264,8 +261,10 @@ function displayProblemImage(imagePath, problemTitle) {
 
 /**
  * Load user progress for this problem.
+ * In practice mode, we won't load saved progress because, well, you're flying solo.
  */
 async function loadUserProgress() {
+  // If you're not logged in, skip progress loading—practice mode FTW.
   if (!Auth.isLoggedIn()) return;
   
   const problemId = getQueryParam('id') || '0';
@@ -299,17 +298,20 @@ async function loadUserProgress() {
 
 /**
  * Save user progress.
+ * In practice mode, progress isn't sent to the backend—you just vibe through the session.
  * @param {string} status - Problem status.
  * @param {string} solutionCode - User's solution code.
- * @returns {boolean} - Whether progress was saved successfully.
+ * @returns {boolean} - Whether progress was "saved" successfully.
  */
 async function saveUserProgress(status, solutionCode) {
-  if (!Auth.isLoggedIn()) {
-    showError('Please sign in to save your progress');
-    return false;
-  }
-  
   const problemId = getQueryParam('id') || '0';
+  
+  // If not logged in, simulate progress update without backend interaction.
+  if (!Auth.isLoggedIn()) {
+    updateProblemStatus(status);
+    console.info('Practice mode: progress not persisted, but you can still practice like a champ.');
+    return true;
+  }
   
   try {
     await API.progress.update(parseInt(problemId), status, solutionCode);
@@ -338,12 +340,14 @@ async function runMatlabCode() {
   }
   
   try {
+    // Conditionally add the Authorization header only if you're logged in.
+    const headers = { 'Content-Type': 'application/json' };
+    if (Auth.isLoggedIn()) {
+      headers['Authorization'] = `Bearer ${Auth.getToken()}`;
+    }
     const response = await fetch(`${API_URL}/run-octave`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${Auth.getToken()}`
-      },
+      headers: headers,
       body: JSON.stringify({ code, input })
     });
     
@@ -367,7 +371,6 @@ async function runMatlabCode() {
     toggleRunLoading(false);
   }
 }
-
 
 /**
  * Simulate MATLAB execution (for demo purposes only).
@@ -457,7 +460,7 @@ async function loadProblem() {
     updateExamples(currentProblem);
     updateConstraints(currentProblem);
     
-    // Load the user's progress for the problem
+    // Load the user's progress for the problem (only if logged in)
     loadUserProgress();
     
   } catch (error) {
