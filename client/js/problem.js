@@ -80,6 +80,24 @@ function setupEventListeners() {
   } else {
     console.error("Submit button not found in the DOM!");
   }
+
+  // Clear terminal button
+  const clearTerminalBtn = document.getElementById('clearTerminal');
+  if (clearTerminalBtn) {
+    clearTerminalBtn.addEventListener('click', function() {
+      clearTerminal();
+    });
+  } else {
+    console.error("Clear terminal button not found in the DOM!");
+  }
+}
+function clearTerminal() {
+  const terminalOutput = document.getElementById('terminalOutput');
+  if (terminalOutput) {
+    terminalOutput.innerHTML = 'Run your code to see the output here.';
+  } else {
+    console.error("Terminal output element not found!");
+  }
 }
 
 /**
