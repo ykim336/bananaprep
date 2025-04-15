@@ -1,3 +1,4 @@
+<!-- client/database.html (Updated) -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,6 +7,7 @@
   <title>BananaPrep - Problem Database</title>
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/database.css">
+  <link rel="stylesheet" href="css/font.css" />
 </head>
 <body>
   <!-- Sticky Header with Logo -->
@@ -41,7 +43,7 @@
           </div>
         </div>
         <div class="filter-dropdown">
-          <button class="nav-btn">Tags</button>
+          <button class="nav-btn">Topics</button>
           <div class="dropdown-content" id="tagFilters">
             <!-- Tags will be populated dynamically -->
           </div>
@@ -69,48 +71,6 @@
             <!-- Dynamically populated rows go here -->
           </tbody>
         </table>
-      </div>
-    </div>
-    
-    <!-- RIGHT SIDEBAR -->
-    <div class="right-sidebar">
-      <!-- User Profile (only shown when logged in) -->
-      <div class="user-profile" id="userProfile" style="display: none;">
-        <h3>
-          Your Progress 
-          <span class="refresh-btn" id="refreshStatsBtn" style="cursor: pointer; font-size: 0.8rem; color: #f39c12;">↻</span>
-        </h3>
-        <div class="progress-bar">
-          <div class="progress-bar-fill" id="progressBarFill" style="width: 0%"></div>
-        </div>
-        <div class="completion-text" id="completionText">0%</div>
-      </div>
-      
-      <div class="session-stats">
-        <h3>Problems Solved</h3>
-        <div class="stats-grid">
-          <div class="stats-item">
-            <div class="number" id="easySolved">0</div>
-            <div>Easy</div>
-          </div>
-          <div class="stats-item">
-            <div class="number" id="mediumSolved">0</div>
-            <div>Medium</div>
-          </div>
-          <div class="stats-item">
-            <div class="number" id="hardSolved">0</div>
-            <div>Hard</div>
-          </div>
-        </div>
-      </div>
-      
-      <div class="company-tags">
-        <span class="company-tag">Circuits</span>
-        <span class="company-tag">Signal Processing</span>
-        <span class="company-tag">Power</span>
-        <span class="company-tag">Digital</span>
-        <span class="company-tag">Electronics</span>
-        <span class="company-tag">Control Systems</span>
       </div>
     </div>
   </div>
