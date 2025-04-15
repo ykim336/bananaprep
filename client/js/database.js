@@ -319,9 +319,13 @@ function filterProblems(data) {
       return false;
     }
     
-    // Filter by tag
-    if (currentFilters.tag !== 'all' && !(problem.tags?.toLowerCase().includes(currentFilters.tag.toLowerCase()))) {
-      return false;
+    // Filter by tag - updated for exact tag matches with BananaPrep custom tags
+    if (currentFilters.tag && currentFilters.tag !== 'all') {
+      // For BananaPrep's format where tags are stored as comma-separated string
+      const problemTags = problem.tags ? problem.tags.split(',').map(tag => tag.trim()) : [];
+      if (!problemTags.some(tag => tag === currentFilters.tag)) {
+        return false;
+      }
     }
     
     // Filter by search text
@@ -382,5 +386,74 @@ function populateTagFilters(problems) {
       renderTable(filterProblems(problemsData));
     });
     tagFiltersContainer.appendChild(tagLink);
+  });
+}
+
+/**
+ * Function to highlight the selected tag in the tag list
+ * Add this to database.js
+ */
+function highlightSelectedTag(tagName) {
+  const allTags = document.querySelectorAll('#allTagsList a');
+  
+  allTags.forEach(tag => {
+    if (tag.getAttribute('data-tag') === tagName) {
+      tag.classList.add('active');
+    } else {
+      tag.classList.remove('active');
+    }
+  });
+}
+
+/**
+ * Function to set up event listeners for tag clicks
+ * Add this or update existing setupTagListeners function
+ */
+function setupTagListeners() {
+  const allTags = document.querySelectorAll('#allTagsList a');
+  
+  allTags.forEach(tag => {
+    tag.addEventListener('click', function(e) {
+      e.preventDefault();
+      const tagName = this.getAttribute('data-tag');
+      
+      // Update the current tag filter
+      currentFilters.tag = tagName;
+      
+      // Highlight the selected tag
+      highlightSelectedTag(tagName);
+      
+      // Apply the filter and render the table
+      renderTable(filterProblems(problemsData));
+    });
+  });
+}
+
+/**
+ * Add this to the document ready function in database.js
+ * or to the initialization code
+ */
+// Inside the DOMContentLoaded event listener:
+setupTagListeners();
+
+// Add an "All Tags" option if not already there
+const allTagsList = document.getElementById('allTagsList');
+if (!document.querySelector('#allTagsList a[data-tag="all"]')) {
+  const allTagsOption = document.createElement('a');
+  allTagsOption.href = '#';
+  allTagsOption.setAttribute('data-tag', 'all');
+  allTagsOption.innerHTML = 'All Tags';
+  allTagsOption.classList.add('all-tags-option');
+  allTagsList.prepend(allTagsOption);
+  
+  // Select "All Tags" by default
+  allTagsOption.classList.add('active');
+  
+  // Add event listener
+  allTagsOption.addEventListener('click', function(e) {
+    e.preventDefault();
+    currentFilters.tag = 'all';
+    highlightSelectedTag('all');
+    renderTable(filterProblems(problemsData));
   });
 }
