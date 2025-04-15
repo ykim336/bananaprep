@@ -7,7 +7,8 @@
     "solution": "The two resistors are in parallel, so use the formula I = V/R. Calculate the equivalent resistance first if needed. R_eq = (R1 * R2) / (R1 + R2). Then, I = V/R_eq.",
     "image": "ohms-law.png",
     "answer": "2",
-    "difficulty": "easy"
+    "difficulty": "easy",
+    "starter_code": "function calculateCurrent(voltage, resistance)\n  % Calculate the current using Ohm's Law\n  % I = V/R\n  \n  % Your code here\n  \n  % Return the current\nend"
   },
   {
     "title": "Kirchhoff's Voltage Law",
@@ -17,7 +18,8 @@
     "solution": "Apply Kirchhoff's Voltage Law: the sum of the voltage gains equals the sum of the voltage drops in a closed loop.",
     "image": "kirchhoff-voltage.png",
     "answer": "8",
-    "difficulty": "medium"
+    "difficulty": "medium",
+    "starter_code": "function calculateVoltage(source_voltage, resistors)\n  % Calculate the voltage across the specified resistor\n  % using Kirchhoff's Voltage Law\n  \n  % Your code here\n  \n  % Return the voltage across the second resistor\nend"
   },
   {
     "title": "Resistor Network Equivalent",
@@ -27,7 +29,8 @@
     "solution": "For resistors in series, add them directly. For parallel, use 1/Req = 1/R1 + 1/R2 + ... and then take the reciprocal.",
     "image": "resistor-network.png",
     "answer": "10",
-    "difficulty": "medium"
+    "difficulty": "medium",
+    "starter_code": "function calculateEquivalentResistance(series_resistors, parallel_resistors)\n  % Calculate the equivalent resistance\n  % For resistors in series: R_total = R1 + R2 + ...\n  % For resistors in parallel: 1/R_total = 1/R1 + 1/R2 + ...\n  \n  % Your code here\n  \n  % Return the equivalent resistance\nend"
   },
   {
     "title": "AC Circuit Impedance",

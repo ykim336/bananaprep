@@ -80,6 +80,24 @@ function setupEventListeners() {
   } else {
     console.error("Submit button not found in the DOM!");
   }
+
+  // Clear terminal button
+  const clearTerminalBtn = document.getElementById('clearTerminal');
+  if (clearTerminalBtn) {
+    clearTerminalBtn.addEventListener('click', function() {
+      clearTerminal();
+    });
+  } else {
+    console.error("Clear terminal button not found in the DOM!");
+  }
+}
+function clearTerminal() {
+  const terminalOutput = document.getElementById('terminalOutput');
+  if (terminalOutput) {
+    terminalOutput.innerHTML = 'Run your code to see the output here.';
+  } else {
+    console.error("Terminal output element not found!");
+  }
 }
 
 /**
@@ -489,6 +507,9 @@ async function loadProblem() {
     updateExamples(currentProblem);
     updateConstraints(currentProblem);
     
+    // Load the starter code if available
+    loadStarterCode(currentProblem);
+    
     // Load the user's progress for the problem (only if logged in)
     loadUserProgress();
     
@@ -498,6 +519,20 @@ async function loadProblem() {
     const problemDescriptionEl = document.getElementById('problemDescription');
     if (problemTitleEl) problemTitleEl.textContent = 'Error loading problem';
     if (problemDescriptionEl) problemDescriptionEl.textContent = error.message;
+  }
+}
+
+function loadStarterCode(problem) {
+  const editor = ace.edit('codeEditor');
+  
+  // Check if the problem has starter code
+  if (problem.starter_code) {
+    // Set the editor content to the starter code
+    editor.setValue(problem.starter_code, -1); // -1 moves cursor to start
+  } else {
+    // If no starter code is available, provide a generic template
+    const genericTemplate = `% Write your solution for "${problem.title}" here\n\nfunction res = solution()\n  % Your code here\n\nend`;
+    editor.setValue(genericTemplate, -1);
   }
 }
 
