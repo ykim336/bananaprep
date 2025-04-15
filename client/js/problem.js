@@ -334,9 +334,9 @@ async function runMatlabCode() {
   const input = prompt("Enter input for your MATLAB function (optional):");
   
   toggleRunLoading(true);
-  const matlabOutput = document.getElementById('matlabOutput');
+  const matlabOutput = document.getElementById("terminalOutput");
   if (matlabOutput) {
-    matlabOutput.textContent = 'Running MATLAB code...';
+    matlabOutput.innerHTML = 'Running MATLAB code...\n';
   }
   
   try {
@@ -362,7 +362,7 @@ async function runMatlabCode() {
     if (matlabOutput) {
       if (result.success) {
         // Display text output
-        matlabOutput.textContent = result.output || 'No output generated.';
+        matlabOutput.innerHTML += result.output + '\n' || 'No output generated.\n';
         
         // If there's an image, display it below the text output
         if (result.hasImage && result.imageData) {
@@ -381,8 +381,11 @@ async function runMatlabCode() {
         }
       } else {
         // Display error in the terminal
-        matlabOutput.textContent = `Error: ${result.output || 'Execution failed'}`;
+        matlabOutput.innerHTML += `<span style="color: #ff5555;">Error: ${result.output || 'Execution failed'}</span>\n`;
       }
+      
+      // Ensure we scroll to the bottom to see the latest output
+      matlabOutput.scrollTop = matlabOutput.scrollHeight;
     }
     
     // Save progress as "attempted"
@@ -390,7 +393,8 @@ async function runMatlabCode() {
   } catch (error) {
     console.error("Error running MATLAB code:", error);
     if (matlabOutput) {
-      matlabOutput.textContent = `Error: ${error.message || 'Failed to run code'}`;
+      matlabOutput.innerHTML += `<span style="color: #ff5555;">Error: ${error.message || 'Failed to run code'}</span>\n`;
+      matlabOutput.scrollTop = matlabOutput.scrollHeight;
     }
   } finally {
     toggleRunLoading(false);

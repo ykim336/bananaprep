@@ -397,6 +397,65 @@
       overflow: auto;
     }
 
+    /* NEW: Terminal output section */
+    .terminal-section {
+      background-color: var(--bg-dark);
+      border-top: 1px solid var(--border-color);
+      padding: 0;
+      height: 200px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .terminal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.4rem 0.8rem;
+      background-color: #222;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .terminal-title {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .terminal-content {
+      overflow-y: auto;
+      padding: 0.8rem;
+      font-family: var(--code-font);
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: var(--text-light);
+      height: 100%;
+      background-color: #1a1a1a;
+      white-space: pre-wrap;
+    }
+
+    /* Terminal resize handle */
+    .resize-handle-vertical {
+      width: 100%;
+      height: 6px;
+      cursor: ns-resize;
+      background-color: var(--bg-medium);
+      border-top: 1px solid var(--border-color);
+      border-bottom: 1px solid var(--border-color);
+      position: absolute;
+      top: -3px;
+      left: 0;
+      z-index: 10;
+    }
+
+    .resize-handle-vertical:hover {
+      background-color: var(--accent-yellow);
+    }
+
     /* Line numbers and syntax highlighting */
     .line-numbers {
       position: absolute;
@@ -501,6 +560,8 @@
       bottom: 0;
       left: 0;
       font-family: "Source Code Pro", monospace !important;
+      height: calc(100%);
+      /* Adjusted height to account for terminal */
     }
 
     /* Set font for the Ace editor specifically */
@@ -533,8 +594,9 @@
   <!-- Header with navigation and action buttons -->
   <header>
     <div class="header-left">
-      <a href="home.html">
-        <img src="images/bananaprep_logo.png" alt="BananaPrep Logo" class="logo-image top-nav" />
+      <a href="index.html">
+        <img src="images/bananaprep_logo.png" alt="BananaPrep Logo" class="logo-image top-nav"
+          onerror="this.style.display='none'; this.parentNode.innerHTML='BananaPrep';" />
       </a>
       <a href="database.html" class="problem-list-btn">
         <span>☰ Problem List</span>
@@ -642,9 +704,26 @@
         </div>
       </div>
 
+      <!-- Code container with editor -->
       <div class="code-container">
         <!-- Custom code editor display that resembles the image -->
         <div id="codeEditor" class="code-editor"></div>
+      </div>
+
+      <!-- NEW: Terminal output section with resize handle -->
+      <div class="terminal-section" id="terminalSection">
+        <div class="resize-handle-vertical" id="verticalResizeHandle"></div>
+        <div class="terminal-header">
+          <div class="terminal-title">
+            <i class="fas fa-terminal"></i>
+            <span>Output</span>
+          </div>
+          <div class="terminal-actions">
+            <i class="fas fa-trash-alt" id="clearTerminal" title="Clear Terminal"
+              style="cursor: pointer; font-size: 0.9rem; color: #aaa;"></i>
+          </div>
+        </div>
+        <div class="terminal-content" id="terminalOutput">Run your code to see the output here.</div>
       </div>
     </div>
   </main>
@@ -755,10 +834,8 @@
         }
       }
 
-      // Vertical resize functionality
-      const verticalResizeHandle = document.getElementById(
-        "verticalResizeHandle"
-      );
+      // NEW: Vertical resize functionality for terminal
+      const verticalResizeHandle = document.getElementById("verticalResizeHandle");
       if (verticalResizeHandle) {
         verticalResizeHandle.addEventListener("mousedown", function (e) {
           e.preventDefault();
@@ -767,89 +844,174 @@
         });
       }
 
+      function resizeVertical(e) {
+        const editorSection = document.querySelector(".editor-section");
+        const terminalSection = document.getElementById("terminalSection");
+        if (!editorSection || !terminalSection) return;
+
+        const editorRect = editorSection.getBoundingClientRect();
+        const offsetY = e.clientY - editorRect.top;
+        const editorHeight = editorSection.clientHeight;
+
+        // Calculate new terminal height (from bottom of editor section)
+        const newTerminalHeight = editorHeight - offsetY;
+
+        // Set minimum and maximum heights
+        if (newTerminalHeight >= 50 && newTerminalHeight <= editorHeight - 100) {
+          terminalSection.style.height = newTerminalHeight + "px";
+        }
+      }
+
       function stopResize() {
         document.removeEventListener("mousemove", resizeHorizontal);
         document.removeEventListener("mousemove", resizeVertical);
       }
 
-      // --- NEW: Problem Loading Mechanism ---
-      // Display error on the problem content area
-      function displayError(title, error) {
-        const problemContent = document.getElementById("problemContent");
-        problemContent.innerHTML = `
-            <h3 style="color: red;">${title}</h3>
-            <p style="color: red;">${error.message}</p>
-            <pre>${error.stack}</pre>
-          `;
+      // NEW: Clear terminal functionality
+      const clearTerminalBtn = document.getElementById("clearTerminal");
+      if (clearTerminalBtn) {
+        clearTerminalBtn.addEventListener("click", function () {
+          const terminalOutput = document.getElementById("terminalOutput");
+          if (terminalOutput) {
+            terminalOutput.innerHTML = "Terminal cleared... Ready for new output.";
+          }
+        });
       }
 
-      // Update the UI with problem details
-      function updateProblemUI(problem) {
-        document.getElementById("problemTitle").textContent =
-          problem.title || "Untitled Problem";
-        document.getElementById("problemDescription").innerHTML =
-          problem.description || "No description available.";
-        document.getElementById("difficultyTag").textContent =
-          problem.difficulty || "Easy";
-
-        // Update examples
-        const problemExamples =
-          document.getElementById("problemExamples");
-        problemExamples.innerHTML = "";
-        if (Array.isArray(problem.examples)) {
-          problem.examples.forEach((example) => {
-            const exDiv = document.createElement("div");
-            exDiv.className = "example";
-            exDiv.innerHTML = `
-                <div class="example-row">
-                  <div class="example-label"><strong>Input:</strong> ${example.input}</div>
-                  <div class="example-label"><strong>Output:</strong> ${example.output}</div>
-                </div>
-              `;
-            problemExamples.appendChild(exDiv);
-          });
+      // NEW: Update problem.js to be aware of the terminal
+      // This will serve as a temporary connection point between our existing code
+      // and the new terminal functionality
+      window.terminalOutput = function (text, isError = false) {
+        const terminal = document.getElementById("terminalOutput");
+        if (terminal) {
+          const newLine = document.createElement("div");
+          newLine.innerHTML = isError ?
+            `<span style="color: #ff5555;">${text}</span>` : text;
+          terminal.appendChild(newLine);
+          terminal.scrollTop = terminal.scrollHeight; // Auto-scroll to bottom
         } else {
-          problemExamples.innerHTML = "<p>No examples available.</p>";
+          console.error("Terminal output element not found");
         }
-
-        // Update constraints
-        const constraintsList = document.getElementById("problemConstraints");
-        constraintsList.innerHTML = "";
-        if (Array.isArray(problem.constraints)) {
-          problem.constraints.forEach((constraint) => {
-            const li = document.createElement("li");
-            li.textContent = constraint;
-            constraintsList.appendChild(li);
-          });
-        } else {
-          constraintsList.innerHTML = "<li>No constraints provided.</li>";
-        }
-
-        // Update image if available
-        const imageContainer = document.getElementById(
-          "problemImageContainer"
-        );
-        imageContainer.innerHTML = "";
-        // if (problem.image) {
-        //   const img = document.createElement("img");
-        //   img.src = problem.image;
-        //   img.alt = problem.title;
-        //   imageContainer.appendChild(img);
-        // }
-      }
+      };
 
       const runBtn = document.getElementById("runBtn");
+
 
       if (runBtn) {
         runBtn.addEventListener("click", function () {
           console.log("Run button clicked!");
-          // Defensive check: is the code editor even loaded?
-          const codeEditor = document.getElementById("codeEditor");
-          let code = "your code here";
-          const simulatedOutput = `Output: ${code ? "Hello, World!" : "No code provided"}`;
+          // Show spinner
+          const runSpinner = document.getElementById("runSpinner");
+          if (runSpinner) runSpinner.style.display = "block";
+
+          // Get code from editor and run
+          const editor = ace.edit("codeEditor");
+          const code = editor.getValue();
+
+          // Get terminal output element
+          const terminalOutput = document.getElementById("terminalOutput");
+          if (terminalOutput) {
+            terminalOutput.innerHTML = "Running code...\n";
+
+            // Simulate backend call (in production, this would make an API call)
+            setTimeout(() => {
+              try {
+                // In a real implementation, this would call your /api/run-octave endpoint
+                // For now, we'll simulate the output
+                let result;
+
+                if (code.includes("error") || code.includes("throw")) {
+                  // Simulate an error
+                  terminalOutput.innerHTML += `<span style="color: #ff5555;">Error: The code contains an error in line ${Math.floor(Math.random() * 10) + 1}.</span>\n`;
+                } else if (code.trim() === "") {
+                  terminalOutput.innerHTML += "No code provided. Please write some MATLAB/Octave code to run.\n";
+                } else {
+                  // Simple simulation of MATLAB/Octave output
+                  terminalOutput.innerHTML += `>> ${code.split('\n')[0]}\n`;
+
+                  // Check for common MATLAB functions and provide simulated output
+                  if (code.includes("plot")) {
+                    terminalOutput.innerHTML += "[Plot generated. View in separate window.]\n";
+                  } else if (code.includes("disp")) {
+                    const dispMatch = code.match(/disp\(['"](.+)['"]\)/);
+                    if (dispMatch && dispMatch[1]) {
+                      terminalOutput.innerHTML += `${dispMatch[1]}\n`;
+                    } else {
+                      terminalOutput.innerHTML += "ans = \n    5\n";
+                    }
+                  } else if (code.includes("=")) {
+                    const varName = code.split("=")[0].trim();
+                    terminalOutput.innerHTML += `${varName} = \n    42\n`;
+                  } else {
+                    terminalOutput.innerHTML += "ans = \n    [1x1 double]\n";
+                  }
+
+                  terminalOutput.innerHTML += "\nExecution completed successfully.\n";
+                }
+              } catch (e) {
+                terminalOutput.innerHTML += `<span style="color: #ff5555;">Runtime Error: ${e.message}</span>\n`;
+              } finally {
+                // Hide spinner when done
+                if (runSpinner) runSpinner.style.display = "none";
+              }
+            }, 800); // Simulate backend processing time
+          }
         });
       } else {
         console.error("Run button or output element not found. Check your DOM!");
+      }
+
+      // Create or update a sample MATLAB/Octave code for the initial setup
+      function setupDefaultCode(problem) {
+        const editor = ace.edit("codeEditor");
+
+        // For circuit problems (commonly found in engineering problems)
+        if (problem.tags && problem.tags.includes("Circuits")) {
+          editor.setValue(
+            `% Calculate current using Ohm's Law
+V = 10;      % Voltage in volts
+R = 5;       % Resistance in ohms
+I = V / R;   % Current in amperes
+
+% Display the current
+disp(['The current is ', num2str(I), ' amperes']);`
+          );
+        }
+        // For signal processing problems
+        else if (problem.tags && problem.tags.includes("Signal Processing")) {
+          editor.setValue(
+            `% Signal processing example for Fourier series
+t = linspace(0, 2*pi, 1000);  % Time vector
+y = zeros(size(t));           % Initialize signal
+
+% Create a square wave with first 5 harmonics
+for k = 1:2:9
+    y = y + (4/pi) * (1/k) * sin(k*t);
+end
+
+% Plot the results
+figure;
+plot(t, y);
+title('Square Wave Approximation');
+xlabel('Time');
+ylabel('Amplitude');`
+          );
+        }
+        // Default code for other problems
+        else {
+          editor.setValue(
+            `% Enter your MATLAB/Octave code here
+% Example:
+a = 5;
+b = 10;
+result = a + b;
+
+% Display the result
+disp(['The result is ', num2str(result)]);`
+          );
+        }
+
+        editor.clearSelection();
       }
 
       // Load problem details with fallback
@@ -871,6 +1033,7 @@
           }
           const problem = problems[problemId];
           updateProblemUI(problem);
+          setupDefaultCode(problem);
         } catch (error) {
           console.error(
             "Error loading problem details from primary source:",
@@ -891,6 +1054,7 @@
             }
             const problem = altProblems[problemId];
             updateProblemUI(problem);
+            setupDefaultCode(problem);
           } catch (altError) {
             console.error(
               "Error loading problem details from both sources:",
@@ -904,11 +1068,156 @@
         }
       }
 
+      // Update the UI with problem details
+      function updateProblemUI(problem) {
+        document.getElementById("problemTitle").textContent =
+          problem.title || "Untitled Problem";
+        document.getElementById("problemDescription").innerHTML =
+          problem.description || "No description available.";
+        document.getElementById("difficultyTag").textContent =
+          problem.difficulty || "Easy";
+
+        // Add appropriate class to difficulty tag
+        const difficultyTag = document.getElementById("difficultyTag");
+        difficultyTag.className = "difficulty-tag";
+        if (problem.difficulty) {
+          difficultyTag.classList.add(problem.difficulty.toLowerCase());
+        }
+
+        // Update examples
+        const problemExamples = document.getElementById("problemExamples");
+        problemExamples.innerHTML = "";
+        if (Array.isArray(problem.examples)) {
+          problem.examples.forEach((example) => {
+            const exDiv = document.createElement("div");
+            exDiv.className = "example";
+            exDiv.innerHTML = `
+          <div class="example-row">
+            <div class="example-label"><strong>Input:</strong> ${example.input}</div>
+            <div class="example-label"><strong>Output:</strong> ${example.output}</div>
+          </div>
+        `;
+            problemExamples.appendChild(exDiv);
+          });
+        } else {
+          problemExamples.innerHTML = "<p>No examples available.</p>";
+        }
+
+        // Update constraints
+        const constraintsList = document.getElementById("problemConstraints");
+        constraintsList.innerHTML = "";
+        if (Array.isArray(problem.constraints)) {
+          problem.constraints.forEach((constraint) => {
+            const li = document.createElement("li");
+            li.textContent = constraint;
+            constraintsList.appendChild(li);
+          });
+        } else {
+          constraintsList.innerHTML = "<li>No constraints provided.</li>";
+        }
+
+        // Update image if available
+        const imageContainer = document.getElementById("problemImageContainer");
+        imageContainer.innerHTML = "";
+        if (problem.image) {
+          const img = document.createElement("img");
+          img.src = `images/problems/${problem.image}`;
+          img.alt = problem.title;
+          img.onerror = function () {
+            this.onerror = null;
+            this.parentNode.innerHTML = '<div style="padding: 1rem; background: #333; border-radius: 4px; text-align: center;"><i class="fas fa-image" style="font-size: 2rem; color: #666;"></i><p style="margin-top: 0.5rem;">Image not available</p></div>';
+          };
+          imageContainer.appendChild(img);
+        }
+      }
+
+      // Display error on the problem content area
+      function displayError(title, error) {
+        const problemContent = document.getElementById("problemContent");
+        problemContent.innerHTML = `
+      <h3 style="color: red;">${title}</h3>
+      <p style="color: red;">${error.message}</p>
+      <pre>${error.stack}</pre>
+    `;
+      }
+
       // Trigger loading of the problem details
       loadProblemDetails();
-      // --- End of Problem Loading Mechanism ---
-    });
-  </script>
-</body>
 
-</html>
+      // Update the run MATLAB code function in problem.js to use the terminal
+      async function runMatlabCode() {
+        const editor = ace.edit("codeEditor");
+        const code = editor.getValue();
+
+        // Optional: get user input
+        const input = prompt("Enter input for your MATLAB function (optional):");
+
+        toggleRunLoading(true);
+        const matlabOutput = document.getElementById("terminalOutput");
+        if (matlabOutput) {
+          matlabOutput.innerHTML = 'Running MATLAB code...\n';
+        }
+
+        try {
+          // Conditionally add the Authorization header only if you're logged in.
+          const headers = { 'Content-Type': 'application/json' };
+          if (Auth.isLoggedIn()) {
+            headers['Authorization'] = `Bearer ${Auth.getToken()}`;
+          }
+
+          // Make API call to run Octave code
+          const response = await fetch(`${API_URL}/run-octave`, {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify({ code, input })
+          });
+
+          const result = await response.json();
+
+          // Output the full response to the console for debugging
+          console.log("Response from Octave:", result);
+
+          // Update terminal with the execution output
+          if (matlabOutput) {
+            if (result.success) {
+              // Display text output
+              matlabOutput.innerHTML += result.output + '\n' || 'No output generated.\n';
+
+              // If there's an image, display it below the text output
+              if (result.hasImage && result.imageData) {
+                const imageElement = document.createElement('img');
+                imageElement.src = result.imageData;
+                imageElement.alt = 'Generated Plot';
+                imageElement.style.maxWidth = '100%';
+                imageElement.style.marginTop = '10px';
+
+                // Clear previous images first
+                const existingImages = matlabOutput.querySelectorAll('img');
+                existingImages.forEach(img => img.remove());
+
+                // Append the new image
+                matlabOutput.appendChild(imageElement);
+              }
+            } else {
+              // Display error in the terminal
+              matlabOutput.innerHTML += `<span style="color: #ff5555;">Error: ${result.output || 'Execution failed'}</span>\n`;
+            }
+
+            // Ensure we scroll to the bottom to see the latest output
+            matlabOutput.scrollTop = matlabOutput.scrollHeight;
+          }
+
+          // Save progress as "attempted"
+          await saveUserProgress('attempted', code);
+        } catch (error) {
+          console.error("Error running MATLAB code:", error);
+          if (matlabOutput) {
+            matlabOutput.innerHTML += `<span style="color: #ff5555;">Error: ${error.message || 'Failed to run code'}</span>\n`;
+            matlabOutput.scrollTop = matlabOutput.scrollHeight;
+          }
+        } finally {
+          toggleRunLoading(false);
+        }
+      }
+    }
+    );
