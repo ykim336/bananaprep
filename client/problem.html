@@ -393,8 +393,8 @@
 
     .code-editor {
       flex: 1;
-      overflow: hidden;
       position: relative;
+      overflow: auto;
     }
 
     /* Line numbers and syntax highlighting */
@@ -432,22 +432,6 @@
       line-height: 1.5rem;
     }
 
-    /* Terminal styles */
-    .terminal-container {
-      height: 100px;
-      background-color: var(--bg-dark);
-      border-top: 1px solid var(--border-color);
-    }
-
-    .terminal-body {
-      padding: 1rem;
-      font-family: var(--code-font);
-      font-size: 0.95rem;
-      color: var(--text-light);
-      height: calc(100% - 2rem);
-      overflow-y: auto;
-    }
-
     /* Resize handles */
     .resize-handle-horizontal {
       position: absolute;
@@ -456,16 +440,6 @@
       right: -5px;
       width: 10px;
       cursor: col-resize;
-      z-index: 5;
-    }
-
-    .resize-handle-vertical {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      height: 10px;
-      cursor: row-resize;
       z-index: 5;
     }
 
@@ -524,7 +498,7 @@
       position: absolute;
       top: 0;
       right: 0;
-      bottom: 100px;
+      bottom: 0;
       left: 0;
       font-family: "Source Code Pro", monospace !important;
     }
@@ -655,7 +629,7 @@
       <div class="resize-handle-horizontal" id="horizontalResizeHandle"></div>
     </div>
 
-    <!-- Right Panel: Code Editor & Terminal -->
+    <!-- Right Panel: Code Editor -->
     <div class="editor-section">
       <div class="tabs-container">
         <div class="tab active">
@@ -671,16 +645,6 @@
       <div class="code-container">
         <!-- Custom code editor display that resembles the image -->
         <div id="codeEditor" class="code-editor"></div>
-
-        <!-- Resize handle for vertical adjustment -->
-        <div class="resize-handle-vertical" id="verticalResizeHandle"></div>
-
-        <!-- Terminal for output -->
-        <div class="terminal-container" id="terminalContainer">
-          <div class="terminal-body" id="matlabOutput">
-            Run your code to see output
-          </div>
-        </div>
       </div>
     </div>
   </main>
@@ -803,25 +767,6 @@
         });
       }
 
-      function resizeVertical(e) {
-        const editorContainer = document.querySelector(".code-container");
-        const editor = document.querySelector(".code-editor");
-        const terminal = document.querySelector(".terminal-container");
-        if (!editorContainer || !editor || !terminal) return;
-        const containerHeight = editorContainer.clientHeight;
-        const containerBottom =
-          editorContainer.getBoundingClientRect().bottom;
-        const newTerminalHeight = containerBottom - e.clientY;
-        const minTerminalHeight = 50;
-        const maxTerminalHeight = containerHeight - 100;
-        if (
-          newTerminalHeight >= minTerminalHeight &&
-          newTerminalHeight <= maxTerminalHeight
-        ) {
-          terminal.style.height = newTerminalHeight + "px";
-        }
-      }
-
       function stopResize() {
         document.removeEventListener("mousemove", resizeHorizontal);
         document.removeEventListener("mousemove", resizeVertical);
@@ -850,7 +795,7 @@
         // Update examples
         const problemExamples =
           document.getElementById("problemExamples");
-          problemExamples.innerHTML = "";
+        problemExamples.innerHTML = "";
         if (Array.isArray(problem.examples)) {
           problem.examples.forEach((example) => {
             const exDiv = document.createElement("div");
@@ -861,7 +806,7 @@
                   <div class="example-label"><strong>Output:</strong> ${example.output}</div>
                 </div>
               `;
-              problemExamples.appendChild(exDiv);
+            problemExamples.appendChild(exDiv);
           });
         } else {
           problemExamples.innerHTML = "<p>No examples available.</p>";
@@ -894,26 +839,17 @@
       }
 
       const runBtn = document.getElementById("runBtn");
-      const terminalOutput = document.getElementById("matlabOutput");
 
-      if (runBtn && terminalOutput) {
+      if (runBtn) {
         runBtn.addEventListener("click", function () {
           console.log("Run button clicked!");
           // Defensive check: is the code editor even loaded?
           const codeEditor = document.getElementById("codeEditor");
           let code = "your code here";
-
-          // If you're integrating with ACE, you might do:
-          // code = ace.edit("codeEditor").getValue();
-
-          // Simulate some output based on the code (this is just a demo)
-          // You can replace this with real code execution logic if needed
           const simulatedOutput = `Output: ${code ? "Hello, World!" : "No code provided"}`;
-
-          terminalOutput.textContent = simulatedOutput;
         });
       } else {
-        console.error("Run button or terminal output element not found. Check your DOM!");
+        console.error("Run button or output element not found. Check your DOM!");
       }
 
       // Load problem details with fallback

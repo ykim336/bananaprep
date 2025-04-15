@@ -327,7 +327,7 @@ async function saveUserProgress(status, solutionCode) {
  * Run MATLAB code from the editor and update the terminal output.
  */
 async function runMatlabCode() {
-  const editor = ace.edit('codeEditor');
+  const editor = ace.edit("codeEditor");
   const code = editor.getValue();
   
   // Optional: get user input
@@ -345,6 +345,8 @@ async function runMatlabCode() {
     if (Auth.isLoggedIn()) {
       headers['Authorization'] = `Bearer ${Auth.getToken()}`;
     }
+    
+    // Make API call to run Octave code
     const response = await fetch(`${API_URL}/run-octave`, {
       method: 'POST',
       headers: headers,
@@ -353,11 +355,34 @@ async function runMatlabCode() {
     
     const result = await response.json();
     
-    // Output the full response to the console
+    // Output the full response to the console for debugging
     console.log("Response from Octave:", result);
 
+    // Update terminal with the execution output
     if (matlabOutput) {
-      matlabOutput.textContent = result.output || 'No output generated.';
+      if (result.success) {
+        // Display text output
+        matlabOutput.textContent = result.output || 'No output generated.';
+        
+        // If there's an image, display it below the text output
+        if (result.hasImage && result.imageData) {
+          const imageElement = document.createElement('img');
+          imageElement.src = result.imageData;
+          imageElement.alt = 'Generated Plot';
+          imageElement.style.maxWidth = '100%';
+          imageElement.style.marginTop = '10px';
+          
+          // Clear previous images first
+          const existingImages = matlabOutput.querySelectorAll('img');
+          existingImages.forEach(img => img.remove());
+          
+          // Append the new image
+          matlabOutput.appendChild(imageElement);
+        }
+      } else {
+        // Display error in the terminal
+        matlabOutput.textContent = `Error: ${result.output || 'Execution failed'}`;
+      }
     }
     
     // Save progress as "attempted"
@@ -365,7 +390,7 @@ async function runMatlabCode() {
   } catch (error) {
     console.error("Error running MATLAB code:", error);
     if (matlabOutput) {
-      matlabOutput.textContent = `Error: ${error.message}`;
+      matlabOutput.textContent = `Error: ${error.message || 'Failed to run code'}`;
     }
   } finally {
     toggleRunLoading(false);
