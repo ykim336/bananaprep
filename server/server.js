@@ -416,7 +416,7 @@ app.get('/api/progress/all', requiresAuth, (req, res) => {
 });
 
 // Endpoint to execute Octave code
-app.post('/api/run-octave', requiresAuth, (req, res) => {
+app.post('/api/run-octave', (req, res) => {
   const { code, input } = req.body;
   const userId = req.userId;
   
