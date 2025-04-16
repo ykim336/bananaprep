@@ -938,3 +938,33 @@ document.addEventListener('DOMContentLoaded', function() {
   // Export the runTest function for use in problem.js
   window.runTest = runTest;
 });
+
+/**
+ * Display problem image with proper error handling.
+ * @param {string} imagePath - Relative path to the image.
+ * @param {string} problemTitle - Problem title for alt text.
+ */
+function displayProblemImage(imagePath, problemTitle) {
+  const imageContainer = document.getElementById('problemImageContainer');
+  if (!imageContainer) {
+    console.error("Problem image container element not found!");
+    return;
+  }
+  
+  if (imagePath) {
+    const fullImagePath = `images/problems/${imagePath}`;
+    imageContainer.innerHTML = `
+      <img src="${fullImagePath}" alt="${problemTitle} illustration"
+           onerror="this.onerror=null; this.parentNode.innerHTML='<div class=\\'image-placeholder\\'><p>Image not available</p></div>';"
+           style="max-width: 100%; border: 1px solid var(--border-color); margin-bottom: 1rem;">
+      <figcaption>Illustration for ${problemTitle}</figcaption>
+    `;
+  } else {
+    imageContainer.innerHTML = `
+      <div class="image-placeholder">
+        <i class="fas fa-image"></i>
+        <p>No illustration available</p>
+      </div>
+    `;
+  }
+}
