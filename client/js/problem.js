@@ -851,3 +851,90 @@ function showTestCaseTab() {
     }
   }
 }
+
+// Wait for DOM to load
+document.addEventListener('DOMContentLoaded', function() {
+  // Get all the tab elements
+  const tabs = document.querySelectorAll('.tabs-container .tab');
+  const codeTab = document.querySelector('.tabs-container .tab:nth-child(1)');
+  const testcaseTab = document.querySelector('.tabs-container .tab:nth-child(2)');
+  
+  // Get content containers
+  const codeContainer = document.querySelector('.code-container');
+  const terminalSection = document.querySelector('.terminal-section');
+  
+  // Add click event listeners to all tabs
+  tabs.forEach((tab, index) => {
+    tab.addEventListener('click', function() {
+      // First, remove active class from all tabs
+      tabs.forEach(t => t.classList.remove('active'));
+      
+      // Add active class to the clicked tab
+      this.classList.add('active');
+      
+      // Handle content display based on which tab was clicked
+      if (index === 0) { // Code tab
+        // Show code editor and terminal
+        if (codeContainer) codeContainer.style.display = 'flex';
+        if (terminalSection) terminalSection.style.display = 'flex';
+        
+        // Hide testcase content if it exists
+        const testcaseContent = document.getElementById('testcaseContent');
+        if (testcaseContent) {
+          testcaseContent.style.display = 'none';
+        }
+      } else if (index === 1) { // Testcase tab
+        // If testcase content doesn't exist yet, create it
+        let testcaseContent = document.getElementById('testcaseContent');
+        if (!testcaseContent) {
+          // Create the test case content area
+          testcaseContent = document.createElement('div');
+          testcaseContent.id = 'testcaseContent';
+          testcaseContent.className = 'test-case-content';
+          
+          // Create a test case results container
+          const testResultsContainer = document.createElement('div');
+          testResultsContainer.id = 'testResultsContainer';
+          testResultsContainer.className = 'test-results-container';
+          testResultsContainer.innerHTML = '<h3>No tests have been run yet</h3><p>Submit your solution to run tests.</p>';
+          testcaseContent.appendChild(testResultsContainer);
+          
+          // Add the test case content to the editor section
+          const editorSection = document.querySelector('.editor-section');
+          if (editorSection) {
+            editorSection.appendChild(testcaseContent);
+          }
+        }
+        
+        // Hide code editor and terminal
+        if (codeContainer) codeContainer.style.display = 'none';
+        if (terminalSection) terminalSection.style.display = 'none';
+        
+        // Show testcase content
+        testcaseContent.style.display = 'block';
+      }
+    });
+  });
+
+  // Function to run a test and get results
+  async function runTest(code) {
+    try {
+      // Make the API call to run Octave code
+      const response = await fetch(`${API_URL}/run-octave`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ code })
+      });
+      
+      return await response.json();
+    } catch (error) {
+      console.error('Error running test:', error);
+      throw error;
+    }
+  }
+  
+  // Export the runTest function for use in problem.js
+  window.runTest = runTest;
+});
