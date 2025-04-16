@@ -46,6 +46,17 @@ function initializePageData() {
 }
 
 /**
+ * Set up expand button
+ */
+document.getElementById('toggleTags').addEventListener('click', function() {
+  const tagsContainer = document.getElementById('allTagsList');
+  const isExpanded = tagsContainer.classList.toggle('expanded');
+  this.innerHTML = isExpanded
+    ? 'Collapse <i class="fas fa-chevron-up"></i>'
+    : 'Expand <i class="fas fa-chevron-down"></i>';
+});
+
+/**
  * Set up all event listeners for the page
  */
 function setupEventListeners() {

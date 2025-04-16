@@ -1,8 +1,11 @@
 /* client/css/database.css (Updated) */
 
-body, input, button, table {
+body,
+input,
+button,
+table {
   font-family: var(--font-primary);
-} 
+}
 
 body {
   overflow: auto !important;
@@ -10,14 +13,53 @@ body {
 }
 
 /* Tags list styling */
-.tags-list-container {
+/* .tags-list-container {
   background-color: var(--bg-medium);
   padding: 10px;
   margin-bottom: 15px;
   border-radius: 6px;
   border: 1px solid var(--border-color);
-  overflow-x: auto;
+  overflow: visible;
+  gap: 10px;
+  flex-wrap: wrap;
+  display: flex;
   white-space: nowrap;
+} */
+
+.tags-list-container {
+  /* Removing the container feels */
+  background-color: transparent;
+  padding: 0;
+  margin-bottom: 0;
+  border: none;
+
+  /* Keep flexbox goodies for tag flow */
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  white-space: nowrap;
+
+  /* For the fade effect */
+  position: relative;
+  overflow: hidden;
+  max-height: 6.2em;
+  /* Adjust this value if your tag lines are different */
+  transition: max-height 0.5s ease;
+}
+
+.tags-list-container::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 0.8em; /* Height of the fade—tweak if needed */
+  background: linear-gradient(transparent, #1a1a1a); /* Change white to match your page bg if necessary */
+  pointer-events: none;
+}
+
+.tags-list-container.expanded {
+  max-height: none;
 }
 
 .tags-list-container a {
@@ -40,6 +82,29 @@ body {
   color: var(--text-muted);
   font-size: 0.8rem;
   margin-left: 4px;
+}
+
+/* Expand button */
+.expand-button {
+  display: flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  background-color: transparent;
+  color: var(--text-light);
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.expand-button:hover {
+  background-color: transparent;
+
+}
+
+.expand-button i {
+  margin-left: 5px;
 }
 
 /* Main Container */
@@ -96,20 +161,25 @@ body {
 .nav-btn {
   background-color: #3a3a3a;
   font-weight: 500;
-  min-width: unset; /* Remove the fixed minimum width */
+  min-width: unset;
+  /* Remove the fixed minimum width */
   min-height: 38px;
   padding: 0.6rem 1rem;
-  width: auto; /* Allow the button to size based on content */
-  white-space: nowrap; /* Prevent text wrapping */
+  width: auto;
+  /* Allow the button to size based on content */
+  white-space: nowrap;
+  /* Prevent text wrapping */
   display: inline-flex;
   align-items: center;
-  gap: 0.2rem; /* Space between icon and text */
+  gap: 0.2rem;
+  /* Space between icon and text */
 }
 
-.nav-btn i, 
+.nav-btn i,
 .pick-one-btn i {
   display: inline-block;
-  margin-right: 0.4rem; /* Space between icon and text */
+  margin-right: 0.4rem;
+  /* Space between icon and text */
 }
 
 .nav-btn:hover {
