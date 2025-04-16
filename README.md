@@ -192,3 +192,9 @@ and
 ```
 ./build-and-run.sh
 ```
+
+
+run all docker stuff in one command:
+```
+./run_server.sh
+```

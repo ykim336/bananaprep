@@ -1,3 +1,4 @@
+<!-- client/database.html (Updated) -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,11 +7,24 @@
   <title>BananaPrep - Problem Database</title>
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/database.css">
+  <link rel="stylesheet" href="css/font.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
 <body>
   <!-- Sticky Header with Logo -->
   <header>
-    <a href="index.html" class="logo">BananaPrep</a>
+    <div class="header-left">
+      <a href="index.html">
+        <img src="images/bananaprep_logo.png" alt="BananaPrep Logo" class="logo-image top-nav-logo"
+          onerror="this.style.display='none'; this.parentNode.innerHTML='BananaPrep';" />
+      </a>
+      <nav class="main-nav">
+        <ul>
+          <li><a href="database.html">Problems</a></li>
+          <li><a href="about.html">About</a></li>
+        </ul>
+      </nav>
+    </div>
     <div class="user-account" id="userAccountSection">
       <!-- This will be populated by JavaScript -->
     </div>
@@ -20,19 +34,74 @@
   <div class="container">
     <!-- MAIN CONTENT AREA -->
     <div class="main-content">
+      <div class="tags-list-container" id="allTagsList">
+        <!-- BananaPrep electrical engineering tags -->
+        <a href="#" data-tag="Circuits">Circuits <span class="tag-count">3</span></a>
+        <a href="#" data-tag="Ohm's Law">Ohm's Law <span class="tag-count">1</span></a>
+        <a href="#" data-tag="Kirchhoff's Voltage Law">Kirchhoff's Voltage Law <span class="tag-count">1</span></a>
+        <a href="#" data-tag="Resistors">Resistors <span class="tag-count">1</span></a>
+        <a href="#" data-tag="AC Circuits">AC Circuits <span class="tag-count">4</span></a>
+        <a href="#" data-tag="RLC">RLC Circuit <span class="tag-count">2</span></a>
+        <a href="#" data-tag="Transformers">Transformers <span class="tag-count">1</span></a>
+        <a href="#" data-tag="Electromagnetism">Electromagnetism <span class="tag-count">8</span></a>
+        <a href="#" data-tag="AC Power">AC Power <span class="tag-count">1</span></a>
+        <a href="#" data-tag="Power Factor">Power Factor <span class="tag-count">1</span></a>
+        <a href="#" data-tag="Transient">Transient <span class="tag-count">2</span></a>
+        <a href="#" data-tag="RC Circuit">RC Circuit <span class="tag-count">2</span></a>
+        <a href="#" data-tag="RL Circuit">RL Circuit <span class="tag-count">1</span></a>
+        <a href="#" data-tag="Power">Power <span class="tag-count">1</span></a>
+        <a href="#" data-tag="DC Circuits">DC Circuits <span class="tag-count">1</span></a>
+        <a href="#" data-tag="Electronics">Electronics <span class="tag-count">5</span></a>
+        <a href="#" data-tag="Diodes">Diodes <span class="tag-count">1</span></a>
+        <a href="#" data-tag="MOSFET">MOSFET <span class="tag-count">1</span></a>
+        <a href="#" data-tag="Digital">Digital <span class="tag-count">1</span></a>
+        <a href="#" data-tag="Logic Gates">Logic Gates <span class="tag-count">1</span></a>
+        <a href="#" data-tag="Op-Amp">Op-Amp <span class="tag-count">2</span></a>
+        <a href="#" data-tag="Analog">Analog <span class="tag-count">1</span></a>
+        <a href="#" data-tag="Filters">Filters <span class="tag-count">1</span></a>
+        <a href="#" data-tag="Control Systems">Control Systems <span class="tag-count">5</span></a>
+        <a href="#" data-tag="Laplace">Laplace <span class="tag-count">1</span></a>
+        <a href="#" data-tag="Signal Processing">Signal Processing <span class="tag-count">5</span></a>
+        <a href="#" data-tag="Fourier">Fourier <span class="tag-count">1</span></a>
+        <a href="#" data-tag="Bode Plot">Bode Plot <span class="tag-count">1</span></a>
+        <a href="#" data-tag="Simulation">Simulation <span class="tag-count">1</span></a>
+        <a href="#" data-tag="SPICE">SPICE <span class="tag-count">1</span></a>
+        <a href="#" data-tag="Thermal">Thermal <span class="tag-count">1</span></a>
+        <a href="#" data-tag="Field Theory">Field Theory <span class="tag-count">1</span></a>
+        <a href="#" data-tag="Capacitance">Capacitance <span class="tag-count">1</span></a>
+        <a href="#" data-tag="Electrostatics">Electrostatics <span class="tag-count">2</span></a>
+        <a href="#" data-tag="Inductance">Inductance <span class="tag-count">1</span></a>
+        <a href="#" data-tag="Magnetic Flux">Magnetic Flux <span class="tag-count">1</span></a>
+        <a href="#" data-tag="Faraday's Law">Faraday's Law <span class="tag-count">1</span></a>
+        <a href="#" data-tag="Lenz's Law">Lenz's Law <span class="tag-count">1</span></a>
+        <a href="#" data-tag="Capacitor">Capacitor <span class="tag-count">1</span></a>
+        <a href="#" data-tag="Discharge">Discharge <span class="tag-count">1</span></a>
+        <a href="#" data-tag="Nodal Analysis">Nodal Analysis <span class="tag-count">1</span></a>
+        <a href="#" data-tag="Circuit Analysis">Circuit Analysis <span class="tag-count">3</span></a>
+        <a href="#" data-tag="Thevenin's Theorem">Thevenin's Theorem <span class="tag-count">1</span></a>
+        <a href="#" data-tag="Superposition">Superposition <span class="tag-count">1</span></a>
+        <a href="#" data-tag="Resonance">Resonance <span class="tag-count">1</span></a>
+        <a href="#" data-tag="BJT">BJT <span class="tag-count">1</span></a>
+        <a href="#" data-tag="Gain">Gain <span class="tag-count">1</span></a>
+        <a href="#" data-tag="Stability">Stability <span class="tag-count">1</span></a>
+        <a href="#" data-tag="Zener Diode">Zener Diode <span class="tag-count">1</span></a>
+        <a href="#" data-tag="Voltage Regulation">Voltage Regulation <span class="tag-count">1</span></a>
+        <a href="#" data-tag="Frequency Response">Frequency Response <span class="tag-count">1</span></a>
+        <a href="#" data-tag="Sampling">Sampling <span class="tag-count">1</span></a>
+        <a href="#" data-tag="Nyquist Plot">Nyquist Plot <span class="tag-count">1</span></a>
+        <a href="#" data-tag="SNR">SNR <span class="tag-count">1</span></a>
+        <a href="#" data-tag="Phase Shift">Phase Shift <span class="tag-count">1</span></a>
+      </div>
+
+      <!-- Expand button -->
+      <button class="expand-button" id="toggleTags">
+        Expand <i class="fas fa-chevron-down"></i>
+      </button>
+      
       <!-- Top Navigation -->
       <div class="top-nav">
         <div class="filter-dropdown">
-          <button class="nav-btn">Lists</button>
-          <div class="dropdown-content">
-            <a href="#" data-filter="all">All Problems</a>
-            <a href="#" data-filter="solved">Solved Problems</a>
-            <a href="#" data-filter="attempted">Attempted Problems</a>
-            <a href="#" data-filter="unsolved">Unsolved Problems</a>
-          </div>
-        </div>
-        <div class="filter-dropdown">
-          <button class="nav-btn">Difficulty</button>
+          <button class="nav-btn"><i class="fas fa-chart-bar"></i> Difficulty</button>
           <div class="dropdown-content">
             <a href="#" data-difficulty="all">All Difficulties</a>
             <a href="#" data-difficulty="easy">Easy</a>
@@ -40,16 +109,10 @@
             <a href="#" data-difficulty="hard">Hard</a>
           </div>
         </div>
-        <div class="filter-dropdown">
-          <button class="nav-btn">Tags</button>
-          <div class="dropdown-content" id="tagFilters">
-            <!-- Tags will be populated dynamically -->
-          </div>
-        </div>
         <div class="search-bar">
           <input type="text" id="searchInput" placeholder="Search problems..." />
         </div>
-        <button class="pick-one-btn" id="pickOneBtn">Pick One</button>
+        <button class="pick-one-btn" id="pickOneBtn"><i class="fas fa-random"></i> Pick One</button>
       </div>
       
       <!-- Table of Problems -->
@@ -69,48 +132,6 @@
             <!-- Dynamically populated rows go here -->
           </tbody>
         </table>
-      </div>
-    </div>
-    
-    <!-- RIGHT SIDEBAR -->
-    <div class="right-sidebar">
-      <!-- User Profile (only shown when logged in) -->
-      <div class="user-profile" id="userProfile" style="display: none;">
-        <h3>
-          Your Progress 
-          <span class="refresh-btn" id="refreshStatsBtn" style="cursor: pointer; font-size: 0.8rem; color: #f39c12;">↻</span>
-        </h3>
-        <div class="progress-bar">
-          <div class="progress-bar-fill" id="progressBarFill" style="width: 0%"></div>
-        </div>
-        <div class="completion-text" id="completionText">0%</div>
-      </div>
-      
-      <div class="session-stats">
-        <h3>Problems Solved</h3>
-        <div class="stats-grid">
-          <div class="stats-item">
-            <div class="number" id="easySolved">0</div>
-            <div>Easy</div>
-          </div>
-          <div class="stats-item">
-            <div class="number" id="mediumSolved">0</div>
-            <div>Medium</div>
-          </div>
-          <div class="stats-item">
-            <div class="number" id="hardSolved">0</div>
-            <div>Hard</div>
-          </div>
-        </div>
-      </div>
-      
-      <div class="company-tags">
-        <span class="company-tag">Circuits</span>
-        <span class="company-tag">Signal Processing</span>
-        <span class="company-tag">Power</span>
-        <span class="company-tag">Digital</span>
-        <span class="company-tag">Electronics</span>
-        <span class="company-tag">Control Systems</span>
       </div>
     </div>
   </div>

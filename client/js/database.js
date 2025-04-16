@@ -38,12 +38,23 @@ function initializePageData() {
   // Update user account section
   Auth.updateUserAccountSection();
   
-  // Show/hide user profile section based on login status
+  // Toggle user profile based on login status; for practice mode, this might just stay hidden
   toggleUserProfileVisibility();
   
-  // Load problems and user data
+  // Load problems and (if logged in) user data
   loadProblems();
 }
+
+/**
+ * Set up expand button
+ */
+document.getElementById('toggleTags').addEventListener('click', function() {
+  const tagsContainer = document.getElementById('allTagsList');
+  const isExpanded = tagsContainer.classList.toggle('expanded');
+  this.innerHTML = isExpanded
+    ? 'Collapse <i class="fas fa-chevron-up"></i>'
+    : 'Expand <i class="fas fa-chevron-down"></i>';
+});
 
 /**
  * Set up all event listeners for the page
@@ -86,10 +97,14 @@ function setupEventListeners() {
     });
   });
   
-  // Refresh stats button
+  // Refresh stats button—if you're not logged in, chill out, no stats available
   const refreshStatsBtn = document.getElementById('refreshStatsBtn');
   if (refreshStatsBtn) {
     refreshStatsBtn.addEventListener('click', () => {
+      if (!Auth.isLoggedIn()) {
+        console.info("Practice mode: You're not logged in, so no stats are available.");
+        return;
+      }
       loadUserStats();
       loadUserProgress();
     });
@@ -97,11 +112,13 @@ function setupEventListeners() {
 }
 
 /**
- * Show/hide user profile section based on login status
+ * Show/hide user profile section based on login status.
+ * In practice mode, we keep it low-key and avoid nagging prompts.
  */
 function toggleUserProfileVisibility() {
   const userProfile = document.getElementById('userProfile');
   if (userProfile) {
+    // You can tweak this if you want to show a "Practice Mode" message instead.
     userProfile.style.display = Auth.isLoggedIn() ? 'block' : 'none';
   }
 }
@@ -121,10 +138,12 @@ async function loadProblems() {
     renderTable(problemsData);
     populateTagFilters(problemsData);
     
-    // After problems are loaded, load user progress if logged in
+    // After problems are loaded, load user progress/stats only if logged in
     if (Auth.isLoggedIn()) {
       await loadUserProgress();
       await loadUserStats();
+    } else {
+      console.info("Practice mode: Skipping user stats/progress load (anonymous session).");
     }
   } catch (error) {
     console.error('Failed to load problems:', error);
@@ -136,10 +155,14 @@ async function loadProblems() {
 }
 
 /**
- * Load user progress for all problems
+ * Load user progress for all problems.
+ * In practice mode, we skip this since no account = no persistent progress.
  */
 async function loadUserProgress() {
-  if (!Auth.isLoggedIn()) return;
+  if (!Auth.isLoggedIn()) {
+    console.info("Practice mode: No user progress to load—fly solo, coder.");
+    return;
+  }
   
   try {
     const progressData = await API.progress.getAll();
@@ -160,10 +183,14 @@ async function loadUserProgress() {
 }
 
 /**
- * Load user stats from API
+ * Load user stats from API.
+ * In practice mode, anonymous users won’t have stats—so chill out.
  */
 async function loadUserStats() {
-  if (!Auth.isLoggedIn()) return;
+  if (!Auth.isLoggedIn()) {
+    console.info("Practice mode: Stats are only for signed-in users. Keep grinding!");
+    return;
+  }
   
   try {
     const stats = await API.user.getStats();
@@ -209,7 +236,7 @@ function updateProgressBar(stats) {
 }
 
 /**
- * Refresh user data without reloading problems
+ * Refresh user data without reloading problems.
  */
 function refreshUserData() {
   if (Auth.isLoggedIn()) {
@@ -218,10 +245,6 @@ function refreshUserData() {
   }
 }
 
-/**
- * Render table with provided data
- * @param {Array} data - Array of problem objects
- */
 /**
  * Render table with provided data
  * @param {Array} data - Array of problem objects
@@ -307,16 +330,20 @@ function filterProblems(data) {
       return false;
     }
     
-    // Filter by tag
-    if (currentFilters.tag !== 'all' && !(problem.tags?.toLowerCase().includes(currentFilters.tag.toLowerCase()))) {
-      return false;
+    // Filter by tag - updated for exact tag matches with BananaPrep custom tags
+    if (currentFilters.tag && currentFilters.tag !== 'all') {
+      // For BananaPrep's format where tags are stored as comma-separated string
+      const problemTags = problem.tags ? problem.tags.split(',').map(tag => tag.trim()) : [];
+      if (!problemTags.some(tag => tag === currentFilters.tag)) {
+        return false;
+      }
     }
     
     // Filter by search text
     if (currentFilters.search && !(
-      problem.title?.toLowerCase().includes(currentFilters.search.toLowerCase()) ||
-      problem.tags?.toLowerCase().includes(currentFilters.search.toLowerCase()) ||
-      problem.concept?.toLowerCase().includes(currentFilters.search.toLowerCase())
+      problem.title?.toLowerCase().includes(currentFilters.search) ||
+      problem.tags?.toLowerCase().includes(currentFilters.search) ||
+      problem.concept?.toLowerCase().includes(currentFilters.search)
     )) {
       return false;
     }
@@ -370,5 +397,74 @@ function populateTagFilters(problems) {
       renderTable(filterProblems(problemsData));
     });
     tagFiltersContainer.appendChild(tagLink);
+  });
+}
+
+/**
+ * Function to highlight the selected tag in the tag list
+ * Add this to database.js
+ */
+function highlightSelectedTag(tagName) {
+  const allTags = document.querySelectorAll('#allTagsList a');
+  
+  allTags.forEach(tag => {
+    if (tag.getAttribute('data-tag') === tagName) {
+      tag.classList.add('active');
+    } else {
+      tag.classList.remove('active');
+    }
+  });
+}
+
+/**
+ * Function to set up event listeners for tag clicks
+ * Add this or update existing setupTagListeners function
+ */
+function setupTagListeners() {
+  const allTags = document.querySelectorAll('#allTagsList a');
+  
+  allTags.forEach(tag => {
+    tag.addEventListener('click', function(e) {
+      e.preventDefault();
+      const tagName = this.getAttribute('data-tag');
+      
+      // Update the current tag filter
+      currentFilters.tag = tagName;
+      
+      // Highlight the selected tag
+      highlightSelectedTag(tagName);
+      
+      // Apply the filter and render the table
+      renderTable(filterProblems(problemsData));
+    });
+  });
+}
+
+/**
+ * Add this to the document ready function in database.js
+ * or to the initialization code
+ */
+// Inside the DOMContentLoaded event listener:
+setupTagListeners();
+
+// Add an "All Tags" option if not already there
+const allTagsList = document.getElementById('allTagsList');
+if (!document.querySelector('#allTagsList a[data-tag="all"]')) {
+  const allTagsOption = document.createElement('a');
+  allTagsOption.href = '#';
+  allTagsOption.setAttribute('data-tag', 'all');
+  allTagsOption.innerHTML = 'All Tags';
+  allTagsOption.classList.add('all-tags-option');
+  allTagsList.prepend(allTagsOption);
+  
+  // Select "All Tags" by default
+  allTagsOption.classList.add('active');
+  
+  // Add event listener
+  allTagsOption.addEventListener('click', function(e) {
+    e.preventDefault();
+    currentFilters.tag = 'all';
+    highlightSelectedTag('all');
+    renderTable(filterProblems(problemsData));
   });
 }

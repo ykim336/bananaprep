@@ -17,6 +17,7 @@ RUN chmod 777 server/public/data/plots
 COPY server/package*.json ./server/
 WORKDIR /app/server
 RUN npm install
+RUN npm install express-openid-connect
 
 # Copy server and client files
 COPY server/ ./
