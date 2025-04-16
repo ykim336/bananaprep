@@ -26,6 +26,15 @@ body {
   white-space: nowrap;
 } */
 
+.top-nav-logo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: transparent;
+  padding: 14px 0px 12px 6px;
+  height: 60px;
+}
+
 .tags-list-container {
   /* Removing the container feels */
   background-color: transparent;
@@ -171,6 +180,7 @@ header {
   gap: 0.5rem;
   margin-bottom: 0.6rem;
   padding: 0.6rem 0;
+  background-color: #262626;
 }
 
 .filter-dropdown {

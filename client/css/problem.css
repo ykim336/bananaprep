@@ -40,7 +40,7 @@ body {
 
 /* Header styles */
 header {
-  background-color: var(--bg-medium);
+  background-color: transparent;
   border-bottom: 1px solid var(--border-color);
   padding: 0 0.75rem;
   display: flex;
@@ -624,10 +624,9 @@ main {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #282828;
+  background-color: transparent;
   padding: 14px 0px 12px 6px;
-  height: 50px;
-  border-bottom: 1px solid #444;
+  height: 60px;
 }
 
 
