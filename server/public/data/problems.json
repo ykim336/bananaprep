@@ -8,7 +8,15 @@
     "image": "ohms-law.png",
     "answer": "2",
     "difficulty": "easy",
-    "starter_code": "function calculateCurrent(voltage, resistance)\n  % Calculate the current using Ohm's Law\n  % I = V/R\n  \n  % Your code here\n  \n  % Return the current\nend"
+    "starter_code": "function res = calculateCurrent(voltage, resistance)\n\t% Your code here (No output from function. Only return value)\n\nend\n\n% Test cases. Do Not modify!\ncalculateCurrent(10, 10)\ncalculateCurrent(100, 10)\ncalculateCurrent(12, 1234)",
+    "test_cases": {
+      "test1": "calculateCurrent(10, 5)",
+      "test2": "calculateCurrent(12, 4)",
+      "test3": "calculateCurrent(9, 3)",
+      "solution1": "ans = 2",
+      "solution2": "ans = 3",
+      "solution3": "ans = 3"
+    }
   },
   {
     "title": "Kirchhoff's Voltage Law",
