@@ -40,7 +40,7 @@ body {
 
 /* Header styles */
 header {
-  background-color: var(--bg-medium);
+  background-color: transparent;
   border-bottom: 1px solid var(--border-color);
   padding: 0 0.75rem;
   display: flex;
@@ -624,10 +624,9 @@ main {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #282828;
+  background-color: transparent;
   padding: 14px 0px 12px 6px;
-  height: 50px;
-  border-bottom: 1px solid #444;
+  height: 60px;
 }
 
 
@@ -713,4 +712,221 @@ main {
 .solution-tabs,
 .tab-content:not(.active) {
   display: none;
+}
+
+/* Improved Test Case UI Styles - Replace existing test case CSS */
+
+.test-case-content {
+  display: none;
+  height: 100%;
+  overflow-y: auto;
+  background-color: var(--bg-dark);
+  color: var(--text-light);
+  padding: 1.5rem;
+  font-family: var(--font-primary);
+}
+
+.test-results-container {
+  margin-bottom: 1.5rem;
+}
+
+.test-results-container h3 {
+  font-size: 1.3rem;
+  margin-bottom: 1.5rem;
+  color: var(--accent-yellow);
+  font-weight: 600;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.test-summary {
+  margin-bottom: 1.5rem;
+  border-radius: 8px;
+  font-weight: 500;
+  padding: 1rem;
+}
+
+.test-summary-passed {
+  background-color: rgba(44, 187, 93, 0.15);
+  color: #2cbb5d;
+  border-left: 4px solid #2cbb5d;
+}
+
+.test-summary-failed {
+  background-color: rgba(239, 71, 67, 0.15);
+  color: #ef4743;
+  border-left: 4px solid #ef4743;
+}
+
+.test-cases {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.test-case {
+  background-color: var(--bg-medium);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.test-case:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.test-case-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  background-color: #2d2d2d;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.test-case-title {
+  font-weight: 500;
+  font-size: 1.05rem;
+}
+
+.test-status {
+  font-size: 0.85rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 20px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+}
+
+.test-passed {
+  background-color: rgba(44, 187, 93, 0.2);
+  color: #2cbb5d;
+}
+
+.test-failed {
+  background-color: rgba(239, 71, 67, 0.2);
+  color: #ef4743;
+}
+
+.test-error {
+  background-color: rgba(255, 152, 0, 0.2);
+  color: #ff9800;
+}
+
+.test-case-details {
+  padding: 1.25rem;
+  font-family: var(--font-monospace);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+  background-color: rgba(0, 0, 0, 0.15);
+}
+
+.test-case-details > div {
+  margin-bottom: 0.75rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.test-case-details strong {
+  color: var(--accent-yellow);
+  opacity: 0.8;
+  margin-bottom: 0.25rem;
+  font-weight: 600;
+}
+
+.test-actual-output {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.test-loading {
+  width: 28px;
+  height: 28px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  border-top-color: var(--accent-yellow);
+  animation: spin 1s ease-in-out infinite;
+  margin: 1.5rem auto;
+}
+
+.test-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.back-to-code-btn {
+  background-color: var(--bg-medium);
+  border: 1px solid var(--border-color);
+  color: var(--text-light);
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: var(--font-primary);
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+  margin: 1.5rem auto;
+  font-weight: 500;
+}
+
+.back-to-code-btn:hover {
+  background-color: #3a3a3a;
+  transform: translateY(-2px);
+}
+
+#markAsSolvedBtn {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  background-color: var(--accent-yellow);
+  color: #333;
+  border: none;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+}
+
+#markAsSolvedBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+}
+
+#markAsSolvedBtn:disabled {
+  background-color: #666;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.function-call, .expected-output, .actual-output {
+  margin-top: 0.25rem;
+  padding: 0.5rem 0.75rem;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  font-family: var(--font-monospace);
+  border-left: 3px solid var(--bg-medium);
+}
+
+.expected-output {
+  border-left-color: var(--accent-yellow);
+}
+
+.actual-output {
+  border-left-color: var(--accent-blue);
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
