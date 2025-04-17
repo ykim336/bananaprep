@@ -1,179 +1,607 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BananaPrep - Problem Details</title>
-  <link rel="stylesheet" href="css/styles.css" />
-  <link rel="stylesheet" href="css/problem.css" />
-  <link rel="stylesheet" href="css/font.css" />
-  <link rel="stylesheet" href="css/terminal.css"/>
-  <!-- Import Source Code Pro font explicitly -->
-  <link rel="stylesheet"
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BananaPrep - Problem Details</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/problem.css" />
+    <link rel="stylesheet" href="css/font.css" />
+    <link rel="stylesheet" href="css/terminal.css"/>
+    <!-- Import Source Code Pro font explicitly -->
+    <link rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;500;600;700&display=swap" />
-  <!-- Import Font Awesome for modern icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <!-- Import Font Awesome for modern icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <!-- Add MathJax for math expression rendering -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script>
+    <!-- Add KaTeX as an alternative for faster rendering -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.4/katex.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.4/katex.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.4/contrib/auto-render.min.js"></script>
+    <style>
+        :root {
+            --bg-dark: #1a1a1a;
+            --bg-medium: #262626;
+            --bg-light: #2d2d2d;
+            --text-light: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --accent-yellow: #ffcc00;
+            --border-color: #3a3a3a;
+            --font-primary: 'Source Sans Pro', 'Segoe UI', Roboto, sans-serif;
+            --transition-speed: 0.2s;
+        }
+        
+        body {
+            font-family: var(--font-primary);
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            overflow: auto !important;
+            height: 100%;
+            margin: 0;
+        }
+        
+        input, button, textarea {
+            font-family: var(--font-primary);
+        }
+        
+        /* Header Styles */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: var(--bg-dark);
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+        
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .problem-list-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.6rem 1rem;
+            background-color: #3a3a3a;
+            border-radius: 6px;
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            margin-left: 15px;
+            transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+        }
+        
+        .problem-list-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            opacity: 0.9;
+            color: #999;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 8px;
+            margin-left: 15px;
+        }
+        
+        .nav-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #3a3a3a;
+            border: none;
+            border-radius: 6px;
+            color: var(--text-light);
+            padding: 0.6rem 1rem;
+            min-height: 38px;
+            cursor: pointer;
+            transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+        }
+        
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            opacity: 0.9;
+            color: #999;
+        }
+        
+        .user-status {
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            background-color: var(--bg-light);
+            color: var(--text-light);
+            transition: background-color 0.2s;
+        }
+        
+        /* Status styling */
+        .user-status.correct {
+            color: #27b88f;
+        }
+        
+        .user-status.incorrect {
+            color: #e83a27;
+        }
+        
+        /* Main Container */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem;
+            overflow: visible;
+            height: auto;
+        }
+        
+        /* Problem Section */
+        .problem-section {
+            width: 100%;
+            margin: 0 auto;
+            padding: 0;
+        }
+        
+        .problem-content {
+            width: 100%;
+        }
+        
+        /* Content Cards */
+        .content-card {
+            margin-bottom: 20px;
+            background-color: var(--bg-medium);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            overflow: hidden;
+            transition: transform 0.2s ease;
+        }
+        
+        .content-card:hover {
+            transform: translateY(-2px);
+        }
+        
+        .problem-title-card {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .problem-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--accent-yellow);
+        }
+        
+        .difficulty-tag {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        
+        .difficulty-tag.Easy {
+            color: #2dc268;
+        }
+        
+        .difficulty-tag.Medium {
+            color: #f1c40f;
+        }
+        
+        .difficulty-tag.Hard {
+            color: #e83a27;
+        }
+        
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--accent-yellow);
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+        
+        /* Examples Section */
+        .example {
+            background-color: var(--bg-light);
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .example-row {
+            display: flex;
+            margin-bottom: 10px;
+        }
+        
+        .example-label {
+            font-weight: 500;
+            margin-right: 10px;
+            color: var(--text-light);
+        }
+        
+        /* Constraints */
+        .constraints-list {
+            padding-left: 20px;
+            margin: 0;
+        }
+        
+        .constraints-list li {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+        
+        /* Math Input Section */
+        .math-input-container {
+            margin-top: 25px;
+            padding: 20px;
+            background-color: var(--bg-medium);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            transition: transform 0.2s ease;
+        }
+        
+        .math-input-container:hover {
+            transform: translateY(-2px);
+        }
+        
+        .math-input-header {
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--accent-yellow);
+            font-size: 1.2rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+        
+        .math-input-area {
+            width: 100%;
+            min-height: 100px;
+            padding: 15px;
+            font-family: 'Source Code Pro', monospace;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            resize: vertical;
+            font-size: 14px;
+            background-color: var(--bg-light);
+            color: var(--text-light);
+            transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
+        }
+        
+        .math-input-area:focus {
+            outline: none;
+            border-color: var(--accent-yellow);
+            box-shadow: 0 0 0 2px rgba(255, 204, 0, 0.2);
+        }
+        
+        .math-preview {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: var(--bg-light);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            min-height: 60px;
+            color: var(--text-light);
+        }
+        
+        .math-controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        
+        button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.6rem 1rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+            background-color: #3a3a3a;
+            color: var(--text-light);
+            font-weight: 500;
+            gap: 0.5rem;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            opacity: 0.9;
+        }
+        
+        .math-submit-btn {
+            background-color: var(--accent-yellow);
+            color: #262626;
+            padding: 0.6rem 1.2rem;
+            font-weight: 600;
+        }
+        
+        .math-submit-btn:hover {
+            opacity: 0.9;
+        }
+        
+        /* Status Bar */
+        .status-bar {
+            display: flex;
+            justify-content: flex-end;
+            padding: 15px 0;
+            border-top: 1px solid var(--border-color);
+            margin-top: 30px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        
+        /* Alert styling */
+        .alert {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            display: none;
+            z-index: 1000;
+            max-width: 350px;
+            font-weight: 500;
+        }
+        
+        .alert-danger {
+            background-color: rgba(232, 58, 39, 0.2);
+            border-left: 4px solid #e83a27;
+            color: #e83a27;
+        }
+        
+        .alert-success {
+            background-color: rgba(39, 184, 143, 0.2);
+            border-left: 4px solid #27b88f;
+            color: #27b88f;
+        }
+        
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            main {
+                padding: 1rem;
+            }
+            
+            .header-left, .header-right {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .problem-list-btn, .nav-buttons {
+                margin-left: 0;
+                margin-top: 10px;
+            }
+            
+            .content-card {
+                padding: 1rem;
+            }
+        }
+    </style>
 </head>
-
 <body>
-  <!-- Header with navigation and action buttons -->
-  <header>
-    <div class="header-left">
-      <a href="index.html">
-        <img src="images/bananaprep_logo.png" alt="BananaPrep Logo" class="top-nav"
-          onerror="this.style.display='none'; this.parentNode.innerHTML='BananaPrep';" />
-      </a>
-      <a href="database.html" class="problem-list-btn">
-        <span>Problem List</span>
-      </a>
-      <div class="nav-buttons">
-        <button class="nav-btn" id="prevProblemBtn" title="Previous Problem">
-          <i class="fas fa-chevron-left"></i>
-        </button>
-        <button class="nav-btn" id="nextProblemBtn" title="Next Problem">
-          <i class="fas fa-chevron-right"></i>
-        </button>
-      </div>
-    </div>
-    <div class="header-center">
-      <div class="action-buttons">
-        <button id="runBtn" class="btn-run">
-          <span id="runSpinner" class="spinner"></span>
-          <i class="fas fa-play"></i>
-          <span>Run</span>
-        </button>
-        <button id="submitBtn" class="btn-submit">
-          <span id="submitSpinner" class="spinner"></span>
-          <i class="fas fa-check"></i>
-          <span>Submit</span>
-        </button>
-      </div>
-    </div>
-    <div class="header-right">
-      <span class="user-status" id="problemStatus">Unsolved</span>
-      <div id="userAccountSection">
-        <a href="login.html" class="user-status">Sign in</a>
-      </div>
-    </div>
-  </header>
-
-  <!-- Main content area -->
-  <main>
-    <!-- Left Panel: Problem Description -->
-    <div class="problem-section">
-      <div class="tabs-container">
-        <div class="tab active">
-          <i class="tab-icon fas fa-file-alt"></i>
-          <span>Description</span>
-        </div>
-        <div class="tab">
-          <i class="tab-icon fas fa-pen-nib"></i>
-          <span>Editorial</span>
-        </div>
-        <div class="tab">
-          <i class="tab-icon fas fa-comments"></i>
-          <span>Solutions</span>
-        </div>
-      </div>
-
-      <div class="problem-content" id="problemContent">
-        <div class="content-card">
-          <div class="problem-title-card">
-            <span class="problem-title" id="problemTitle">Loading problem...</span>
-            <span class="difficulty-tag" id="difficultyTag">Easy</span>
-          </div>
-          <div class="problem-description" id="problemDescription">
-            Loading problem description...
-          </div>
-          <div id="problemImageContainer" class="problem-image-container">
-            <!-- Image will be inserted here by JavaScript -->
-          </div>
-        </div>
-        <div class="content-card examples-section">
-          <div class="section-title">Examples</div>
-          <div id="problemExamples">
-            <!-- Examples will be generated by JavaScript -->
-            <div class="example">
-              <div class="example-row">
-                <div class="example-label">Loading examples...</div>
-              </div>
+    </style>
+</head>
+<body>
+    <!-- Header with navigation and action buttons -->
+    <header>
+        <div class="header-left">
+            <a href="index.html">
+                <img src="images/bananaprep_logo.png" alt="BananaPrep Logo" class="top-nav"
+                onerror="this.style.display='none'; this.parentNode.innerHTML='BananaPrep';" />
+            </a>
+            <a href="database.html" class="problem-list-btn">
+                <span>Problem List</span>
+            </a>
+            <div class="nav-buttons">
+                <button class="nav-btn" id="prevProblemBtn" title="Previous Problem">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="nav-btn" id="nextProblemBtn" title="Next Problem">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
             </div>
-          </div>
         </div>
-
-        <div class="content-card constraints-section">
-          <div class="section-title">Constraints</div>
-          <ul class="constraints-list" id="problemConstraints">
-            <li>Loading constraints...</li>
-          </ul>
+        <div class="header-right">
+            <span class="user-status" id="problemStatus">Unsolved</span>
+            <div id="userAccountSection">
+                <a href="login.html" class="user-status">Sign in</a>
+            </div>
         </div>
-      </div>
-
-      <!-- Resize handle for horizontal adjustment -->
-      <div class="resize-handle-horizontal" id="horizontalResizeHandle"></div>
-    </div>
-
-    <!-- Right Panel: Code Editor -->
-    <div class="editor-section">
-      <div class="tabs-container">
-        <div class="tab active">
-          <i class="tab-icon fas fa-code"></i>
-          <span>Code</span>
+    </header>
+    
+    <!-- Main content area -->
+    <main>
+        <!-- Full Width Problem Section -->
+        <div class="problem-section">
+            <div class="problem-content" id="problemContent">
+                <div class="content-card">
+                    <div class="problem-title-card">
+                        <span class="problem-title" id="problemTitle">Loading problem...</span>
+                        <span class="difficulty-tag" id="difficultyTag">Easy</span>
+                    </div>
+                    <div class="problem-description" id="problemDescription">
+                        Loading problem description...
+                    </div>
+                    <div id="problemImageContainer" class="problem-image-container">
+                        <!-- Image will be inserted here by JavaScript -->
+                    </div>
+                </div>
+                
+                
+                <!-- New: Math Input Section -->
+                <div class="content-card math-input-container">
+                    <div class="math-input-header">
+                        <span>Your Solution</span>
+                        <button id="helpBtn" title="Help with math syntax">
+                            <i class="fas fa-question-circle"></i>
+                        </button>
+                    </div>
+                    <textarea id="mathInputArea" class="math-input-area" placeholder="Enter your mathematical expression here (e.g., 2x + 3 = 5)"></textarea>
+                    <div class="math-preview" id="mathPreview">Preview will appear here...</div>
+                    <div class="math-controls">
+                        <div>
+                            <button id="clearBtn" title="Clear input">
+                                <i class="fas fa-trash-alt"></i> Clear
+                            </button>
+                        </div>
+                        <button id="submitSolutionBtn" class="math-submit-btn">Submit</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Status bar -->
+            <div class="status-bar">
+                <div class="status-right">BananaPrep © 2025</div>
+            </div>
         </div>
-        <div class="tab">
-          <i class="tab-icon fas fa-vial"></i>
-          <span>Testcase</span>
-        </div>
-      </div>
-
-      <!-- Code container with editor -->
-      <div class="code-container">
-        <!-- Custom code editor display that resembles the image -->
-        <div id="codeEditor" class="code-editor"></div>
-      </div>
-
-      <!-- NEW: Terminal output section with resize handle -->
-      <div class="terminal-section" id="terminalSection">
-        <div class="resize-handle-vertical" id="verticalResizeHandle"></div>
-        <div class="terminal-header">
-          <div class="terminal-title">
-            <i class="fas fa-terminal"></i>
-            <span>Output</span>
-          </div>
-          <div class="terminal-actions">
-            <i class="fas fa-trash-alt" id="clearTerminal" title="Clear Terminal"
-              style="cursor: pointer; font-size: 0.9rem; color: #aaa;"></i>
-          </div>
-        </div>
-        <div class="terminal-content" id="terminalOutput">Run your code to see the output here.</div>
-      </div>
-    </div>
-  </main>
-
-  <!-- Status bar -->
-  <div class="status-bar">
-    <div class="status-right">BananaPrep © 2025</div>
-  </div>
-
-  <!-- Hidden elements preserved for JavaScript functionality -->
-  <div id="authPrompt" style="display: none"></div>
-  <div class="solution-tabs">
-    <div class="tab" id="answerTab"></div>
-    <div class="tab" id="codeTab"></div>
-  </div>
-  <div class="tab-content" id="answerSection"></div>
-  <div class="tab-content" id="codeSection"></div>
-
-  <!-- Alert messages -->
-  <div class="alert alert-danger" id="errorAlert"></div>
-  <div class="alert alert-success" id="successAlert"></div>
-
-  <!-- Scripts -->
-  <script src="js/api.js"></script>
-  <script src="js/auth.js"></script>
-  <script src="js/problem.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js" type="text/javascript"
-    charset="utf-8"></script>
-  <script src="js/ace-init.js"></script>
-  <!-- Additional script to integrate problem navigation, resizing, and our new loading mechanism -->
+    </main>
+    
+    <!-- Hidden elements preserved for JavaScript functionality -->
+    <div id="authPrompt" style="display: none"></div>
+    
+    <!-- Alert messages -->
+    <div class="alert alert-danger" id="errorAlert"></div>
+    <div class="alert alert-success" id="successAlert"></div>
+    
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/problem.js"></script>
+    
+    <!-- New script for handling math expressions -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const mathInput = document.getElementById('mathInputArea');
+            const mathPreview = document.getElementById('mathPreview');
+            const submitBtn = document.getElementById('submitSolutionBtn');
+            const clearBtn = document.getElementById('clearBtn');
+            const helpBtn = document.getElementById('helpBtn');
+            
+            // Function to update preview with MathJax
+            function updateMathPreview() {
+                const expression = mathInput.value.trim();
+                if (expression) {
+                    mathPreview.innerHTML = '$$' + expression + '$$';
+                    MathJax.typeset([mathPreview]);
+                } else {
+                    mathPreview.innerHTML = 'Preview will appear here...';
+                }
+            }
+            
+            // Update preview as user types (with debounce for performance)
+            let debounceTimer;
+            mathInput.addEventListener('input', function() {
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(updateMathPreview, 300);
+            });
+            
+            // Submit solution
+            submitBtn.addEventListener('click', function() {
+                const solution = mathInput.value.trim();
+                if (!solution) {
+                    showError('Please enter a solution before submitting.');
+                    return;
+                }
+                
+                // Get the problem ID from the URL or your application state
+                const problemId = getProblemIdFromUrl();
+                
+                // Submit the solution to your backend
+                submitSolution(problemId, solution)
+                    .then(response => {
+                        if (response.correct) {
+                            showSuccess('Correct! Your solution is right.');
+                            document.getElementById('problemStatus').textContent = 'Solved';
+                            document.getElementById('problemStatus').classList.add('correct');
+                        } else {
+                            showError('Sorry, that\'s not correct. Try again!');
+                            document.getElementById('problemStatus').classList.add('incorrect');
+                        }
+                    })
+                    .catch(error => {
+                        showError('Error submitting solution: ' + error.message);
+                    });
+            });
+            
+            // Clear input
+            clearBtn.addEventListener('click', function() {
+                mathInput.value = '';
+                mathPreview.innerHTML = 'Preview will appear here...';
+            });
+            
+            // Show help dialog
+            helpBtn.addEventListener('click', function() {
+                showHelpDialog();
+            });
+            
+            // Helper functions
+            function getProblemIdFromUrl() {
+                // Extract problem ID from URL or your application state
+                const urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get('id') || '1'; // Default to 1 if not found
+            }
+            
+            function submitSolution(problemId, solution) {
+                // This would normally be an API call to your backend
+                // For now, returning a mock promise
+                return new Promise((resolve, reject) => {
+                    // Mock validation - replace with actual API call
+                    setTimeout(() => {
+                        // This is where you'd validate the solution on your server
+                        // For testing, let's say solutions containing "=" are correct
+                        const isCorrect = solution.includes('=');
+                        resolve({ correct: isCorrect });
+                    }, 500);
+                });
+            }
+            
+            function showHelpDialog() {
+                // Simple help dialog - you can expand this with more detailed instructions
+                alert(`Math Expression Syntax Help:
+                
+Basic operations: + - * / ^
+Fractions: \\frac{numerator}{denominator}
+Subscripts: x_{1}
+Superscripts: x^{2}
+Square roots: \\sqrt{x}
+Greek letters: \\alpha, \\beta, \\pi
+                
+Example: x^2 + \\frac{3}{4} = \\sqrt{10}`);
+            }
+            
+            function showError(message) {
+                const errorAlert = document.getElementById('errorAlert');
+                errorAlert.textContent = message;
+                errorAlert.style.display = 'block';
+                setTimeout(() => {
+                    errorAlert.style.display = 'none';
+                }, 5000);
+            }
+            
+            function showSuccess(message) {
+                const successAlert = document.getElementById('successAlert');
+                successAlert.textContent = message;
+                successAlert.style.display = 'block';
+                setTimeout(() => {
+                    successAlert.style.display = 'none';
+                }, 5000);
+            }
+        });
+    </script>
+</body>
+</html>

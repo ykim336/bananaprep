@@ -968,3 +968,4 @@ function displayProblemImage(imagePath, problemTitle) {
     `;
   }
 }
+

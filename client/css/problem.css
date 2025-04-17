@@ -971,3 +971,377 @@ main {
   margin-bottom: 0.5rem;
   opacity: 0.7;
 }
+
+/* CSS for Problem Page - BananaPrep */
+
+:root {
+  --bg-dark: #1a1a1a;
+  --bg-medium: #262626;
+  --bg-light: #2d2d2d;
+  --text-light: #e0e0e0;
+  --text-muted: #a0a0a0;
+  --accent-yellow: #ffcc00;
+  --border-color: #3a3a3a;
+  --font-primary: 'Source Sans Pro', 'Segoe UI', Roboto, sans-serif;
+  --transition-speed: 0.2s;
+}
+
+body {
+  font-family: var(--font-primary);
+  background-color: var(--bg-dark);
+  color: var(--text-light);
+  overflow: auto !important;
+  height: 100%;
+  margin: 0;
+}
+
+input, button, textarea {
+  font-family: var(--font-primary);
+}
+
+/* Header Styles */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: var(--bg-dark);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.problem-list-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.6rem 1rem;
+  background-color: #3a3a3a;
+  border-radius: 6px;
+  color: var(--text-light);
+  text-decoration: none;
+  font-weight: 500;
+  margin-left: 15px;
+  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+}
+
+.problem-list-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  opacity: 0.9;
+  color: #999;
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 8px;
+  margin-left: 15px;
+}
+
+.nav-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #3a3a3a;
+  border: none;
+  border-radius: 6px;
+  color: var(--text-light);
+  padding: 0.6rem 1rem;
+  min-height: 38px;
+  cursor: pointer;
+  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+}
+
+.nav-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  opacity: 0.9;
+  color: #999;
+}
+
+.user-status {
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  background-color: var(--bg-light);
+  color: var(--text-light);
+  transition: background-color 0.2s;
+}
+
+/* Status styling */
+.user-status.correct {
+  color: #27b88f;
+}
+
+.user-status.incorrect {
+  color: #e83a27;
+}
+
+/* Main Container */
+main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem 2rem;
+  overflow: visible;
+  height: auto;
+}
+
+/* Problem Section */
+.problem-section {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.problem-content {
+  width: 100%;
+}
+
+/* Content Cards */
+.content-card {
+  margin-bottom: 20px;
+  background-color: var(--bg-medium);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  padding: 1.5rem;
+  overflow: hidden;
+  transition: transform 0.2s ease;
+}
+
+.content-card:hover {
+  transform: translateY(-2px);
+}
+
+.problem-title-card {
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 15px;
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.problem-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--accent-yellow);
+}
+
+.difficulty-tag {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.difficulty-tag.Easy {
+  color: #2dc268;
+}
+
+.difficulty-tag.Medium {
+  color: #f1c40f;
+}
+
+.difficulty-tag.Hard {
+  color: #e83a27;
+}
+
+.section-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--accent-yellow);
+  margin-bottom: 15px;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 10px;
+}
+
+/* Examples Section */
+.example {
+  background-color: var(--bg-light);
+  border-radius: 6px;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+.example-row {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.example-label {
+  font-weight: 500;
+  margin-right: 10px;
+  color: var(--text-light);
+}
+
+/* Constraints */
+.constraints-list {
+  padding-left: 20px;
+  margin: 0;
+}
+
+.constraints-list li {
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+
+/* Math Input Section */
+.math-input-container {
+  margin-top: 25px;
+  padding: 20px;
+  background-color: var(--bg-medium);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  transition: transform 0.2s ease;
+}
+
+.math-input-container:hover {
+  transform: translateY(-2px);
+}
+
+.math-input-header {
+  font-weight: 600;
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--accent-yellow);
+  font-size: 1.2rem;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 10px;
+}
+
+.math-input-area {
+  width: 100%;
+  min-height: 100px;
+  padding: 15px;
+  font-family: 'Source Code Pro', monospace;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  resize: vertical;
+  font-size: 14px;
+  background-color: var(--bg-light);
+  color: var(--text-light);
+  transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
+}
+
+.math-input-area:focus {
+  outline: none;
+  border-color: var(--accent-yellow);
+  box-shadow: 0 0 0 2px rgba(255, 204, 0, 0.2);
+}
+
+.math-preview {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: var(--bg-light);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  min-height: 60px;
+  color: var(--text-light);
+}
+
+.math-controls {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+  background-color: #3a3a3a;
+  color: var(--text-light);
+  font-weight: 500;
+  gap: 0.5rem;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  opacity: 0.9;
+}
+
+.math-submit-btn {
+  background-color: var(--accent-yellow);
+  color: #262626;
+  padding: 0.6rem 1.2rem;
+  font-weight: 600;
+}
+
+.math-submit-btn:hover {
+  opacity: 0.9;
+}
+
+/* Status Bar */
+.status-bar {
+  display: flex;
+  justify-content: flex-end;
+  padding: 15px 0;
+  border-top: 1px solid var(--border-color);
+  margin-top: 30px;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+/* Alert styling */
+.alert {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 15px 20px;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: none;
+  z-index: 1000;
+  max-width: 350px;
+  font-weight: 500;
+}
+
+.alert-danger {
+  background-color: rgba(232, 58, 39, 0.2);
+  border-left: 4px solid #e83a27;
+  color: #e83a27;
+}
+
+.alert-success {
+  background-color: rgba(39, 184, 143, 0.2);
+  border-left: 4px solid #27b88f;
+  color: #27b88f;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  main {
+      padding: 1rem;
+  }
+  
+  .header-left, .header-right {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+  }
+  
+  .problem-list-btn, .nav-buttons {
+      margin-left: 0;
+      margin-top: 10px;
+  }
+  
+  .content-card {
+      padding: 1rem;
+  }
+}
