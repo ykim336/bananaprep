@@ -6,28 +6,117 @@
   <title>BananaPrep - Home</title>
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/index.css">
+  <link rel="stylesheet" href="css/font.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  
+  <!-- Custom CSS just for the header -->
+  <style>
+    /* Header styling to match database.html */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      background-color: transparent;
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    .header-left {
+      display: flex;
+      align-items: center;
+    }
+    
+    .top-nav-logo {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: transparent;
+      padding: 14px 0px 12px 6px;
+      height: 60px;
+    }
+    
+    .main-nav ul {
+      list-style: none;
+      display: flex;
+      margin: 0;
+      margin-top: 10px;
+      padding: 0;
+    }
+    
+    .main-nav li {
+      margin-left: 15px;
+    }
+    
+    .main-nav a {
+      text-decoration: none;
+      color: var(--text-light);
+      font-weight: 500;
+      transition: color 0.2s ease;
+    }
+    
+    .main-nav a:hover {
+      color: var(--accent-yellow);
+    }
+    
+    .main-nav a.active {
+      color: var(--accent-yellow);
+    }
+    
+    #userAccountSection {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    /* Login button styling for guest users */
+    .login-btn {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.6rem 1rem;
+      background-color: transparent;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      color: var(--text-light);
+      text-decoration: none;
+      font-weight: 500;
+      transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+    }
+    
+    .login-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      opacity: 0.9;
+      color: #999;
+    }
+  </style>
 </head>
 <body>
-  <!-- Header -->
+  <!-- Header - Exactly like database.html -->
   <header>
-    <div class="logo">BananaPrep</div>
-    <div class="tagline">Crush your engineering interview!</div>
+    <div class="header-left">
+      <a href="index.html">
+        <img src="images/bananaprep_logo.png" alt="BananaPrep Logo" class="logo-image top-nav-logo"
+          onerror="this.style.display='none'; this.parentNode.innerHTML='BananaPrep';" />
+      </a>
+      <nav class="main-nav">
+        <ul>
+          <li><a href="index.html" class="active">Home</a></li>
+          <li><a href="database.html">Problems</a></li>
+          <li><a href="about.html">About</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div id="userAccountSection">
+      <!-- This will be populated by JavaScript -->
+    </div>
   </header>
 
-  <!-- Navigation -->
-  <nav>
-    <a href="index.html" class="active">Home</a>
-    <a href="database.html">Problem Database</a>
-    <a href="about.html">About</a>
-    <a href="login.html">Login</a>
-  </nav>
-
-  <!-- Main Content -->
+  <!-- Hero Section -->
   <div class="container">
     <!-- Hero Section -->
     <section class="hero">
       <h2>Enhance Your Math & Engineering Skills</h2>
-      <p>MathQuest provides a comprehensive platform for solving mathematical and electrical engineering problems. Practice with our collection of curated problems, track your progress, and improve your problem-solving abilities.</p>
+      <p>BananaPrep provides a comprehensive platform for solving mathematical and electrical engineering problems. Practice with our collection of curated problems, track your progress, and improve your problem-solving abilities.</p>
       <a href="database.html" class="cta-button">Explore Problems</a>
     </section>
 
@@ -39,7 +128,7 @@
       </div>
       <div class="feature-card">
         <h3>Interactive Solution Environment</h3>
-        <p>Code your solutions directly in our integrated MATLAB environment, run tests, and get immediate feedback on your approach. For written solutions, a fourm of peers and profesionals discuss different approaches to problems.</p>
+        <p>Code your solutions directly in our integrated MATLAB environment, run tests, and get immediate feedback on your approach. For written solutions, a forum of peers and professionals discuss different approaches to problems.</p>
       </div>
       <div class="feature-card">
         <h3>Progress Tracking</h3>
@@ -50,7 +139,7 @@
     <!-- Sample Problems Section -->
     <section class="sample-problems">
       <h2>Featured Problems</h2>
-      <div class="problem-cards">
+      <div class="problem-cards" id="featuredProblems">
         <div class="problem-card" onclick="window.location.href='problem.html?id=0'">
           <h3>Ohm's Law Calculation</h3>
           <p>Calculate the current flowing through a resistor when a voltage is applied across it.</p>

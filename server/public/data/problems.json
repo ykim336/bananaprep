@@ -7,15 +7,6 @@
     "solution": "We begin by simplifying the two rightmost 6Ω resistors in parallel: 1/R = (⅙Ω + ⅙Ω)  = 3Ω. Next, we can add the series 3Ω resistor connected to this, R = 3Ω + 3Ω = 6Ω. Now, this 6Ω is in parallel with that diagonal 6Ω resistor, 1/R = (⅙Ω + ⅙Ω) = 3Ω. This 3Ω is then added in series with the bottom 3Ω resistor, R = 3Ω + 3Ω = 6Ω. Now, this 6Ω is in parallel with the middle 3Ω resistor, 1/R = ⅓Ω  + ⅙Ω = 2Ω. This 2Ω result is now in parallel with the diagonal 2Ω resistor, 1/R = ½ + ½ = 1. Finally, we add the 9Ω resistor in series, R = 9Ω + 1Ω = 10Ω ",
     "image": "p1.png",
     "answer": "2",  
-    "difficulty": "easy",
-    "starter_code": "function res = calculateRes(R1, R2, R3, R4, R5, R6, R7, R8)\n\t% Your code here (No output from function. Only return value)\n\nend",
-    "test_cases": {
-      "test1": "calculateRes(1, 1, 1, 1, 1, 1, 1, 1)",
-      "test2": "calculateRes(10, 10, 10, 10, 10, 10, 10, 10)",
-      "test3": "calculateRes(100, 100, 10, 100, 100, 100, 100, 100)",
-      "solution1": "ans = 1",
-      "solution2": "ans = 2",
-      "solution3": "ans = 3"
-    }
+    "difficulty": "easy"
   }
 ]

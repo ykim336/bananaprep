@@ -215,3 +215,79 @@ header {
       margin-bottom: 0.5rem;
     }
   }
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: var(--bg-dark);
+    border-bottom: 1px solid var(--border-color);
+  }
+  
+  .header-left {
+    display: flex;
+    align-items: center;
+  }
+  
+  .top-nav-logo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: transparent;
+    padding: 14px 0px 12px 6px;
+    height: 60px;
+  }
+  
+  .main-nav ul {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    margin-top: 10px;
+    padding: 0;
+  }
+  
+  .main-nav li {
+    margin-left: 15px;
+  }
+  
+  .main-nav a {
+    text-decoration: none;
+    color: var(--text-light);
+    font-weight: 500;
+    transition: color 0.2s ease;
+  }
+  
+  .main-nav a:hover {
+    color: var(--accent-yellow);
+  }
+  
+  .main-nav a.active {
+    color: var(--accent-yellow);
+  }
+  
+  #userAccountSection {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  /* Login button styling for guest users */
+  .login-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.6rem 1rem;
+    background-color: #3a3a3a;
+    border-radius: 6px;
+    color: var(--text-light);
+    text-decoration: none;
+    font-weight: 500;
+    transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+  }
+  
+  .login-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    opacity: 0.9;
+    color: #999;
+  }
